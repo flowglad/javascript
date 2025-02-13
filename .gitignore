@@ -12,3 +12,6 @@ node_modules
 .env.production
 .env.test
 .env.test.local
+
+.yalc/
+yalc.lock

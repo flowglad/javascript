@@ -3,7 +3,7 @@ import {
   FlowgladServerSessionParams,
   NextjsAuthFlowgladServerSessionParams,
   SupabaseFlowgladServerSessionParams,
-} from '../next/types'
+} from '../../next/src/types'
 
 const getSessionFromNextAuth = async (
   params: NextjsAuthFlowgladServerSessionParams

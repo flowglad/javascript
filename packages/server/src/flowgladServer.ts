@@ -1,10 +1,10 @@
-import { flowgladNode } from '../next/core'
+import { flowgladNode } from '../../next/src/core'
 import {
   CoreCustomerProfileUser,
   FlowgladServerSessionParams,
   NextjsAuthFlowgladServerSessionParams,
   SupabaseFlowgladServerSessionParams,
-} from '../next/types'
+} from '../../next/src/types'
 
 import { Flowglad as FlowgladNode } from '@flowglad/node'
 

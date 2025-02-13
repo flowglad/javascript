@@ -5,7 +5,7 @@ import {
   getCustomerProfileBilling,
 } from './customerProfileSubrouteHandler'
 import { FlowgladServer } from './flowgladServer'
-import { FlowgladActionKey } from '../shared/types'
+import { FlowgladActionKey } from '../../shared/types'
 
 const routeToHandlerMap: Record<
   FlowgladActionKey,

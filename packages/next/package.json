@@ -1,5 +1,5 @@
 {
-    "name": "@flowglad/react",
+    "name": "@flowglad/next",
     "version": "0.1.0",
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",
@@ -8,19 +8,21 @@
     "scripts": {
       "build": "tsup",
       "clean": "rm -rf dist",
-      "dev": "tsup --watch --onSuccess 'yalc push'",  
+      "dev": "tsup --watch --onSuccess 'yalc push'",
       "yalc:publish": "yalc publish"
     },
     "dependencies": {
       "@flowglad/shared": "workspace:*",
-      "@tanstack/react-query": "5.66.0",
+      "@flowglad/react": "workspace:*",
+      "@flowglad/server": "workspace:*",
       "zod": "3.23.8"
     },
     "devDependencies": {
       "@types/react": "19.0.8"
     },
     "peerDependencies": {
-      "react": "19.0.0"
+      "react": "19.0.0",
+      "next": "^14.0.3 || ^15.0.0"
     },
     "publishConfig": {
       "access": "public"

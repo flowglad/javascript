@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { flowgladNode } from '../next/core'
+import { flowgladNode } from '../../next/src/core'
 import { FlowgladServer } from './flowgladServer'
 
 export const getCustomerProfileBilling = async (

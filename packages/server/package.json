@@ -1,0 +1,22 @@
+{
+    "name": "@flowglad/nextjs",
+    "version": "0.1.0",
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "files": ["dist"],
+    "scripts": {
+      "build": "tsup",
+      "clean": "rm -rf dist"
+    },
+    "dependencies": {
+      "@flowglad/shared": "workspace:*",
+      "zod": "3.23.8"
+    },
+    "peerDependencies": {
+      "next": "^14.0.3 || ^15.0.0"
+    },
+    "publishConfig": {
+      "access": "public"
+    }
+  }

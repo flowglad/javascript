@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "module": "ESNext",
+      "target": "ES2019",
+      "lib": ["DOM", "ESNext"],
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "moduleResolution": "node",
+      "jsx": "react",
+      "declaration": true,
+      "declarationMap": true
+    }
+  }

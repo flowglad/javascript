@@ -1,0 +1,25 @@
+{
+  "name": "@flowglad/javascript",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "test": "pnpm -r test",
+    "format": "prettier --write \"**/*.{ts,tsx}\"",
+    "lint": "pnpm -r lint",
+    "clean": "pnpm -r clean",
+    "preinstall": "npx only-allow pnpm",
+    "build": "pnpm -r build",
+    "version-packages": "changeset version",
+    "publish-packages": "pnpm build && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.26.0",
+    "@types/node": "^18.0.0",
+    "prettier": "3.5.1",
+    "prettier-plugin-packagejson": "2.5.8",
+    "prettier-plugin-tailwindcss": "0.6.11",
+    "tsup": "8.3.6",
+    "tsx": "4.17.0",
+    "typescript": "^5.0.0"
+  }
+}

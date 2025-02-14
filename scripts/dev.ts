@@ -66,10 +66,34 @@ const rebuildAndPush = debounce(async (path: string) => {
 
 // Watch all package source files
 chokidar
-  .watch('packages/*/src/**/*', {
-    ignored: /(^|[\/\\])\../,
+const watcher = chokidar
+  .watch('./packages', {
+    usePolling: true,
+    persistent: true,
+    ignoreInitial: false, // Set to false to see initial scan
+    depth: 99, // Make sure we go deep enough in directory structure
+    awaitWriteFinish: {
+      stabilityThreshold: 500,
+      pollInterval: 100,
+    },
+    ignored: [
+      /(^|[\/\\])\../, // dotfiles
+      /node_modules/,
+      /dist/,
+      /build/,
+    ],
   })
   .on('change', (path) => {
     console.log(`🔄 File changed: ${path}`)
     rebuildAndPush(path)
   })
+
+const watchedPaths = new Set()
+watcher.on('add', (path) => watchedPaths.add(path))
+watcher.on('addDir', (path) => watchedPaths.add(path))
+
+// Log watched paths after initial scan
+watcher.on('ready', () => {
+  console.log('\nWatched paths:')
+  console.log(Array.from(watchedPaths).join('\n'))
+})

@@ -2,10 +2,11 @@
 import React, { createContext, useContext } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
-import { FlowgladActionKey } from '../shared/types'
 import { z } from 'zod'
-import { createPurchaseSessionSchema } from '../shared/actions'
+import { createPurchaseSessionSchema } from '../../shared/actions'
+import { FlowgladActionKey } from '../../shared/types'
 
+console.log('lol--00-0--000----')
 type LoadedFlowgladContextValues = {
   loaded: true
   customerProfile: {

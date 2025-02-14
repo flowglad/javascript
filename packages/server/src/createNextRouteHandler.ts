@@ -7,6 +7,7 @@ import {
 import { FlowgladServer } from './flowgladServer'
 import { FlowgladActionKey } from '../../shared/types'
 
+console.log('createNex--tRouteHandler------')
 const routeToHandlerMap: Record<
   FlowgladActionKey,
   (

@@ -4,7 +4,7 @@ import {
   FlowgladServerSessionParams,
   NextjsAuthFlowgladServerSessionParams,
   SupabaseFlowgladServerSessionParams,
-} from '../../next/src/types'
+} from './types'
 
 import { Flowglad as FlowgladNode } from '@flowglad/node'
 

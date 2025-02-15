@@ -1,5 +1,5 @@
-// @ts-ignore
 import { runAfterLast } from '../../scripts/runAfterLast'
+// @ts-ignore
 import { name, version } from './package.json'
 import { defineConfig, type Options } from 'tsup'
 
@@ -11,8 +11,6 @@ export default defineConfig((overrideOptions) => {
     entry: [
       './src/**/*.{ts,tsx,js,jsx}',
       '!./src/**/*.test.{ts,tsx}',
-      '!./src/**/server-actions.ts',
-      '!./src/**/keyless-actions.ts',
     ],
     // We want to preserve original file structure
     // so that the "use client" directives are not lost
@@ -41,42 +39,13 @@ export default defineConfig((overrideOptions) => {
     outDir: './dist/cjs',
   }
 
-  const serverActionsEsm: Options = {
-    ...esm,
-    entry: [
-      './src/**/server-actions.ts',
-      './src/**/keyless-actions.ts',
-    ],
-    sourcemap: false,
-  }
-
-  const serverActionsCjs: Options = {
-    ...cjs,
-    entry: [
-      './src/**/server-actions.ts',
-      './src/**/keyless-actions.ts',
-    ],
-    sourcemap: false,
-  }
-
-  const copyPackageJson = (format: 'esm' | 'cjs') =>
-    `cp ./package.${format}.json ./dist/${format}/package.json`
-  // Tsup will not output the generated file in the same location as the source file
-  // So we need to move the server-actions.js file to the app-router folder manually
-  // Happy to improve this if there is a better way
-  const moveServerActions = (format: 'esm' | 'cjs') =>
-    `mv ./dist/${format}/server-actions.js ./dist/${format}/app-router`
-  const moveKeylessActions = (format: 'esm' | 'cjs') =>
-    `mv ./dist/${format}/keyless-actions.js ./dist/${format}/app-router`
+  // const copyPackageJson = (format: 'esm' | 'cjs') =>
+  //   `cp ./package.${format}.json ./dist/${format}/package.json`
 
   return runAfterLast([
     'pnpm build:declarations',
-    copyPackageJson('esm'),
-    copyPackageJson('cjs'),
-    moveServerActions('esm'),
-    moveServerActions('cjs'),
-    moveKeylessActions('esm'),
-    moveKeylessActions('cjs'),
+    // copyPackageJson('esm'),
+    // copyPackageJson('cjs'),
     shouldPublish && 'pnpm publish:local',
-  ])(esm, cjs, serverActionsEsm, serverActionsCjs)
+  ])(esm, cjs)
 })

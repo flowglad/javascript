@@ -1,5 +1,5 @@
-// @ts-ignore
 import { runAfterLast } from '../../scripts/runAfterLast'
+// @ts-ignore
 import { name, version } from './package.json'
 import { defineConfig, type Options } from 'tsup'
 
@@ -11,8 +11,6 @@ export default defineConfig((overrideOptions) => {
     entry: [
       './src/**/*.{ts,tsx,js,jsx}',
       '!./src/**/*.test.{ts,tsx}',
-      '!./src/**/server-actions.ts',
-      '!./src/**/keyless-actions.ts',
     ],
     // We want to preserve original file structure
     // so that the "use client" directives are not lost
@@ -43,19 +41,11 @@ export default defineConfig((overrideOptions) => {
 
   const serverActionsEsm: Options = {
     ...esm,
-    entry: [
-      './src/**/server-actions.ts',
-      './src/**/keyless-actions.ts',
-    ],
     sourcemap: false,
   }
 
   const serverActionsCjs: Options = {
     ...cjs,
-    entry: [
-      './src/**/server-actions.ts',
-      './src/**/keyless-actions.ts',
-    ],
     sourcemap: false,
   }
 
@@ -71,12 +61,8 @@ export default defineConfig((overrideOptions) => {
 
   return runAfterLast([
     'pnpm build:declarations',
-    copyPackageJson('esm'),
-    copyPackageJson('cjs'),
-    moveServerActions('esm'),
-    moveServerActions('cjs'),
-    moveKeylessActions('esm'),
-    moveKeylessActions('cjs'),
+    // copyPackageJson('esm'),
+    // copyPackageJson('cjs'),
     shouldPublish && 'pnpm publish:local',
   ])(esm, cjs, serverActionsEsm, serverActionsCjs)
 })

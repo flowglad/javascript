@@ -9,7 +9,8 @@
     "build": "tsup",
     "clean": "rm -rf dist",
     "dev": "tsup --watch --onSuccess 'yalc push'",
-    "lint": "eslint && tsc --noEmit --project ../../tsconfig.base.json"
+    "lint": "eslint && tsc --noEmit --project ../../tsconfig.base.json",
+    "build:declarations": "tsc -p tsconfig.declarations.json"
   },
   "publishConfig": {
     "access": "public"

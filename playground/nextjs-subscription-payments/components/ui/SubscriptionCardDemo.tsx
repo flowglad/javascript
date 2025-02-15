@@ -2,7 +2,6 @@ import { useBilling } from '@flowglad/next';
 
 const SubscribeButton = () => {
   const billing = useBilling();
-  console.log('-----billing', billing);
   if (!billing.loaded) {
     return <div>Loading...</div>;
   }

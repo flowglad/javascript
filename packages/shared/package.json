@@ -4,9 +4,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "tsup",
     "clean": "rm -rf dist",
@@ -19,7 +17,11 @@
   "dependencies": {
     "zod": "3.23.8"
   },
-  "devDependencies": {
-    "tsup": "8.3.6"
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
   }
 }

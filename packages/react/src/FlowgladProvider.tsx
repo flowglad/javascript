@@ -5,9 +5,9 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { FlowgladContextProvider } from './FlowgladContext'
+
 const queryClient = new QueryClient()
 
-console.log('=------00000000000oij--')
 export const FlowgladProvider = ({
   children,
   flowgladRoute,

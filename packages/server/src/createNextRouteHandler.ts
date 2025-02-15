@@ -5,9 +5,8 @@ import {
   getCustomerProfileBilling,
 } from './customerProfileSubrouteHandler'
 import { FlowgladServer } from './flowgladServer'
-import { FlowgladActionKey } from '../../shared/types'
+import { FlowgladActionKey } from '@flowglad/shared'
 
-console.log('createNex--tRouteHandler------')
 const routeToHandlerMap: Record<
   FlowgladActionKey,
   (

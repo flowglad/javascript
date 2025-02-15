@@ -1,4 +1,4 @@
-import { flowgladNode } from '../../next/src/core'
+import { flowgladNode } from './core'
 import {
   CoreCustomerProfileUser,
   FlowgladServerSessionParams,

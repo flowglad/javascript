@@ -3,10 +3,11 @@ import React, { createContext, useContext } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { z } from 'zod'
-import { createPurchaseSessionSchema } from '../../shared/actions'
-import { FlowgladActionKey } from '../../shared/types'
+import {
+  createPurchaseSessionSchema,
+  FlowgladActionKey,
+} from '@flowglad/shared'
 
-console.log('lol--00-0--000----')
 type LoadedFlowgladContextValues = {
   loaded: true
   customerProfile: {
@@ -41,6 +42,7 @@ type LoadedFlowgladContextValues = {
 
 interface NotLoadedFlowgladContextValues {
   loaded: false
+  smthElse: string
 }
 type FlowgladContextValues =
   | LoadedFlowgladContextValues
@@ -48,6 +50,7 @@ type FlowgladContextValues =
 
 const FlowgladContext = createContext<FlowgladContextValues>({
   loaded: false,
+  smthElse: 'smthElse',
 })
 
 const constructCreatePurchaseSession =
@@ -125,6 +128,7 @@ export const FlowgladContextProvider = ({
         }
       : {
           loaded: false,
+          smthElse: 'smthElse33',
         }
   console.log('flowglad context values', value)
   return (

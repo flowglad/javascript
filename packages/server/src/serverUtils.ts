@@ -3,9 +3,9 @@ import {
   FlowgladServerSessionParams,
   NextjsAuthFlowgladServerSessionParams,
   SupabaseFlowgladServerSessionParams,
-} from '../../next/src/types'
+} from './types'
 
-const getSessionFromNextAuth = async (
+export const getSessionFromNextAuth = async (
   params: NextjsAuthFlowgladServerSessionParams
 ) => {
   let coreCustomerProfileUser: CoreCustomerProfileUser | null = null
@@ -34,7 +34,7 @@ const getSessionFromNextAuth = async (
   return coreCustomerProfileUser
 }
 
-const sessionFromSupabaseAuth = async (
+export const sessionFromSupabaseAuth = async (
   params: SupabaseFlowgladServerSessionParams
 ) => {
   let coreCustomerProfileUser: CoreCustomerProfileUser | null = null

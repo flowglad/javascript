@@ -1,13 +1,40 @@
 import { exec } from 'child_process'
 import chokidar from 'chokidar'
 import debounce from 'debounce'
+import chalk from 'chalk'
+
+const initialPublish = async () => {
+  console.log(chalk.blue('🚀 Initial publish of all packages...'))
+  try {
+    await exec('pnpm yalc:publish')
+    console.log(chalk.green('✅ Initial publish complete\n'))
+  } catch (error) {
+    console.error(chalk.red('❌ Initial publish failed:'), error)
+    process.exit(1)
+  }
+}
+
+const linkPackagesGlobally = async () => {
+  console.log(chalk.blue('🔗 Linking packages globally...'))
+  try {
+    for (const packageName of Object.keys(dependencyGraph)) {
+      const packagePath = `packages/${packageName.replace('@flowglad/', '')}`
+      console.log(chalk.yellow(`Linking ${packageName}...`))
+      await exec(`cd ${packagePath} && pnpm link --global`)
+    }
+    console.log(chalk.green('✅ All packages linked globally\n'))
+  } catch (error) {
+    console.error(chalk.red('❌ Global linking failed:'), error)
+    process.exit(1)
+  }
+}
 
 // Define dependency graph
 const dependencyGraph: Record<string, string[]> = {
   '@flowglad/shared': [],
   '@flowglad/react': ['@flowglad/shared'],
   '@flowglad/server': ['@flowglad/shared'],
-  '@flowglad/nextjs': ['@flowglad/react', '@flowglad/server'],
+  '@flowglad/next': ['@flowglad/react', '@flowglad/server'],
 }
 
 // Get all dependencies that need to be rebuilt when a package changes
@@ -28,7 +55,9 @@ const getDependentPackages = (packageName: string): string[] => {
 const buildAndPushPackage = async (packageName: string) => {
   const packagePath = `packages/${packageName.replace('@flowglad/', '')}`
 
-  console.log(`📦 Building ${packageName}...`)
+  console.log(
+    `📦 Building ${packageName}... at packagePath: ${packagePath}`
+  )
 
   try {
     // Build the package
@@ -65,35 +94,40 @@ const rebuildAndPush = debounce(async (path: string) => {
 }, 500)
 
 // Watch all package source files
-chokidar
-const watcher = chokidar
-  .watch('./packages', {
-    usePolling: true,
-    persistent: true,
-    ignoreInitial: false, // Set to false to see initial scan
-    depth: 99, // Make sure we go deep enough in directory structure
-    awaitWriteFinish: {
-      stabilityThreshold: 500,
-      pollInterval: 100,
-    },
-    ignored: [
-      /(^|[\/\\])\../, // dotfiles
-      /node_modules/,
-      /dist/,
-      /build/,
-    ],
-  })
-  .on('change', (path) => {
-    console.log(`🔄 File changed: ${path}`)
-    rebuildAndPush(path)
-  })
+const main = async () => {
+  await initialPublish()
+  await linkPackagesGlobally()
+  const watcher = chokidar
+    .watch('./packages', {
+      usePolling: true,
+      persistent: true,
+      ignoreInitial: false, // Set to false to see initial scan
+      depth: 99, // Make sure we go deep enough in directory structure
+      awaitWriteFinish: {
+        stabilityThreshold: 500,
+        pollInterval: 100,
+      },
+      ignored: [
+        /(^|[\/\\])\../, // dotfiles
+        /node_modules/,
+        /dist/,
+        /build/,
+      ],
+    })
+    .on('change', (path) => {
+      console.log(`🔄 File changed: ${path}`)
+      rebuildAndPush(path)
+    })
 
-const watchedPaths = new Set()
-watcher.on('add', (path) => watchedPaths.add(path))
-watcher.on('addDir', (path) => watchedPaths.add(path))
+  const watchedPaths = new Set()
+  watcher.on('add', (path) => watchedPaths.add(path))
+  watcher.on('addDir', (path) => watchedPaths.add(path))
 
-// Log watched paths after initial scan
-watcher.on('ready', () => {
-  console.log('\nWatched paths:')
-  console.log(Array.from(watchedPaths).join('\n'))
-})
+  // Log watched paths after initial scan
+  watcher.on('ready', () => {
+    console.log('\nWatched paths:')
+    console.log(Array.from(watchedPaths).join('\n'))
+  })
+}
+
+main().catch(console.error)

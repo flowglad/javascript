@@ -10,6 +10,7 @@ import {
 
 type LoadedFlowgladContextValues = {
   loaded: true
+  authenticated: true
   customerProfile: {
     externalId: string
     email: string
@@ -38,19 +39,37 @@ type LoadedFlowgladContextValues = {
       }[]
     }[]
   }
+  errors: null
 }
 
 interface NotLoadedFlowgladContextValues {
   loaded: false
-  smthElse: string
+  authenticated: boolean
+  errors: null
 }
+
+interface NotAuthenticatedFlowgladContextValues {
+  loaded: true
+  authenticated: false
+  errors: null
+}
+
+interface ErrorFlowgladContextValues {
+  loaded: true
+  authenticated: boolean
+  errors: Error[]
+}
+
 type FlowgladContextValues =
   | LoadedFlowgladContextValues
   | NotLoadedFlowgladContextValues
+  | NotAuthenticatedFlowgladContextValues
+  | ErrorFlowgladContextValues
 
 const FlowgladContext = createContext<FlowgladContextValues>({
   loaded: false,
-  smthElse: 'smthElse',
+  authenticated: false,
+  errors: null,
 })
 
 const constructCreatePurchaseSession =
@@ -78,7 +97,9 @@ export const FlowgladContextProvider = ({
   flowgladRoute = '/api/flowglad',
   cancelUrl,
   successUrl,
+  authenticated,
 }: {
+  authenticated?: boolean
   customerProfile?: {
     externalId: string
     email: string
@@ -90,11 +111,12 @@ export const FlowgladContextProvider = ({
   children: React.ReactNode
 }) => {
   const {
-    isPending,
-    error,
+    isPending: isPendingBilling,
+    error: errorBilling,
     data: billing,
   } = useQuery({
     queryKey: [FlowgladActionKey.GetCustomerProfileBilling],
+    enabled: authenticated,
     queryFn: async () => {
       const response = await axios.get(
         `${flowgladRoute}/${FlowgladActionKey.GetCustomerProfileBilling}`
@@ -109,28 +131,55 @@ export const FlowgladContextProvider = ({
     data: customerProfile,
   } = useQuery({
     queryKey: [FlowgladActionKey.FindOrCreateCustomerProfile],
-    queryFn: () =>
-      axios.post(
-        `${flowgladRoute}/${FlowgladActionKey.FindOrCreateCustomerProfile}`
-      ),
+    queryFn: async () => {
+      const response = await axios.post(
+        `${flowgladRoute}/${FlowgladActionKey.FindOrCreateCustomerProfile}`,
+        {}
+      )
+      return response.data
+    },
+    enabled: authenticated,
   })
-
   const createPurchaseSession =
     constructCreatePurchaseSession(flowgladRoute)
-  const value: FlowgladContextValues =
-    customerProfile && billing
-      ? {
-          loaded: true,
-          customerProfile: customerProfile.data.customerProfile,
-          createPurchaseSession,
-          catalog: billing.catalog,
-          subscriptions: billing.subscriptions,
-        }
-      : {
-          loaded: false,
-          smthElse: 'smthElse33',
-        }
-  console.log('flowglad context values', value)
+
+  let value: FlowgladContextValues
+  if (!authenticated) {
+    value = {
+      loaded: true,
+      authenticated: false,
+      errors: null,
+    }
+  } else if (customerProfile && billing) {
+    console.log('customerProfile', customerProfile)
+    console.log('billing', billing)
+    value = {
+      loaded: true,
+      authenticated,
+      customerProfile: customerProfile.data.customerProfile,
+      createPurchaseSession,
+      catalog: billing.data.catalog,
+      subscriptions: billing.data.subscriptions,
+      errors: null,
+    }
+  } else if (isPendingBilling || isPendingFindOrCreate) {
+    value = {
+      loaded: false,
+      authenticated,
+      errors: null,
+    }
+  } else {
+    const errors: Error[] = [errorBilling, errorFindOrCreate].filter(
+      (error): error is Error => error !== null
+    )
+    console.log('errors', errors)
+    value = {
+      loaded: true,
+      authenticated,
+      errors,
+    }
+  }
+
   return (
     <FlowgladContext.Provider value={value}>
       {children}
@@ -138,4 +187,12 @@ export const FlowgladContextProvider = ({
   )
 }
 
-export const useBilling = () => useContext(FlowgladContext)
+export const useBilling = () => {
+  const billing = useContext(FlowgladContext)
+  if (!billing.authenticated) {
+    throw new Error(
+      'FlowgladContext is not authenticated. If you are authenticated, ensure that the FlowgladProvider `authenticated` property is set to true.'
+    )
+  }
+  return billing
+}

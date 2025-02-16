@@ -1,11 +1,11 @@
 import { z, ZodSchema } from 'zod'
 import { FlowgladActionKey, HTTPMethod } from './types'
 
-type FlowgladActionValidatorMap = Record<
+export type FlowgladActionValidatorMap = Record<
   FlowgladActionKey,
   {
     method: HTTPMethod
-    validator: ZodSchema
+    inputValidator: ZodSchema
   }
 >
 
@@ -15,21 +15,25 @@ export const createPurchaseSessionSchema = z.object({
   cancelUrl: z.string().url(),
 })
 
+export type CreatePurchaseSessionParams = z.infer<
+  typeof createPurchaseSessionSchema
+>
+
 export const flowgladActionValidators: FlowgladActionValidatorMap = {
   [FlowgladActionKey.GetCustomerProfileBilling]: {
     method: HTTPMethod.GET,
-    validator: z.object({
+    inputValidator: z.object({
       externalId: z.string(),
     }),
   },
   [FlowgladActionKey.FindOrCreateCustomerProfile]: {
     method: HTTPMethod.POST,
-    validator: z.object({
+    inputValidator: z.object({
       externalId: z.string(),
     }),
   },
   [FlowgladActionKey.CreatePurchaseSession]: {
     method: HTTPMethod.POST,
-    validator: createPurchaseSessionSchema,
+    inputValidator: createPurchaseSessionSchema,
   },
 }

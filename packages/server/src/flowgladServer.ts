@@ -1,3 +1,4 @@
+import { CreatePurchaseSessionParams } from '@flowglad/shared'
 import { flowgladNode } from './core'
 import {
   CoreCustomerProfileUser,
@@ -103,4 +104,21 @@ export class FlowgladServer {
         session.externalId
       )
     }
+
+  public createPurchaseSession = async (
+    params: CreatePurchaseSessionParams
+  ): Promise<FlowgladNode.PurchaseSessions.PurchaseSessionCreateResponse> => {
+    const session = await getSessionFromParams(
+      this.createHandlerParams
+    )
+    if (!session) {
+      throw new Error('User not authenticated')
+    }
+    return flowgladNode().purchaseSessions.create({
+      customerProfileExternalId: session.externalId,
+      VariantId: params.VariantId,
+      successUrl: params.successUrl,
+      cancelUrl: params.cancelUrl,
+    })
+  }
 }

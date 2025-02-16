@@ -6,7 +6,7 @@ import { PropsWithChildren, Suspense } from 'react';
 import { getURL } from '@/utils/helpers';
 import { createClient } from '@/utils/supabase/server';
 import 'styles/main.css';
-import { FlowgladProvider } from '@flowglad/next';
+import { FlowgladProvider } from '@flowglad/react';
 
 const title = 'Next.js Subscription Starter';
 const description = 'Brought to you by Vercel, Stripe, and Supabase.';
@@ -27,7 +27,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
     data: { user }
   } = await supabase.auth.getUser();
   return (
-    <FlowgladProvider>
+    <FlowgladProvider authenticated={!!user}>
       <html lang="en">
         <body className="bg-black">
           <Navbar />

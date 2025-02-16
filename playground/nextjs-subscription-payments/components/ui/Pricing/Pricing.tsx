@@ -10,7 +10,7 @@ import { User } from '@supabase/supabase-js';
 import cn from 'classnames';
 import { useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { useBilling } from '@flowglad/next';
+import { useBilling } from '@flowglad/react';
 import { SubscriptionDemoCard } from '../SubscriptionCardDemo';
 
 type Subscription = Tables<'subscriptions'>;
@@ -83,6 +83,7 @@ export default function Pricing({ user, products, subscription }: Props) {
     setPriceIdLoading(undefined);
   };
   const billing = useBilling();
+  console.log('====billing', billing);
   if (!products.length) {
     return (
       <section className="bg-black">

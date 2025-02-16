@@ -1,9 +1,15 @@
-import { useBilling } from '@flowglad/next';
+import { useBilling } from '@flowglad/react';
 
 const SubscribeButton = () => {
   const billing = useBilling();
   if (!billing.loaded) {
     return <div>Loading...</div>;
+  } else if (billing.errors) {
+    return (
+      <div>
+        Error: {billing.errors.map((error) => error.message).join(', ')}
+      </div>
+    );
   }
   const { createPurchaseSession, catalog } = billing;
   return (
@@ -16,6 +22,7 @@ const SubscribeButton = () => {
           cancelUrl: 'http://localhost:3002/cancel'
         })
       }
+      className="bg-blue-500 text-white px-4 py-2 rounded-md"
     >
       Subscribe
     </button>
@@ -26,12 +33,17 @@ export const SubscriptionDemoCard = () => {
   const billing = useBilling();
   if (!billing.loaded) {
     return <div>Loading...</div>;
+  } else if (billing.errors) {
+    return (
+      <div>
+        Error: {billing.errors.map((error) => error.message).join(', ')}
+      </div>
+    );
   }
   const { customerProfile, subscriptions } = billing;
   if (!customerProfile) {
     return <div>No customer profile found</div>;
   }
-  console.log('-----customerProfile', customerProfile);
   if (!subscriptions[0]) {
     return <SubscribeButton />;
   }

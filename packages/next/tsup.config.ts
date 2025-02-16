@@ -53,7 +53,6 @@ export default defineConfig((overrideOptions) => {
     `cp ./package.${format}.json ./dist/${format}/package.json`
   // Tsup will not output the generated file in the same location as the source file
   // So we need to move the server-actions.js file to the app-router folder manually
-  // Happy to improve this if there is a better way
   const moveServerActions = (format: 'esm' | 'cjs') =>
     `mv ./dist/${format}/server-actions.js ./dist/${format}/app-router`
   const moveKeylessActions = (format: 'esm' | 'cjs') =>

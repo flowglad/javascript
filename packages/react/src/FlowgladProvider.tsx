@@ -13,11 +13,13 @@ export const FlowgladProvider = ({
   flowgladRoute,
   cancelUrl,
   successUrl,
+  authenticated,
 }: {
   children: React.ReactNode
   flowgladRoute?: string
   cancelUrl?: string
   successUrl?: string
+  authenticated: boolean
 }) => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -25,6 +27,7 @@ export const FlowgladProvider = ({
         flowgladRoute={flowgladRoute}
         cancelUrl={cancelUrl}
         successUrl={successUrl}
+        authenticated={authenticated}
       >
         {children}
       </FlowgladContextProvider>

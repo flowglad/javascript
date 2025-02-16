@@ -10,7 +10,8 @@
       "clean": "rm -rf dist",
       "dev": "tsup --watch --onSuccess 'yalc push'",
       "yalc:publish": "yalc publish",
-      "build:declarations": "tsc -p tsconfig.declarations.json"
+      "build:declarations": "tsc -p tsconfig.declarations.json",
+      "lint": "eslint && tsc --noEmit"
     },
     "dependencies": {
       "@flowglad/shared": "workspace:*",
@@ -23,9 +24,6 @@
         "import": "./dist/esm/index.js",
         "require": "./dist/cjs/index.js"
       }
-    },
-    "peerDependencies": {
-      "next": "^14.0.3 || ^15.0.0"
     },
     "publishConfig": {
       "access": "public"

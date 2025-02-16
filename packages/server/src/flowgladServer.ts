@@ -117,6 +117,7 @@ export class FlowgladServer {
     return flowgladNode().purchaseSessions.create({
       customerProfileExternalId: session.externalId,
       VariantId: params.VariantId,
+      // @ts-expect-error - update open API and publish
       successUrl: params.successUrl,
       cancelUrl: params.cancelUrl,
     })

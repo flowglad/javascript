@@ -1,3 +1,4 @@
+'use server';
 import { createNextRouteHandler } from '@flowglad/next';
 import { flowgladServer } from '@/app/flowglad';
 

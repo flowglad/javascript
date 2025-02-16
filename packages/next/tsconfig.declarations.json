@@ -16,6 +16,7 @@
       "src/index.browser.ts",
       "src/index.headless.ts",
       "src/index.headless.browser.ts",
+      "src/server.ts",
       "src/**/*.d.ts"
     ]
   }

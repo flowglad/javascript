@@ -1,4 +1,4 @@
-import { useBilling } from '@flowglad/react';
+import { useBilling } from '@flowglad/next';
 
 const SubscribeButton = () => {
   const billing = useBilling();

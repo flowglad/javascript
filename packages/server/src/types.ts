@@ -64,7 +64,7 @@ export interface NextjsAuthFlowgladServerSessionParams {
   }
 }
 
-export interface FooFlowgladServerSessionParams {
+export interface BaseFlowgladServerSessionParams {
   getRequestingCustomerProfile: GetRequestingCustomerProfile
   authorizeRead?: (
     requestedCustomerProfileId: string
@@ -74,4 +74,4 @@ export interface FooFlowgladServerSessionParams {
 export type FlowgladServerSessionParams =
   | SupabaseFlowgladServerSessionParams
   | NextjsAuthFlowgladServerSessionParams
-  | FooFlowgladServerSessionParams
+  | BaseFlowgladServerSessionParams

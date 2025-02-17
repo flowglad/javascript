@@ -13,7 +13,7 @@ const getSessionFromNextAuth = async (
   params: NextjsAuthFlowgladServerSessionParams
 ) => {
   let coreCustomerProfileUser: CoreCustomerProfileUser | null = null
-  const session = await params.nextAuth.getServerSession()
+  const session = await params.nextAuth.auth()
   if (session?.user) {
     if (params.nextAuth.extractUserIdFromSession) {
       const userId = params.nextAuth.extractUserIdFromSession(session)
@@ -36,6 +36,13 @@ const getSessionFromNextAuth = async (
     }
   }
   return coreCustomerProfileUser
+}
+
+const getSessionFromNextAuth4 = async (
+  params: NextjsAuthFlowgladServerSessionParams
+) => {
+  const session = await params.nextAuth.auth()
+  return session
 }
 
 const sessionFromSupabaseAuth = async (

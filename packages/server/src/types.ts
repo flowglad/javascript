@@ -71,7 +71,13 @@ interface BetterAuthSession {
 
 export interface BetterAuthFlowgladServerSessionParams {
   betterAuth: {
+    /**
+     * the getSession function from the BetterAuth client.
+     */
     getSession: () => Promise<BetterAuthSession | null>
+    /**
+     * Extracts the customer profile parameters from the session object.
+     */
     customerProfileFromSession?: (
       session: BetterAuthSession
     ) => Promise<CoreCustomerProfileUser | null>

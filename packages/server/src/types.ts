@@ -115,4 +115,6 @@ export interface ClerkFlowgladServerSessionParams {
 export type FlowgladServerSessionParams =
   | SupabaseFlowgladServerSessionParams
   | NextjsAuthFlowgladServerSessionParams
+  | ClerkFlowgladServerSessionParams
+  | BetterAuthFlowgladServerSessionParams
   | BaseFlowgladServerSessionParams

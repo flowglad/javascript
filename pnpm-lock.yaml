@@ -95,8 +95,8 @@ importers:
   packages/server:
     dependencies:
       '@flowglad/node':
-        specifier: 0.1.0-alpha.1
-        version: 0.1.0-alpha.1
+        specifier: 0.1.0-alpha.3
+        version: 0.1.0-alpha.3
       '@flowglad/shared':
         specifier: workspace:*
         version: link:../shared
@@ -468,8 +468,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@flowglad/node@0.1.0-alpha.1':
-    resolution: {integrity: sha512-nv9yWQZ309D3dvFIy+NB9Fd4c+UsrmERwVE+tLaZX6CCg1g76tnOWZfuqP7fFa7RpXoC2AwV3P5ERaHW1bpE+w==}
+  '@flowglad/node@0.1.0-alpha.3':
+    resolution: {integrity: sha512-aTeuQlsosUwmX960kEU+VMjnq7oOttzIhmCxN1E8u4kGQTCZSTOGgHkemzuAM+es01eoVrliDZoY3YcWaxKENA==}
 
   '@img/sharp-darwin-arm64@0.33.5':
     resolution: {integrity: sha512-UT4p+iz/2H4twwAoLCqfA9UH5pI6DggwKEGuaPy7nCVQ8ZsiY5PIcrRvD1DzuY3qYL07NtIQcWnBSY/heikIFQ==}
@@ -795,9 +795,6 @@ packages:
 
   '@types/node@18.19.75':
     resolution: {integrity: sha512-UIksWtThob6ZVSyxcOqCLOUNg/dyO1Qvx4McgeuhrEtHTLFTf7BBhEazaE4K806FGTPtzd/2sE90qn4fVr7cyw==}
-
-  '@types/node@20.17.19':
-    resolution: {integrity: sha512-LEwC7o1ifqg/6r2gn9Dns0f1rhK+fPFDoMiceTJ6kWmVk6bgXBI/9IOWfVan4WiAavK9pIVWdX0/e3J+eEUh5A==}
 
   '@types/prop-types@15.7.14':
     resolution: {integrity: sha512-gNMvNH49DJ7OJYv+KAKn0Xp45p8PLl6zo2YnvDIbTd4J6MER2BmWN49TG7n9LvkyihINxeKW8+3bfS2yDC9dzQ==}
@@ -1635,9 +1632,6 @@ packages:
   undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
 
-  undici-types@6.19.8:
-    resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
-
   universalify@0.1.2:
     resolution: {integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==}
     engines: {node: '>= 4.0.0'}
@@ -1979,7 +1973,7 @@ snapshots:
   '@esbuild/win32-x64@0.24.2':
     optional: true
 
-  '@flowglad/node@0.1.0-alpha.1':
+  '@flowglad/node@0.1.0-alpha.3':
     dependencies:
       '@types/node': 18.19.75
       '@types/node-fetch': 2.6.12
@@ -2225,7 +2219,7 @@ snapshots:
 
   '@types/node-fetch@2.6.12':
     dependencies:
-      '@types/node': 20.17.19
+      '@types/node': 18.19.75
       form-data: 4.0.1
 
   '@types/node@12.20.55': {}
@@ -2233,10 +2227,6 @@ snapshots:
   '@types/node@18.19.75':
     dependencies:
       undici-types: 5.26.5
-
-  '@types/node@20.17.19':
-    dependencies:
-      undici-types: 6.19.8
 
   '@types/prop-types@15.7.14': {}
 
@@ -3003,8 +2993,6 @@ snapshots:
   typescript@5.7.3: {}
 
   undici-types@5.26.5: {}
-
-  undici-types@6.19.8: {}
 
   universalify@0.1.2: {}
 

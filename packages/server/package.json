@@ -18,6 +18,10 @@
       "@flowglad/node": "catalog:flowglad/node",
       "zod": "3.23.8"
     },
+    "devDependencies": {
+      "eslint": "catalog:repo",
+      "typescript": "catalog:repo"
+    },
     "exports": {
       ".": {
         "types": "./dist/types/index.d.ts",

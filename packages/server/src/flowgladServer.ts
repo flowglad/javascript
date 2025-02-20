@@ -15,13 +15,9 @@ const getSessionFromNextAuth = async (
   let coreCustomerProfileUser: CoreCustomerProfileUser | null = null
   const session = await params.nextAuth.auth()
   if (session?.user) {
-    if (params.nextAuth.extractUserIdFromSession) {
-      const userId = params.nextAuth.extractUserIdFromSession(session)
-      coreCustomerProfileUser = {
-        externalId: userId,
-        name: session.user.name || '',
-        email: session.user.email || '',
-      }
+    if (params.nextAuth.customerProfileFromAuth) {
+      coreCustomerProfileUser =
+        await params.nextAuth.customerProfileFromAuth(session)
     } else {
       if (!session.user.email) {
         throw new Error(
@@ -100,14 +96,14 @@ export class FlowgladServer {
     }
 
   public getBilling =
-    async (): Promise<FlowgladNode.CustomerProfiles.BillingRetrieveResponse> => {
+    async (): Promise<FlowgladNode.CustomerProfiles.CustomerProfileBillingResponse> => {
       const session = await getSessionFromParams(
         this.createHandlerParams
       )
       if (!session) {
         throw new Error('User not authenticated')
       }
-      return flowgladNode().customerProfiles.billing.retrieve(
+      return flowgladNode().customerProfiles.billing(
         session.externalId
       )
     }
@@ -124,7 +120,6 @@ export class FlowgladServer {
     return flowgladNode().purchaseSessions.create({
       customerProfileExternalId: session.externalId,
       VariantId: params.VariantId,
-      // @ts-expect-error - update open API and publish
       successUrl: params.successUrl,
       cancelUrl: params.cancelUrl,
     })

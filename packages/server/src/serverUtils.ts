@@ -9,21 +9,16 @@ export const getSessionFromNextAuth = async (
   params: NextjsAuthFlowgladServerSessionParams
 ) => {
   let coreCustomerProfileUser: CoreCustomerProfileUser | null = null
-  const session = await params.nextAuth.getServerSession()
+  const session = await params.nextAuth.auth()
   if (session?.user) {
-    if (params.nextAuth.extractUserIdFromSession) {
-      const userId = params.nextAuth.extractUserIdFromSession(session)
-      coreCustomerProfileUser = {
-        externalId: userId,
-        name: session.user.name || '',
-        email: session.user.email || '',
-      }
+    if (params.nextAuth.customerProfileFromAuth) {
+      coreCustomerProfileUser =
+        await params.nextAuth.customerProfileFromAuth(session)
+    } else if (!session.user.email) {
+      throw new Error(
+        'FlowgladError: NextAuth session has no email. Please provide an extractUserIdFromSession function to extract the userId from the session, or include email on your sessions.'
+      )
     } else {
-      if (!session.user.email) {
-        throw new Error(
-          'FlowgladError: NextAuth session has no email. Please provide an extractUserIdFromSession function to extract the userId from the session, or include email on your sessions.'
-        )
-      }
       coreCustomerProfileUser = {
         externalId: session.user.email,
         name: session.user.name || '',

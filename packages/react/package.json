@@ -16,6 +16,7 @@
     "build:declarations": "tsc -p tsconfig.declarations.json"
   },
   "dependencies": {
+    "@flowglad/node": "catalog:flowglad/node",
     "@flowglad/shared": "workspace:*",
     "@tanstack/react-query": "5.66.0",
     "zod": "3.23.8"

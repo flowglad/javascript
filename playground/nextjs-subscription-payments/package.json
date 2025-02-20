@@ -21,7 +21,7 @@
   "dependencies": {
     "@clerk/nextjs": "^6.10.2",
     "@flowglad/next": "file:.yalc/@flowglad/next",
-    "@flowglad/node": "0.1.0-alpha.3",
+    "@flowglad/node": "catalog:flowglad/node",
     "@flowglad/react": "file:.yalc/@flowglad/react",
     "@flowglad/server": "file:.yalc/@flowglad/server",
     "@flowglad/shared": "file:.yalc/@flowglad/shared",

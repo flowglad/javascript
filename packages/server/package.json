@@ -15,7 +15,7 @@
     },
     "dependencies": {
       "@flowglad/shared": "workspace:*",
-      "@flowglad/node": "0.1.0-alpha.3",
+      "@flowglad/node": "catalog:flowglad/node",
       "zod": "3.23.8"
     },
     "exports": {

@@ -1,0 +1,28 @@
+{
+  "name": "@flowglad/shared",
+  "version": "0.0.1-alpha.1",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist",
+    "dev": "tsup --watch --onSuccess 'yalc push'",
+    "lint": "eslint && tsc --noEmit",
+    "build:declarations": "tsc -p tsconfig.declarations.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "zod": "3.23.8"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  }
+}

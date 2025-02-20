@@ -2,6 +2,7 @@
   "name": "@flowglad/javascript",
   "private": true,
   "license": "MIT",
+  "version": "0.0.0",
   "scripts": {
     "test": "pnpm -r test",
     "yalc:publish": "pnpm -r yalc:publish",
@@ -14,8 +15,9 @@
     "clean": "pnpm -r clean",
     "preinstall": "npx only-allow pnpm",
     "build": "pnpm -r build",
+    "build:declarations": "pnpm -r build:declarations",
     "version-packages": "changeset version",
-    "publish-packages": "pnpm build && changeset publish"
+    "publish-packages": "pnpm build:declarations && pnpm build && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.0",

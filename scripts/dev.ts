@@ -1,7 +1,7 @@
 import { exec } from 'child_process'
 import chokidar from 'chokidar'
 import debounce from 'debounce'
-import chalk from 'chalk'
+const chalk = require('chalk')
 
 const initialPublish = async () => {
   console.log(chalk.blue('🚀 Initial publish of all packages...'))

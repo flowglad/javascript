@@ -1,6 +1,5 @@
 packages:
   - 'packages/*'
-  - 'examples/*'
 
 catalogs:
   # Can be referenced through "catalog:react"

@@ -1,5 +1,18 @@
 # @flowglad/nextjs
 
+## 0.2.0
+
+### Minor Changes
+
+- Rename next to nextjs
+
+### Patch Changes
+
+- Updated dependencies
+  - @flowglad/react@0.2.0
+  - @flowglad/server@0.2.0
+  - @flowglad/shared@0.2.0
+
 ## 0.1.0
 
 ### Minor Changes

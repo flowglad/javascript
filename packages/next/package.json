@@ -1,46 +1,48 @@
 {
-    "name": "@flowglad/next",
-    "version": "0.0.1-alpha.1",
-    "main": "./dist/index.js",
-    "module": "./dist/index.mjs",
-    "types": "./dist/index.d.ts",
-    "files": ["dist"],
-    "scripts": {
-      "build": "tsup",
-      "clean": "rm -rf dist",
-      "dev": "tsup --watch --onSuccess 'yalc push'",
-      "yalc:publish": "yalc publish",
-      "lint": "eslint && tsc --noEmit",
-      "build:declarations": "tsc -p tsconfig.declarations.json"
+  "name": "@flowglad/next",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist",
+    "dev": "tsup --watch --onSuccess 'yalc push'",
+    "yalc:publish": "yalc publish",
+    "lint": "eslint && tsc --noEmit",
+    "build:declarations": "tsc -p tsconfig.declarations.json"
+  },
+  "dependencies": {
+    "@flowglad/shared": "workspace:*",
+    "@flowglad/react": "workspace:*",
+    "@flowglad/server": "workspace:*",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:react",
+    "eslint": "catalog:repo",
+    "typescript": "catalog:repo"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
     },
-    "dependencies": {
-      "@flowglad/shared": "workspace:*",
-      "@flowglad/react": "workspace:*",
-      "@flowglad/server": "workspace:*",
-      "zod": "3.23.8"
-    },
-    "devDependencies": {
-      "@types/react": "catalog:react",
-      "eslint": "catalog:repo",
-      "typescript": "catalog:repo"
-    },
-    "exports": {
-      ".": {
-        "types": "./dist/types/index.d.ts",
-        "import": "./dist/esm/index.js",
-        "require": "./dist/cjs/index.js"
-      },
-      "./server": {
-        "types": "./dist/types/server.d.ts",
-        "import": "./dist/esm/server.js",
-        "require": "./dist/cjs/server.js"
-      }
-    },
-    "peerDependencies": {
-      "react": "^19.0.0",
-      "next": "^14.0.3 || ^15.0.0"
-    },
-    "publishConfig": {
-      "access": "public"
+    "./server": {
+      "types": "./dist/types/server.d.ts",
+      "import": "./dist/esm/server.js",
+      "require": "./dist/cjs/server.js"
     }
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "next": "^14.0.3 || ^15.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
+}

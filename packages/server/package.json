@@ -1,35 +1,37 @@
 {
-    "name": "@flowglad/server",
-    "version": "0.0.1-alpha.1",
-    "main": "./dist/index.js",
-    "module": "./dist/index.mjs",
-    "types": "./dist/index.d.ts",
-    "files": ["dist"],
-    "scripts": {
-      "build": "tsup",
-      "clean": "rm -rf dist",
-      "dev": "tsup --watch --onSuccess 'yalc push'",
-      "yalc:publish": "yalc publish",
-      "build:declarations": "tsc -p tsconfig.declarations.json",
-      "lint": "eslint && tsc --noEmit"
-    },
-    "dependencies": {
-      "@flowglad/shared": "workspace:*",
-      "@flowglad/node": "catalog:flowglad/node",
-      "zod": "3.23.8"
-    },
-    "devDependencies": {
-      "eslint": "catalog:repo",
-      "typescript": "catalog:repo"
-    },
-    "exports": {
-      ".": {
-        "types": "./dist/types/index.d.ts",
-        "import": "./dist/esm/index.js",
-        "require": "./dist/cjs/index.js"
-      }
-    },
-    "publishConfig": {
-      "access": "public"
+  "name": "@flowglad/server",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist",
+    "dev": "tsup --watch --onSuccess 'yalc push'",
+    "yalc:publish": "yalc publish",
+    "build:declarations": "tsc -p tsconfig.declarations.json",
+    "lint": "eslint && tsc --noEmit"
+  },
+  "dependencies": {
+    "@flowglad/shared": "workspace:*",
+    "@flowglad/node": "catalog:flowglad/node",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "eslint": "catalog:repo",
+    "typescript": "catalog:repo"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
     }
+  },
+  "publishConfig": {
+    "access": "public"
   }
+}

@@ -7,21 +7,13 @@ import {
   createPurchaseSessionSchema,
   FlowgladActionKey,
 } from '@flowglad/shared'
+import type { Flowglad } from '@flowglad/node'
 
 type LoadedFlowgladContextValues = {
   loaded: true
   authenticated: true
-  customerProfile: {
-    externalId: string
-    email: string
-    name: string
-  }
-  subscriptions: {
-    id: string
-    status: string
-    currentPeriodEnd: string
-    currentPeriodStart: string
-  }[]
+  customerProfile: Flowglad.CustomerProfileRetrieveResponse.CustomerProfile
+  subscriptions: Flowglad.SubscriptionRetrieveResponse.Subscription[]
   createPurchaseSession: (
     params: z.infer<typeof createPurchaseSessionSchema> & {
       autoRedirect?: boolean
@@ -30,15 +22,7 @@ type LoadedFlowgladContextValues = {
     id: string
     url: string
   }>
-  catalog: {
-    products: {
-      id: string
-      variants: {
-        id: string
-        price: number
-      }[]
-    }[]
-  }
+  catalog: Flowglad.CustomerProfileBillingResponse.Catalog
   errors: null
 }
 

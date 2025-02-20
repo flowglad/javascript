@@ -5,6 +5,10 @@ settings:
   excludeLinksFromLockfile: false
 
 catalogs:
+  flowglad/node:
+    '@flowglad/node':
+      specifier: 0.1.0-alpha.3
+      version: 0.1.0-alpha.3
   react:
     '@types/react':
       specifier: 18.3.12
@@ -75,6 +79,9 @@ importers:
 
   packages/react:
     dependencies:
+      '@flowglad/node':
+        specifier: catalog:flowglad/node
+        version: 0.1.0-alpha.3
       '@flowglad/shared':
         specifier: workspace:*
         version: link:../shared
@@ -95,7 +102,7 @@ importers:
   packages/server:
     dependencies:
       '@flowglad/node':
-        specifier: 0.1.0-alpha.3
+        specifier: catalog:flowglad/node
         version: 0.1.0-alpha.3
       '@flowglad/shared':
         specifier: workspace:*

@@ -9,7 +9,7 @@
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "dev": "tsx scripts/dev.ts",
     "dev:react": "pnpm --filter @flowglad/react dev",
-    "dev:next": "pnpm --filter @flowglad/next dev",
+    "dev:next": "pnpm --filter @flowglad/nextjs dev",
     "dev:server": "pnpm --filter @flowglad/server dev",
     "lint": "pnpm -r lint",
     "clean": "pnpm -r clean",

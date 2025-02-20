@@ -34,7 +34,7 @@ const dependencyGraph: Record<string, string[]> = {
   '@flowglad/shared': [],
   '@flowglad/react': ['@flowglad/shared'],
   '@flowglad/server': ['@flowglad/shared'],
-  '@flowglad/next': ['@flowglad/react', '@flowglad/server'],
+  '@flowglad/nextjs': ['@flowglad/react', '@flowglad/server'],
 }
 
 // Get all dependencies that need to be rebuilt when a package changes

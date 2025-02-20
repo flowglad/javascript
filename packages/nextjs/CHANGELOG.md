@@ -1,4 +1,4 @@
-# @flowglad/next
+# @flowglad/nextjs
 
 ## 0.1.0
 

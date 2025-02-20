@@ -2,7 +2,7 @@
 
 import LogoCloud from '@/components/ui/LogoCloud';
 import { User } from '@supabase/supabase-js';
-import { useBilling } from '@flowglad/next';
+import { useBilling } from '@flowglad/nextjs';
 import { SubscriptionDemoCard } from '../SubscriptionCardDemo';
 
 interface Props {

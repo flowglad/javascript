@@ -3,6 +3,7 @@ import {
   findOrCreateCustomerProfile,
   getCustomerProfileBilling,
 } from './customerProfileHandlers'
+import { createPurchaseSession } from './purchaseSessionHandlers'
 import { SubRouteHandler } from './types'
 
 export const routeToHandlerMap: Record<
@@ -13,6 +14,5 @@ export const routeToHandlerMap: Record<
     getCustomerProfileBilling,
   [FlowgladActionKey.FindOrCreateCustomerProfile]:
     findOrCreateCustomerProfile,
-  [FlowgladActionKey.CreatePurchaseSession]:
-    findOrCreateCustomerProfile,
+  [FlowgladActionKey.CreatePurchaseSession]: createPurchaseSession,
 }

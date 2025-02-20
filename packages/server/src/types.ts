@@ -104,7 +104,7 @@ interface ClerkUser {
 }
 
 export interface ClerkFlowgladServerSessionParams {
-  clerkAuth: {
+  clerk: {
     currentUser: () => Promise<ClerkUser | null>
     customerProfileFromCurrentUser?: (
       currentUser: ClerkUser

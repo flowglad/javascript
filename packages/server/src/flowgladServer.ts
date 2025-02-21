@@ -1,6 +1,7 @@
 import { CreatePurchaseSessionParams } from '@flowglad/shared'
 import { flowgladNode } from './core'
 import {
+  ClerkFlowgladServerSessionParams,
   CoreCustomerProfileUser,
   FlowgladServerSessionParams,
   NextjsAuthFlowgladServerSessionParams,
@@ -58,16 +59,34 @@ const sessionFromSupabaseAuth = async (
   return coreCustomerProfileUser
 }
 
+const sessionFromClerkAuth = async (
+  params: ClerkFlowgladServerSessionParams
+) => {
+  let coreCustomerProfileUser: CoreCustomerProfileUser | null = null
+  const session = await params.clerk.currentUser()
+  if (params.clerk.customerProfileFromCurrentUser && session) {
+    coreCustomerProfileUser =
+      await params.clerk.customerProfileFromCurrentUser(session)
+  } else if (session) {
+    coreCustomerProfileUser = {
+      externalId: session.id,
+      name: session.firstName || '',
+      email: session.emailAddresses[0].emailAddress || '',
+    }
+  }
+  return coreCustomerProfileUser
+}
+
 const getSessionFromParams = async (
   params: FlowgladServerSessionParams
 ) => {
   let coreCustomerProfileUser: CoreCustomerProfileUser | null = null
   if ('nextAuth' in params) {
     coreCustomerProfileUser = await getSessionFromNextAuth(params)
-  }
-
-  if ('supabaseAuth' in params) {
+  } else if ('supabaseAuth' in params) {
     coreCustomerProfileUser = await sessionFromSupabaseAuth(params)
+  } else if ('clerk' in params) {
+    coreCustomerProfileUser = await sessionFromClerkAuth(params)
   }
   return coreCustomerProfileUser
 }
@@ -92,7 +111,7 @@ export class FlowgladServer {
 
   public getSession =
     async (): Promise<CoreCustomerProfileUser | null> => {
-      return await getSessionFromParams(this.createHandlerParams)
+      return getSessionFromParams(this.createHandlerParams)
     }
 
   public getBilling =

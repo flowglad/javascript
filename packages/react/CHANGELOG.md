@@ -1,5 +1,15 @@
 # @flowglad/react
 
+## 0.2.3
+
+### Patch Changes
+
+- remove axios dependency
+- Fix missing clerk authentication
+- Updated dependencies
+- Updated dependencies
+  - @flowglad/shared@0.2.3
+
 ## 0.2.0
 
 ### Minor Changes

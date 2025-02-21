@@ -1,5 +1,16 @@
 # @flowglad/server
 
+## 0.4.0
+
+### Minor Changes
+
+- use 0.1.0-alpha.5
+
+### Patch Changes
+
+- Updated dependencies
+  - @flowglad/shared@0.4.0
+
 ## 0.3.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @flowglad/shared
 
+## 0.4.0
+
+### Minor Changes
+
+- use 0.1.0-alpha.5
+
 ## 0.3.0
 
 ### Minor Changes

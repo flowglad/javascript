@@ -1,7 +1,6 @@
 'use client'
 import React, { createContext, useContext } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
 import { z } from 'zod'
 import {
   createPurchaseSessionSchema,
@@ -12,8 +11,8 @@ import type { Flowglad } from '@flowglad/node'
 type LoadedFlowgladContextValues = {
   loaded: true
   authenticated: true
-  customerProfile: Flowglad.CustomerProfileRetrieveResponse.CustomerProfile
-  subscriptions: Flowglad.SubscriptionRetrieveResponse.Subscription[]
+  customerProfile: Flowglad.CustomerProfileBillingResponse.CustomerProfile
+  subscriptions: Flowglad.CustomerProfileBillingResponse.Subscription[]
   createPurchaseSession: (
     params: z.infer<typeof createPurchaseSessionSchema> & {
       autoRedirect?: boolean
@@ -63,16 +62,20 @@ const constructCreatePurchaseSession =
       LoadedFlowgladContextValues['createPurchaseSession']
     >[0]
   ) => {
-    const response = await axios.post(
+    const response = await fetch(
       `${flowgladRoute}/${FlowgladActionKey.CreatePurchaseSession}`,
-      params
+      {
+        method: 'POST',
+        body: JSON.stringify(params),
+      }
     )
+    const data = await response.json()
     if (params.autoRedirect) {
-      window.location.href = response.data.purchaseSessionUrl
+      window.location.href = data.purchaseSessionUrl
     }
     return {
-      id: response.data.purchaseSessionId,
-      url: response.data.purchaseSessionUrl,
+      id: data.purchaseSessionId,
+      url: data.purchaseSessionUrl,
     }
   }
 
@@ -102,10 +105,11 @@ export const FlowgladContextProvider = ({
     queryKey: [FlowgladActionKey.GetCustomerProfileBilling],
     enabled: authenticated,
     queryFn: async () => {
-      const response = await axios.get(
+      const response = await fetch(
         `${flowgladRoute}/${FlowgladActionKey.GetCustomerProfileBilling}`
       )
-      return response.data
+      const data = await response.json()
+      return data
     },
   })
 
@@ -116,11 +120,15 @@ export const FlowgladContextProvider = ({
   } = useQuery({
     queryKey: [FlowgladActionKey.FindOrCreateCustomerProfile],
     queryFn: async () => {
-      const response = await axios.post(
+      const response = await fetch(
         `${flowgladRoute}/${FlowgladActionKey.FindOrCreateCustomerProfile}`,
-        {}
+        {
+          method: 'POST',
+          body: JSON.stringify({}),
+        }
       )
-      return response.data
+      const data = await response.json()
+      return data
     },
     enabled: authenticated,
   })

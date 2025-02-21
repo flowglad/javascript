@@ -69,8 +69,11 @@ const constructCreatePurchaseSession =
         body: JSON.stringify(params),
       }
     )
-    const data: Flowglad.PurchaseSessions.PurchaseSessionCreateResponse =
-      await response.json()
+    const json: {
+      data: Flowglad.PurchaseSessions.PurchaseSessionCreateResponse
+    } = await response.json()
+    console.log('create purchase session data', json.data)
+    const data = json.data
     if (params.autoRedirect) {
       window.location.href = data.url
     }

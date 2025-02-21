@@ -53,10 +53,10 @@ export const SubscriptionDemoCard = () => {
         Plan: {subscriptions[0].status}
       </div>
       <div className="mb-3 text-gray-600 dark:text-gray-400">
-        Current Period End: {subscriptions[0]?.currentPeriodStart}
+        Current Period End: {subscriptions[0]?.currentBillingPeriodEnd}
       </div>
       <div className="mb-3 text-gray-600 dark:text-gray-400">
-        Current Period Start: {subscriptions[0]?.currentPeriodStart}
+        Current Period Start: {subscriptions[0]?.currentBillingPeriodStart}
       </div>
       <div className="mb-3 text-gray-600 dark:text-gray-400">
         Status: {subscriptions[0]?.status}

@@ -1,5 +1,18 @@
 # @flowglad/nextjs
 
+## 0.3.0
+
+### Minor Changes
+
+- Use retrieve billing
+
+### Patch Changes
+
+- Updated dependencies
+  - @flowglad/server@0.3.0
+  - @flowglad/react@0.3.0
+  - @flowglad/shared@0.3.0
+
 ## 0.2.4
 
 ### Patch Changes

@@ -11,8 +11,8 @@ import type { Flowglad } from '@flowglad/node'
 type LoadedFlowgladContextValues = {
   loaded: true
   authenticated: true
-  customerProfile: Flowglad.CustomerProfileBillingResponse.CustomerProfile
-  subscriptions: Flowglad.CustomerProfileBillingResponse.Subscription[]
+  customerProfile: Flowglad.CustomerProfiles.CustomerProfileRetrieveBillingResponse.CustomerProfile
+  subscriptions: Flowglad.CustomerProfiles.CustomerProfileRetrieveBillingResponse.Subscription[]
   createPurchaseSession: (
     params: z.infer<typeof createPurchaseSessionSchema> & {
       autoRedirect?: boolean
@@ -21,7 +21,7 @@ type LoadedFlowgladContextValues = {
     id: string
     url: string
   }>
-  catalog: Flowglad.CustomerProfileBillingResponse.Catalog
+  catalog: Flowglad.CustomerProfiles.CustomerProfileRetrieveBillingResponse.Catalog
   errors: null
 }
 

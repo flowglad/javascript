@@ -62,10 +62,12 @@ const buildAndPushPackage = async (packageName: string) => {
 
   try {
     // Build the package
-    await exec(`cd ${packagePath} && pnpm build`)
+    await exec(
+      `cd ${packagePath} && pnpm build && pnpm build:declarations`
+    )
 
-    // Push to yalc
-    await exec(`cd ${packagePath} && yalc push --changed`)
+    // Push to yalc - add --copy flag to force file copying instead of symlinks
+    await exec(`cd ${packagePath} && yalc push --force --copy`)
 
     console.log(`✅ Built and pushed ${packageName}`)
 
@@ -91,8 +93,28 @@ const rebuildAndPush = debounce(async (path: string) => {
   const packageName = getPackageFromPath(path)
   if (!packageName) return
 
-  await buildAndPushPackage(packageName)
-}, 500)
+  console.log(
+    chalk.yellow(
+      `🔄 Rebuilding ${packageName} due to changes in ${path}`
+    )
+  )
+
+  try {
+    await buildAndPushPackage(packageName)
+
+    // Force update in all consuming projects
+    console.log(
+      chalk.blue('📡 Pushing updates to consuming projects...')
+    )
+    await exec(
+      'cd playground/supabase-auth && yalc update && touch app/page.tsx'
+    )
+
+    console.log(chalk.green('✅ Updates pushed successfully'))
+  } catch (error) {
+    console.error(chalk.red('❌ Error during rebuild:'), error)
+  }
+}, 100)
 
 // Watch all package source files
 const main = async () => {
@@ -100,13 +122,13 @@ const main = async () => {
   await linkPackagesGlobally()
   const watcher = chokidar
     .watch('./packages', {
-      usePolling: true,
+      usePolling: false,
       persistent: true,
-      ignoreInitial: false, // Set to false to see initial scan
-      depth: 99, // Make sure we go deep enough in directory structure
+      ignoreInitial: true,
+      depth: 99,
       awaitWriteFinish: {
-        stabilityThreshold: 500,
-        pollInterval: 100,
+        stabilityThreshold: 100,
+        pollInterval: 50,
       },
       ignored: [
         /(^|[\/\\])\../, // dotfiles

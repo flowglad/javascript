@@ -1,5 +1,11 @@
 # @flowglad/shared
 
+## 0.3.0
+
+### Minor Changes
+
+- Use retrieve billing
+
 ## 0.2.4
 
 ### Patch Changes

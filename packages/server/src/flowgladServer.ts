@@ -118,14 +118,15 @@ export class FlowgladServer {
     }
 
   public getBilling =
-    async (): Promise<FlowgladNode.CustomerProfiles.CustomerProfileBillingResponse> => {
+    async (): Promise<FlowgladNode.CustomerProfiles.CustomerProfileRetrieveBillingResponse> => {
       const session = await getSessionFromParams(
         this.createHandlerParams
       )
       if (!session) {
         throw new Error('User not authenticated')
       }
-      return this.flowgladNode.customerProfiles.billing.retrieve(
+      console.log('!!----=', this.flowgladNode.customerProfiles)
+      return this.flowgladNode.customerProfiles.retrieveBilling(
         session.externalId
       )
     }

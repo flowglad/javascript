@@ -1,5 +1,16 @@
 # @flowglad/server
 
+## 0.3.0
+
+### Minor Changes
+
+- Use retrieve billing
+
+### Patch Changes
+
+- Updated dependencies
+  - @flowglad/shared@0.3.0
+
 ## 0.2.4
 
 ### Patch Changes

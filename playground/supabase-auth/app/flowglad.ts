@@ -4,5 +4,6 @@ import { createClient } from '@/utils/supabase/server';
 export const flowgladServer = new FlowgladServer({
   supabaseAuth: {
     client: createClient
-  }
+  },
+  baseURL: 'https://staging.flowglad.com'
 });

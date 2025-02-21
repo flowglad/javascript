@@ -1,4 +1,3 @@
-import { flowgladNode } from '../core'
 import { FlowgladServer } from '../flowgladServer'
 import { FlowgladActionKey, HTTPMethod } from '@flowglad/shared'
 import type { SubRouteHandler } from './types'
@@ -42,12 +41,10 @@ export const findOrCreateCustomerProfile: SubRouteHandler<
   const requestingCustomerProfileId =
     await flowgladServer.getRequestingCustomerProfileId()
   try {
-    customerProfile = await flowgladNode().customerProfiles.retrieve(
-      requestingCustomerProfileId
-    )
+    customerProfile = await flowgladServer.getCustomerProfile()
   } catch (error) {
     if ((error as any).error.code === 'NOT_FOUND') {
-      customerProfile = await flowgladNode().customerProfiles.create({
+      customerProfile = await flowgladServer.createCustomerProfile({
         customerProfile: {
           email: user.email,
           name: user.name,

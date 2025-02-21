@@ -1,5 +1,4 @@
 import { CreatePurchaseSessionParams } from '@flowglad/shared'
-import { flowgladNode } from './core'
 import {
   ClerkFlowgladServerSessionParams,
   CoreCustomerProfileUser,
@@ -93,9 +92,13 @@ const getSessionFromParams = async (
 
 export class FlowgladServer {
   private createHandlerParams: FlowgladServerSessionParams
-
+  private flowgladNode: FlowgladNode
   constructor(createHandlerParams: FlowgladServerSessionParams) {
     this.createHandlerParams = createHandlerParams
+    this.flowgladNode = new FlowgladNode({
+      apiKey: createHandlerParams.apiKey,
+      baseURL: createHandlerParams.baseURL,
+    })
   }
 
   public getRequestingCustomerProfileId =
@@ -122,11 +125,27 @@ export class FlowgladServer {
       if (!session) {
         throw new Error('User not authenticated')
       }
-      return flowgladNode().customerProfiles.billing(
+      return this.flowgladNode.customerProfiles.billing.retrieve(
         session.externalId
       )
     }
-
+  public getCustomerProfile =
+    async (): Promise<FlowgladNode.CustomerProfiles.CustomerProfileRetrieveResponse> => {
+      const session = await getSessionFromParams(
+        this.createHandlerParams
+      )
+      if (!session) {
+        throw new Error('User not authenticated')
+      }
+      return this.flowgladNode.customerProfiles.retrieve(
+        session.externalId
+      )
+    }
+  public createCustomerProfile = async (
+    params: FlowgladNode.CustomerProfiles.CustomerProfileCreateParams
+  ): Promise<FlowgladNode.CustomerProfiles.CustomerProfileCreateResponse> => {
+    return this.flowgladNode.customerProfiles.create(params)
+  }
   public createPurchaseSession = async (
     params: CreatePurchaseSessionParams
   ): Promise<FlowgladNode.PurchaseSessions.PurchaseSessionCreateResponse> => {
@@ -136,7 +155,7 @@ export class FlowgladServer {
     if (!session) {
       throw new Error('User not authenticated')
     }
-    return flowgladNode().purchaseSessions.create({
+    return this.flowgladNode.purchaseSessions.create({
       customerProfileExternalId: session.externalId,
       VariantId: params.VariantId,
       successUrl: params.successUrl,

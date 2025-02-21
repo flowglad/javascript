@@ -1,5 +1,13 @@
 # @flowglad/server
 
+## 0.2.4
+
+### Patch Changes
+
+- Add baseURL, use billing.retrieve
+- Updated dependencies
+  - @flowglad/shared@0.2.4
+
 ## 0.2.3
 
 ### Patch Changes

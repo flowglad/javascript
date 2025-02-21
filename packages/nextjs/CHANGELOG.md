@@ -1,5 +1,15 @@
 # @flowglad/nextjs
 
+## 0.2.4
+
+### Patch Changes
+
+- Add baseURL, use billing.retrieve
+- Updated dependencies
+  - @flowglad/server@0.2.4
+  - @flowglad/react@0.2.4
+  - @flowglad/shared@0.2.4
+
 ## 0.2.3
 
 ### Patch Changes

@@ -1,5 +1,15 @@
 # @flowglad/nextjs
 
+## 0.4.1
+
+### Patch Changes
+
+- Add url to purchase session
+- Updated dependencies
+  - @flowglad/server@0.4.1
+  - @flowglad/react@0.4.1
+  - @flowglad/shared@0.4.1
+
 ## 0.4.0
 
 ### Minor Changes

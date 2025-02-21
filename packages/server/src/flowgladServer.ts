@@ -125,7 +125,6 @@ export class FlowgladServer {
       if (!session) {
         throw new Error('User not authenticated')
       }
-      console.log('!!----=', this.flowgladNode.customerProfiles)
       return this.flowgladNode.customerProfiles.retrieveBilling(
         session.externalId
       )

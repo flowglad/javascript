@@ -15,8 +15,8 @@ importers:
         specifier: file:.yalc/@flowglad/nextjs
         version: file:.yalc/@flowglad/nextjs(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@flowglad/node':
-        specifier: 0.1.0-alpha.5
-        version: 0.1.0-alpha.5
+        specifier: 0.1.0
+        version: 0.1.0
       '@flowglad/react':
         specifier: file:.yalc/@flowglad/react
         version: file:.yalc/@flowglad/react(react@18.3.1)
@@ -193,11 +193,11 @@ packages:
       next: ^14.0.3 || ^15.0.0
       react: ^19.0.0
 
+  '@flowglad/node@0.1.0':
+    resolution: {integrity: sha512-d4/BAFaZBGOiv4U5PVF30CnxKY2mjtFt35kKF53IIaj/Z+nfLXOuZoy+uTNCq18JeoCYGKeQ3H6GmzljqU7t0w==}
+
   '@flowglad/node@0.1.0-alpha.3':
     resolution: {integrity: sha512-aTeuQlsosUwmX960kEU+VMjnq7oOttzIhmCxN1E8u4kGQTCZSTOGgHkemzuAM+es01eoVrliDZoY3YcWaxKENA==}
-
-  '@flowglad/node@0.1.0-alpha.5':
-    resolution: {integrity: sha512-sPZ8EqwH2CNJrRBoL2PABY/AN6T+eH9J9hSynCnSXhd5R5Dmc7Sf3o/q8kh2Ci9a0QplUa5naYnHwHalB2rHdw==}
 
   '@flowglad/react@0.2.4':
     resolution: {integrity: sha512-5Tq2Ol4T5iKe1ZSkLsFP1JdNAzzrb7jKnApDHEblDZZkFfNvbm5y7pcAiDvls+VGMZAzeazCO98nASp43/8WlQ==}
@@ -2485,7 +2485,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@flowglad/node@0.1.0-alpha.3':
+  '@flowglad/node@0.1.0':
     dependencies:
       '@types/node': 18.19.76
       '@types/node-fetch': 2.6.12
@@ -2497,7 +2497,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@flowglad/node@0.1.0-alpha.5':
+  '@flowglad/node@0.1.0-alpha.3':
     dependencies:
       '@types/node': 18.19.76
       '@types/node-fetch': 2.6.12
@@ -2521,7 +2521,7 @@ snapshots:
 
   '@flowglad/react@file:.yalc/@flowglad/react(react@18.3.1)':
     dependencies:
-      '@flowglad/node': 0.1.0-alpha.5
+      '@flowglad/node': 0.1.0
       '@flowglad/shared': 0.2.4
       '@tanstack/react-query': 5.66.0(react@18.3.1)
       react: 18.3.1
@@ -2539,7 +2539,7 @@ snapshots:
 
   '@flowglad/server@file:.yalc/@flowglad/server':
     dependencies:
-      '@flowglad/node': 0.1.0-alpha.5
+      '@flowglad/node': 0.1.0
       '@flowglad/shared': 0.2.4
       zod: 3.23.8
     transitivePeerDependencies:

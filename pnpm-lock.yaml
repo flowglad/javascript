@@ -92,8 +92,8 @@ importers:
   packages/react:
     dependencies:
       '@flowglad/node':
-        specifier: 0.1.0-alpha.5
-        version: 0.1.0-alpha.5
+        specifier: 0.1.0
+        version: 0.1.0
       '@flowglad/shared':
         specifier: workspace:*
         version: link:../shared
@@ -120,8 +120,8 @@ importers:
   packages/server:
     dependencies:
       '@flowglad/node':
-        specifier: 0.1.0-alpha.5
-        version: 0.1.0-alpha.5
+        specifier: 0.1.0
+        version: 0.1.0
       '@flowglad/shared':
         specifier: workspace:*
         version: link:../shared
@@ -525,8 +525,8 @@ packages:
     resolution: {integrity: sha512-Ys+3g2TaW7gADOJzPt83SJtCDhMjndcDMFVQ/Tj9iA1BfJzFKD9mAUXT3OenpuPHbI6P/myECxRJrofUsDx/5g==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
-  '@flowglad/node@0.1.0-alpha.5':
-    resolution: {integrity: sha512-sPZ8EqwH2CNJrRBoL2PABY/AN6T+eH9J9hSynCnSXhd5R5Dmc7Sf3o/q8kh2Ci9a0QplUa5naYnHwHalB2rHdw==}
+  '@flowglad/node@0.1.0':
+    resolution: {integrity: sha512-d4/BAFaZBGOiv4U5PVF30CnxKY2mjtFt35kKF53IIaj/Z+nfLXOuZoy+uTNCq18JeoCYGKeQ3H6GmzljqU7t0w==}
 
   '@humanwhocodes/config-array@0.11.14':
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
@@ -2376,7 +2376,7 @@ snapshots:
 
   '@eslint/js@8.57.0': {}
 
-  '@flowglad/node@0.1.0-alpha.5':
+  '@flowglad/node@0.1.0':
     dependencies:
       '@types/node': 18.19.76
       '@types/node-fetch': 2.6.12

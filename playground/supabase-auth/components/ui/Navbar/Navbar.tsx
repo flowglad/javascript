@@ -9,7 +9,6 @@ export default async function Navbar() {
     data: { user }
   } = await supabase.auth.getUser();
 
-  console.log('user', user);
   return (
     <nav className={s.root}>
       <a href="#skip" className="sr-only focus:not-sr-only">

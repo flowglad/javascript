@@ -69,13 +69,14 @@ const constructCreatePurchaseSession =
         body: JSON.stringify(params),
       }
     )
-    const data = await response.json()
+    const data: Flowglad.PurchaseSessions.PurchaseSessionCreateResponse =
+      await response.json()
     if (params.autoRedirect) {
-      window.location.href = data.purchaseSessionUrl
+      window.location.href = data.url
     }
     return {
-      id: data.purchaseSessionId,
-      url: data.purchaseSessionUrl,
+      id: data.purchaseSession.id,
+      url: data.url,
     }
   }
 
@@ -143,8 +144,6 @@ export const FlowgladContextProvider = ({
       errors: null,
     }
   } else if (customerProfile && billing) {
-    console.log('customerProfile', customerProfile)
-    console.log('billing', billing)
     value = {
       loaded: true,
       authenticated,

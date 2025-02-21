@@ -1,5 +1,13 @@
 # @flowglad/react
 
+## 0.4.2
+
+### Patch Changes
+
+- Fix purchase session redirect
+- Updated dependencies
+  - @flowglad/shared@0.4.2
+
 ## 0.4.1
 
 ### Patch Changes

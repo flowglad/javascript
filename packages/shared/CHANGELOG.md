@@ -1,5 +1,11 @@
 # @flowglad/shared
 
+## 0.4.7
+
+### Patch Changes
+
+- rm console.log
+
 ## 0.4.6
 
 ### Patch Changes

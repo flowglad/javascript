@@ -31,7 +31,6 @@ const SubscribeButton = () => {
 
 export const SubscriptionDemoCard = () => {
   const billing = useBilling();
-  console.log('====billing', billing);
   if (!billing.loaded) {
     return <div>Loading...</div>;
   } else if (billing.errors) {

@@ -1,6 +1,6 @@
 {
   "name": "@flowglad/react",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -11,7 +11,7 @@
     "build": "tsup",
     "clean": "rm -rf dist",
     "dev": "tsup --watch --onSuccess 'yalc push'",
-    "lint": "eslint && tsc --noEmit",
+    "lint": "eslint --config eslint.config.js && tsc --noEmit",
     "yalc:publish": "yalc publish && yalc link",
     "build:declarations": "tsc -p tsconfig.declarations.json"
   },

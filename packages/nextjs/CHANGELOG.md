@@ -1,5 +1,15 @@
 # @flowglad/nextjs
 
+## 0.4.7
+
+### Patch Changes
+
+- rm console.log
+- Updated dependencies
+  - @flowglad/react@0.4.7
+  - @flowglad/server@0.4.7
+  - @flowglad/shared@0.4.7
+
 ## 0.4.6
 
 ### Patch Changes

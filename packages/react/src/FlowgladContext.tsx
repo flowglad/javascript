@@ -130,7 +130,6 @@ export const FlowgladContextProvider = ({
       return data
     },
   })
-  console.log('==== within the contextbilling', billing)
   const createPurchaseSession =
     constructCreatePurchaseSession(serverRoute)
 

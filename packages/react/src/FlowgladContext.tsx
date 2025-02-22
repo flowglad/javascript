@@ -5,6 +5,7 @@ import { z } from 'zod'
 import {
   createPurchaseSessionSchema,
   FlowgladActionKey,
+  flowgladActionValidators,
 } from '@flowglad/shared'
 import type { Flowglad } from '@flowglad/node'
 
@@ -65,7 +66,10 @@ const constructCreatePurchaseSession =
     const response = await fetch(
       `${flowgladRoute}/${FlowgladActionKey.CreatePurchaseSession}`,
       {
-        method: 'POST',
+        method:
+          flowgladActionValidators[
+            FlowgladActionKey.CreatePurchaseSession
+          ].method,
         body: JSON.stringify(params),
       }
     )
@@ -100,6 +104,10 @@ export const FlowgladContextProvider = ({
   successUrl?: string
   children: React.ReactNode
 }) => {
+  // In a perfect world, this would be a useMutation hook rather than useQuery.
+  // Because technically, billing fetch requests run a "find or create" operation on
+  // the customer profile. But useQuery allows us to execute the call using `enabled`
+  // which allows us to avoid maintaining a useEffect hook.
   const {
     isPending: isPendingBilling,
     error: errorBilling,
@@ -109,32 +117,20 @@ export const FlowgladContextProvider = ({
     enabled: authenticated,
     queryFn: async () => {
       const response = await fetch(
-        `${serverRoute}/${FlowgladActionKey.GetCustomerProfileBilling}`
-      )
-      const data = await response.json()
-      return data
-    },
-  })
-
-  const {
-    isPending: isPendingFindOrCreate,
-    error: errorFindOrCreate,
-    data: customerProfile,
-  } = useQuery({
-    queryKey: [FlowgladActionKey.FindOrCreateCustomerProfile],
-    queryFn: async () => {
-      const response = await fetch(
-        `${serverRoute}/${FlowgladActionKey.FindOrCreateCustomerProfile}`,
+        `${serverRoute}/${FlowgladActionKey.GetCustomerProfileBilling}`,
         {
-          method: 'POST',
+          method:
+            flowgladActionValidators[
+              FlowgladActionKey.GetCustomerProfileBilling
+            ].method,
           body: JSON.stringify({}),
         }
       )
       const data = await response.json()
       return data
     },
-    enabled: authenticated,
   })
+  console.log('==== within the contextbilling', billing)
   const createPurchaseSession =
     constructCreatePurchaseSession(serverRoute)
 
@@ -145,24 +141,24 @@ export const FlowgladContextProvider = ({
       authenticated: false,
       errors: null,
     }
-  } else if (customerProfile && billing) {
+  } else if (billing) {
     value = {
       loaded: true,
       authenticated,
-      customerProfile: customerProfile.data.customerProfile,
+      customerProfile: billing.data.customerProfile,
       createPurchaseSession,
       catalog: billing.data.catalog,
       subscriptions: billing.data.subscriptions,
       errors: null,
     }
-  } else if (isPendingBilling || isPendingFindOrCreate) {
+  } else if (isPendingBilling) {
     value = {
       loaded: false,
       authenticated,
       errors: null,
     }
   } else {
-    const errors: Error[] = [errorBilling, errorFindOrCreate].filter(
+    const errors: Error[] = [errorBilling].filter(
       (error): error is Error => error !== null
     )
     value = {
@@ -183,7 +179,7 @@ export const useBilling = () => {
   const billing = useContext(FlowgladContext)
   if (!billing.authenticated) {
     throw new Error(
-      'FlowgladContext is not authenticated. If you are authenticated, ensure that the FlowgladProvider `authenticated` property is set to true.'
+      'Flowglad: Attempted to access billing data while `authenticated` property is not `true`. If you are authenticated, ensure that the FlowgladProvider `authenticated` property is set to true.'
     )
   }
   return billing

@@ -21,7 +21,7 @@ export type CreatePurchaseSessionParams = z.infer<
 
 export const flowgladActionValidators: FlowgladActionValidatorMap = {
   [FlowgladActionKey.GetCustomerProfileBilling]: {
-    method: HTTPMethod.GET,
+    method: HTTPMethod.POST,
     inputValidator: z.object({
       externalId: z.string(),
     }),

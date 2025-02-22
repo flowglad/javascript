@@ -103,6 +103,13 @@ export class FlowgladServer {
 
   public getRequestingCustomerProfileId =
     async (): Promise<string> => {
+      if (this.createHandlerParams.getRequestingCustomerProfile) {
+        const profile =
+          await this.createHandlerParams.getRequestingCustomerProfile()
+        if (profile) {
+          return profile.externalId
+        }
+      }
       const session = await getSessionFromParams(
         this.createHandlerParams
       )
@@ -119,16 +126,45 @@ export class FlowgladServer {
 
   public getBilling =
     async (): Promise<FlowgladNode.CustomerProfiles.CustomerProfileRetrieveBillingResponse> => {
-      const session = await getSessionFromParams(
-        this.createHandlerParams
-      )
-      if (!session) {
-        throw new Error('User not authenticated')
-      }
+      const customerProfile = await this.findOrCreateCustomerProfile()
       return this.flowgladNode.customerProfiles.retrieveBilling(
-        session.externalId
+        customerProfile.externalId
       )
     }
+
+  public findOrCreateCustomerProfile = async (): Promise<
+    FlowgladNode.CustomerProfiles.CustomerProfileRetrieveResponse['customerProfile']
+  > => {
+    let customerProfile:
+      | FlowgladNode.CustomerProfiles.CustomerProfileRetrieveResponse['customerProfile']
+      | null = null
+    try {
+      const getResult = await this.getCustomerProfile()
+      customerProfile = getResult.customerProfile
+    } catch (error) {
+      if ((error as any).error.code === 'NOT_FOUND') {
+        const session = await getSessionFromParams(
+          this.createHandlerParams
+        )
+        if (!session) {
+          throw new Error('User not authenticated')
+        }
+        const createResult = await this.createCustomerProfile({
+          customerProfile: {
+            email: session.email,
+            name: session.name,
+            externalId: session.externalId,
+          },
+        })
+        customerProfile = createResult.data.customerProfile
+      }
+    }
+    if (!customerProfile) {
+      throw new Error('Customer profile not found')
+    }
+    return customerProfile
+  }
+
   public getCustomerProfile =
     async (): Promise<FlowgladNode.CustomerProfiles.CustomerProfileRetrieveResponse> => {
       const session = await getSessionFromParams(

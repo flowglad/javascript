@@ -1,5 +1,11 @@
 # @flowglad/shared
 
+## 0.4.6
+
+### Patch Changes
+
+- No more find or create customer profile calls on the FlowgladContext, billing now includes a find or create
+
 ## 0.4.5
 
 ### Patch Changes

@@ -5,7 +5,7 @@ import type { SubRouteHandler } from './types'
 export const getCustomerProfileBilling: SubRouteHandler<
   FlowgladActionKey.GetCustomerProfileBilling
 > = async (params, flowgladServer: FlowgladServer) => {
-  if (params.method !== HTTPMethod.GET) {
+  if (params.method !== HTTPMethod.POST) {
     return {
       data: {},
       status: 405,

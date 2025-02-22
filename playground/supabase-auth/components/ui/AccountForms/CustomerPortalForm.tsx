@@ -3,7 +3,6 @@
 import Button from '@/components/ui/Button';
 import { useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { createStripePortal } from '@/utils/stripe/server';
 import Link from 'next/link';
 import Card from '@/components/ui/Card';
 import { Tables } from '@/types_db';
@@ -39,9 +38,7 @@ export default function CustomerPortalForm({ subscription }: Props) {
 
   const handleStripePortalRequest = async () => {
     setIsSubmitting(true);
-    const redirectUrl = await createStripePortal(currentPath);
     setIsSubmitting(false);
-    return router.push(redirectUrl);
   };
 
   return (

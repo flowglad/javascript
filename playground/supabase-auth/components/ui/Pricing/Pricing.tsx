@@ -11,6 +11,7 @@ interface Props {
 
 export default function Pricing({ user }: Props) {
   const billing = useBilling();
+  console.log('====pricing billing', billing);
   if (!billing.loaded) {
     return (
       <section className="bg-black">

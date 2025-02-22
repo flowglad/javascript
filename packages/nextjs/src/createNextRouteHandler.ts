@@ -1,46 +1,32 @@
 'use server'
-import { FlowgladServer, routeToHandlerMap } from '@flowglad/server'
-import { FlowgladActionKey, HTTPMethod } from '@flowglad/shared'
+import {
+  FlowgladServer,
+  createRequestHandler,
+  RequestHandlerOptions,
+} from '@flowglad/server'
+import { HTTPMethod } from '@flowglad/shared'
 import { NextRequest, NextResponse } from 'next/server'
 
-export const createNextRouteHandler =
-  (flowgladServer: FlowgladServer) =>
-  async (
+export const createNextRouteHandler = (
+  flowgladServer: FlowgladServer,
+  options: Omit<RequestHandlerOptions, 'flowgladServer'> = {}
+) => {
+  const handler = createRequestHandler({ flowgladServer, ...options })
+
+  return async (
     req: NextRequest,
     { params }: { params: { path: string[] } }
   ): Promise<NextResponse> => {
-    const joinedPath = params.path.join('/') as FlowgladActionKey
-    if (!Object.values(FlowgladActionKey).includes(joinedPath)) {
-      return NextResponse.json(
-        {
-          message: `"${joinedPath}" is not a valid Flowglad API path`,
-        },
-        { status: 404 }
-      )
-    }
+    const result = await handler({
+      path: params.path,
+      method: req.method as HTTPMethod,
+      query:
+        req.method === 'GET'
+          ? Object.fromEntries(req.nextUrl.searchParams)
+          : undefined,
+      body: req.method !== 'GET' ? await req.json() : undefined,
+    })
 
-    const handler = routeToHandlerMap[joinedPath]
-    if (!handler) {
-      return NextResponse.json(
-        {
-          message: `"${joinedPath}" is not a valid Flowglad API path`,
-        },
-        { status: 404 }
-      )
-    }
-    let data
-    if (req.method === 'GET') {
-      data = Object.fromEntries(req.nextUrl.searchParams)
-    } else {
-      data = await req.json()
-    }
-    const result = await handler(
-      {
-        method: req.method as HTTPMethod,
-        data,
-      },
-      flowgladServer
-    )
     return NextResponse.json(
       {
         error: result.error,
@@ -51,3 +37,4 @@ export const createNextRouteHandler =
       }
     )
   }
+}

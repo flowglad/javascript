@@ -1,6 +1,6 @@
 {
   "name": "@flowglad/react",
-  "version": "0.4.2",
+  "version": "0.4.5",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",

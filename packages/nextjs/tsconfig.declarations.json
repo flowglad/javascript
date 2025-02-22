@@ -7,7 +7,7 @@
       "emitDeclarationOnly": true,
       "declarationMap": false,
       "sourceMap": false,
-      "outDir": "./dist",
+      "outDir": "./dist/types",
       "declarationDir": "./dist/types",
       "noImplicitReturns": false
     },

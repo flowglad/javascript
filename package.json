@@ -13,13 +13,14 @@
     "dev:server": "pnpm --filter @flowglad/server dev",
     "lint": "pnpm -r lint",
     "clean": "pnpm -r clean",
-    "changeset": "changeset",
+    
     "changeset:empty": "pnpm changeset --empty",
     "preinstall": "npx only-allow pnpm",
     "build": "pnpm -r build",
     "build:declarations": "pnpm -r build:declarations",
-    "version-packages": "changeset version",
-    "publish-packages": "pnpm build:declarations && pnpm build && changeset publish"
+    "packages:changeset": "changeset",
+    "packages:version": "changeset version",
+    "packages:publish": "pnpm build:declarations && pnpm build && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.0",

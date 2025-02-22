@@ -1,5 +1,23 @@
 # @flowglad/shared
 
+## 0.4.5
+
+### Patch Changes
+
+- Fix circular package reference, and export flowglad/server modules from flowglad/next
+
+## 0.4.4
+
+### Patch Changes
+
+- Helpful error messages in FlowgladProvider, core route handler constructor for @flowglad/server"
+
+## 0.4.3
+
+### Patch Changes
+
+- rm console logs
+
 ## 0.4.2
 
 ### Patch Changes

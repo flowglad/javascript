@@ -1,5 +1,35 @@
 # @flowglad/nextjs
 
+## 0.4.5
+
+### Patch Changes
+
+- Fix circular package reference, and export flowglad/server modules from flowglad/next
+- Updated dependencies
+  - @flowglad/server@0.4.5
+  - @flowglad/shared@0.4.5
+  - @flowglad/react@0.4.5
+
+## 0.4.4
+
+### Patch Changes
+
+- Helpful error messages in FlowgladProvider, core route handler constructor for @flowglad/server"
+- Updated dependencies
+  - @flowglad/server@0.4.4
+  - @flowglad/shared@0.4.4
+  - @flowglad/react@0.4.4
+
+## 0.4.3
+
+### Patch Changes
+
+- rm console logs
+- Updated dependencies
+  - @flowglad/react@0.4.3
+  - @flowglad/server@0.4.3
+  - @flowglad/shared@0.4.3
+
 ## 0.4.2
 
 ### Patch Changes

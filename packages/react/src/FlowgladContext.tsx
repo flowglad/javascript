@@ -72,7 +72,6 @@ const constructCreatePurchaseSession =
     const json: {
       data: Flowglad.PurchaseSessions.PurchaseSessionCreateResponse
     } = await response.json()
-    console.log('create purchase session data', json.data)
     const data = json.data
     if (params.autoRedirect) {
       window.location.href = data.url
@@ -85,7 +84,7 @@ const constructCreatePurchaseSession =
 
 export const FlowgladContextProvider = ({
   children,
-  flowgladRoute = '/api/flowglad',
+  serverRoute = '/api/flowglad',
   cancelUrl,
   successUrl,
   authenticated,
@@ -96,7 +95,7 @@ export const FlowgladContextProvider = ({
     email: string
     name: string
   }
-  flowgladRoute?: string
+  serverRoute?: string
   cancelUrl?: string
   successUrl?: string
   children: React.ReactNode
@@ -110,7 +109,7 @@ export const FlowgladContextProvider = ({
     enabled: authenticated,
     queryFn: async () => {
       const response = await fetch(
-        `${flowgladRoute}/${FlowgladActionKey.GetCustomerProfileBilling}`
+        `${serverRoute}/${FlowgladActionKey.GetCustomerProfileBilling}`
       )
       const data = await response.json()
       return data
@@ -125,7 +124,7 @@ export const FlowgladContextProvider = ({
     queryKey: [FlowgladActionKey.FindOrCreateCustomerProfile],
     queryFn: async () => {
       const response = await fetch(
-        `${flowgladRoute}/${FlowgladActionKey.FindOrCreateCustomerProfile}`,
+        `${serverRoute}/${FlowgladActionKey.FindOrCreateCustomerProfile}`,
         {
           method: 'POST',
           body: JSON.stringify({}),
@@ -137,7 +136,7 @@ export const FlowgladContextProvider = ({
     enabled: authenticated,
   })
   const createPurchaseSession =
-    constructCreatePurchaseSession(flowgladRoute)
+    constructCreatePurchaseSession(serverRoute)
 
   let value: FlowgladContextValues
   if (!authenticated) {
@@ -166,7 +165,6 @@ export const FlowgladContextProvider = ({
     const errors: Error[] = [errorBilling, errorFindOrCreate].filter(
       (error): error is Error => error !== null
     )
-    console.log('errors', errors)
     value = {
       loaded: true,
       authenticated,

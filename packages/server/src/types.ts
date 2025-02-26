@@ -13,33 +13,35 @@ export interface FlowgladServerSessionParamsCore {
   apiKey?: string
 }
 
+interface SupabaseClient {
+  auth: {
+    getUser: () => Promise<
+      | {
+          data: {
+            user: {
+              id: string
+              email?: string
+              phone?: string
+              user_metadata: {
+                [key: string]: any
+              }
+            }
+          }
+        }
+      | {
+          data: {
+            user: null
+          }
+          error: any
+        }
+    >
+  }
+}
+
 export interface SupabaseFlowgladServerSessionParams
   extends FlowgladServerSessionParamsCore {
   supabaseAuth: {
-    client: () => {
-      auth: {
-        getUser: () => Promise<
-          | {
-              data: {
-                user: {
-                  id: string
-                  email?: string
-                  phone?: string
-                  user_metadata: {
-                    [key: string]: any
-                  }
-                }
-              }
-            }
-          | {
-              data: {
-                user: null
-              }
-              error: any
-            }
-        >
-      }
-    }
+    client: () => Promise<SupabaseClient> | SupabaseClient
   }
 }
 

@@ -1,5 +1,17 @@
 # @flowglad/shared
 
+## 0.4.11
+
+### Patch Changes
+
+- fix purchase session error check
+
+## 0.4.10
+
+### Patch Changes
+
+- Await client in supabase auth
+
 ## 0.4.9
 
 ### Patch Changes

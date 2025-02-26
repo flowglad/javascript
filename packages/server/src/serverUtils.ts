@@ -35,7 +35,7 @@ export const sessionFromSupabaseAuth = async (
   let coreCustomerProfileUser: CoreCustomerProfileUser | null = null
   const {
     data: { user },
-  } = await params.supabaseAuth.client().auth.getUser()
+  } = await (await params.supabaseAuth.client()).auth.getUser()
   if (user) {
     coreCustomerProfileUser = {
       externalId: user.id,

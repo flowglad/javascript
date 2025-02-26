@@ -88,10 +88,9 @@ const constructCreatePurchaseSession =
     const json: {
       data: Flowglad.PurchaseSessions.PurchaseSessionCreateResponse
       error?: { code: string; json: Record<string, unknown> }
-      status: number
     } = await response.json()
     const data = json.data
-    if (json.status !== 200) {
+    if (json.error) {
       console.error(
         'FlowgladContext: Purchase session creation failed',
         json

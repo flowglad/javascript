@@ -8,6 +8,7 @@ import {
   flowgladActionValidators,
 } from '@flowglad/shared'
 import type { Flowglad } from '@flowglad/node'
+import { validateUrl } from './utils'
 
 type LoadedFlowgladContextValues = {
   loaded: true
@@ -18,10 +19,13 @@ type LoadedFlowgladContextValues = {
     params: z.infer<typeof createPurchaseSessionSchema> & {
       autoRedirect?: boolean
     }
-  ) => Promise<{
-    id: string
-    url: string
-  }>
+  ) => Promise<
+    | {
+        id: string
+        url: string
+      }
+    | { error: { code: string; json: Record<string, unknown> } }
+  >
   catalog: Flowglad.CustomerProfiles.CustomerProfileRetrieveBillingResponse.Catalog
   errors: null
 }
@@ -62,7 +66,15 @@ const constructCreatePurchaseSession =
     params: Parameters<
       LoadedFlowgladContextValues['createPurchaseSession']
     >[0]
-  ) => {
+  ): Promise<
+    | {
+        id: string
+        url: string
+      }
+    | { error: { code: string; json: Record<string, unknown> } }
+  > => {
+    validateUrl(params.successUrl, 'successUrl')
+    validateUrl(params.cancelUrl, 'cancelUrl')
     const response = await fetch(
       `${flowgladRoute}/${FlowgladActionKey.CreatePurchaseSession}`,
       {
@@ -75,8 +87,19 @@ const constructCreatePurchaseSession =
     )
     const json: {
       data: Flowglad.PurchaseSessions.PurchaseSessionCreateResponse
+      error?: { code: string; json: Record<string, unknown> }
+      status: number
     } = await response.json()
     const data = json.data
+    if (json.status !== 200) {
+      console.error(
+        'FlowgladContext: Purchase session creation failed',
+        json
+      )
+      return {
+        error: json.error!,
+      }
+    }
     if (params.autoRedirect) {
       window.location.href = data.url
     }

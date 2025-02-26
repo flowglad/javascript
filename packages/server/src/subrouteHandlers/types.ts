@@ -16,5 +16,14 @@ export type SubRouteHandler<T extends FlowgladActionKey> = (
 ) => Promise<{
   data: {}
   status: number
-  error?: string
+  error?: {
+    code: string
+    json: Record<string, unknown>
+  }
 }>
+
+export type SubRouteHandlerResult<T extends FlowgladActionKey> =
+  Awaited<ReturnType<SubRouteHandler<T>>>
+
+export type SubRouteHandlerResultData<T extends FlowgladActionKey> =
+  SubRouteHandlerResult<T>['data']

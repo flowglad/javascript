@@ -18,8 +18,8 @@ const SubscribeButton = () => {
         createPurchaseSession({
           autoRedirect: true,
           VariantId: catalog.products[0].variants[0].id,
-          successUrl: 'http://localhost:3002/success',
-          cancelUrl: 'http://localhost:3002/cancel'
+          successUrl: 'lol/success',
+          cancelUrl: 'lol/cancel'
         })
       }
       className="bg-blue-500 text-white px-4 py-2 rounded-md"

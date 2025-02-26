@@ -26,7 +26,6 @@ export const createNextRouteHandler = (
           : undefined,
       body: req.method !== 'GET' ? await req.json() : undefined,
     })
-
     return NextResponse.json(
       {
         error: result.error,

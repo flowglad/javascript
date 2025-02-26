@@ -86,6 +86,9 @@ const getSessionFromParams = async (
     coreCustomerProfileUser = await sessionFromSupabaseAuth(params)
   } else if ('clerk' in params) {
     coreCustomerProfileUser = await sessionFromClerkAuth(params)
+  } else if (params.getRequestingCustomerProfile) {
+    coreCustomerProfileUser =
+      await params.getRequestingCustomerProfile()
   }
   return coreCustomerProfileUser
 }

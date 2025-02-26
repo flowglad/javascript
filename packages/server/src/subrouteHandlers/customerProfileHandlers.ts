@@ -9,7 +9,10 @@ export const getCustomerProfileBilling: SubRouteHandler<
     return {
       data: {},
       status: 405,
-      error: 'Method not allowed',
+      error: {
+        code: 'Method not allowed',
+        json: {},
+      },
     }
   }
   const customerProfileBilling = await flowgladServer.getBilling()
@@ -26,7 +29,12 @@ export const findOrCreateCustomerProfile: SubRouteHandler<
     return {
       data: {},
       status: 405,
-      error: 'Method not allowed',
+      error: {
+        code: '405',
+        json: {
+          message: 'Method not allowed',
+        },
+      },
     }
   }
   const user = await flowgladServer.getSession()
@@ -34,7 +42,12 @@ export const findOrCreateCustomerProfile: SubRouteHandler<
     return {
       data: {},
       status: 401,
-      error: 'Unauthorized',
+      error: {
+        code: '401',
+        json: {
+          message: 'Unauthorized',
+        },
+      },
     }
   }
   let customerProfile
@@ -57,7 +70,12 @@ export const findOrCreateCustomerProfile: SubRouteHandler<
     return {
       data: {},
       status: 404,
-      error: 'Customer profile not found',
+      error: {
+        code: '404',
+        json: {
+          message: `Customer profile ${requestingCustomerProfileId} not found`,
+        },
+      },
     }
   }
   return {

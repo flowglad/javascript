@@ -59,3 +59,24 @@ export const getSessionFromParams = async (
   }
   return coreCustomerProfileUser
 }
+
+export const parseErrorStringToErrorObject = (
+  errorString: string
+) => {
+  let [errorCode, ...errorJsonParts] = errorString.split(' ')
+  if (isNaN(Number(errorCode))) {
+    errorCode = 'Unknown'
+  }
+  let errorJson: Record<string, unknown> = {}
+  try {
+    errorJson = JSON.parse(errorJsonParts.join(' '))
+  } catch (e) {
+    errorJson = {
+      message: errorString,
+    }
+  }
+  return {
+    code: errorCode,
+    json: errorJson,
+  }
+}

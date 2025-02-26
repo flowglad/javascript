@@ -1,5 +1,21 @@
 # @flowglad/server
 
+## 0.4.9
+
+### Patch Changes
+
+- Pass through structured error messages to client
+- Updated dependencies
+  - @flowglad/shared@0.4.9
+
+## 0.4.8
+
+### Patch Changes
+
+- Add getRequestingCustomerProfile as fallback for getSessionFromParams
+- Updated dependencies
+  - @flowglad/shared@0.4.8
+
 ## 0.4.7
 
 ### Patch Changes

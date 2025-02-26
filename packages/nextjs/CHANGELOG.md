@@ -1,5 +1,25 @@
 # @flowglad/nextjs
 
+## 0.4.9
+
+### Patch Changes
+
+- Pass through structured error messages to client
+- Updated dependencies
+  - @flowglad/server@0.4.9
+  - @flowglad/shared@0.4.9
+  - @flowglad/react@0.4.9
+
+## 0.4.8
+
+### Patch Changes
+
+- Add getRequestingCustomerProfile as fallback for getSessionFromParams
+- Updated dependencies
+  - @flowglad/server@0.4.8
+  - @flowglad/react@0.4.8
+  - @flowglad/shared@0.4.8
+
 ## 0.4.7
 
 ### Patch Changes

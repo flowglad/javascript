@@ -5,38 +5,8 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { FlowgladContextProvider } from './FlowgladContext'
-import { z } from 'zod'
+import { validateUrl } from './utils'
 const queryClient = new QueryClient()
-
-const isValidURL = (url: string) => {
-  try {
-    new URL(url)
-    return true
-  } catch (error) {
-    return false
-  }
-}
-
-const validateUrl = (
-  url: string | undefined,
-  propName: string,
-  allowRelative = false
-) => {
-  if (typeof url === 'undefined') return
-
-  const isValid = allowRelative
-    ? url.startsWith('/') || isValidURL(url)
-    : isValidURL(url)
-
-  if (!isValid) {
-    const expectedMsg = allowRelative
-      ? 'a valid URL or relative path starting with a forward slash (/)'
-      : 'a valid URL'
-    throw new Error(
-      `FlowgladProvider: Received invalid \`${propName}\` property. Expected ${expectedMsg}. Received: "${url}"`
-    )
-  }
-}
 
 export const FlowgladProvider = ({
   children,

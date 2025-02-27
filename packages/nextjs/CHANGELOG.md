@@ -1,5 +1,15 @@
 # @flowglad/nextjs
 
+## 0.4.12
+
+### Patch Changes
+
+- fix the types problem
+- Updated dependencies
+  - @flowglad/server@0.4.12
+  - @flowglad/shared@0.4.12
+  - @flowglad/react@0.4.12
+
 ## 0.4.11
 
 ### Patch Changes

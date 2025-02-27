@@ -1,5 +1,13 @@
 # @flowglad/react
 
+## 0.4.12
+
+### Patch Changes
+
+- fix the types problem
+- Updated dependencies
+  - @flowglad/shared@0.4.12
+
 ## 0.4.11
 
 ### Patch Changes

@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "innerbuild": "next build",
     "build": "pnpm lint && pnpm migrations:push && next build && pnpm trigger:deploy",
     "start": "next start",
     "lint": "next lint && tsc --noEmit",
+    "install-packages": "pnpm install --ignore-workspace",
     "test": "vitest",
     "test:setup": "export NODE_ENV=test && docker-compose -f docker-compose.test.yml down --volumes && docker-compose -f docker-compose.test.yml up --build -d && docker-compose -f docker-compose.test.yml ps && pnpm migrations:push",
     "test:teardown": "docker-compose -f docker-compose.test.yml down --volumes",

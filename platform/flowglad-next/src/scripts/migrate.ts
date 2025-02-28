@@ -1,0 +1,40 @@
+import core from '@/utils/core'
+import { loadEnvConfig } from '@next/env'
+import { migrate } from 'drizzle-orm/postgres-js/migrator'
+import { drizzle } from 'drizzle-orm/postgres-js'
+import postgres from 'postgres'
+
+const projectDir = process.cwd()
+// To load env vars in a script
+loadEnvConfig(projectDir)
+const TEST_DB_URL = 'postgresql://test:test@localhost:5432/test_db'
+
+const dbUrl = core.IS_TEST
+  ? TEST_DB_URL
+  : core.envVariable('DATABASE_URL')
+
+const client = postgres(dbUrl, {
+  max: 15,
+  idle_timeout: 5,
+  prepare: false,
+  debug: true,
+})
+
+const db = drizzle(client)
+
+export const migrateDb = async () => {
+  console.info('Applying migrations...')
+  await migrate(db, { migrationsFolder: 'drizzle-migrations' })
+  console.info('Migrations applied successfully.')
+}
+
+async function main() {
+  await migrateDb()
+  process.exit(0)
+}
+
+main().catch((err) => {
+  console.error(`Error applying migrations:`)
+  console.log(err)
+  process.exit(1)
+})

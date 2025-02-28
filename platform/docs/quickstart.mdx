@@ -1,0 +1,310 @@
+---
+title: 'Quickstart'
+description: 'Process your first payment in 3 minutes'
+---
+
+This guide will show you how set up Flowglad in your app. It's optimized for Next.js, but it can be adapted for any React + Node.js application.
+
+## 1. Sign Up For Flowglad
+
+[Create a Flowglad account](https://app.flowglad.com/sign-up).
+
+## 2. Add Your API Key
+
+Add your Flowglad API key to your environment
+
+```bash .env
+FLOWGLAD_SECRET_KEY="sk_test_...."
+```
+
+Quicklinks to add your key to your secrets:
+
+[Vercel Dashboard](https://vercel.com/dashboard)
+
+[Infisical Dashboard](https://app.infisical.com/dashboard)
+
+## 3. Install Flowglad
+
+<CodeGroup>
+
+```bash Next.js
+pnpm install @flowglad/nextjs
+```
+
+```bash Other React Frameworks
+pnpm install @flowglad/react @flowglad/server
+```
+
+</CodeGroup>
+
+## 4. Server Setup
+
+First, set up a Flowglad server client. Do this in a file that can be imported wherever you need to access billing data, or make calls to Flowglad:
+
+<CodeGroup>
+```ts Supabase Auth
+import { FlowgladServer } from '@flowglad/nextjs/server'
+// or wherever you initialize your supabase client
+import { createClient } from '@/utils/supabase'
+
+export const flowgladServer = new FlowgladServer({
+  supabaseAuth: {
+    client: createClient
+  },
+})
+```
+
+```ts Clerk
+import { currentUser } from '@clerk/nextjs/server'
+import { FlowgladServer } from '@flowglad/nextjs/server'
+
+export const flowgladServer = new FlowgladServer({
+  clerk: {
+    currentUser,
+  },
+})
+```
+
+```ts Next Auth
+import { auth } from '@/auth' // your initialized, configured NextAuth client
+import { FlowgladServer } from '@flowglad/nextjs/server'
+
+export const flowgladServer = new FlowgladServer({
+  nextAuth: {
+    auth,
+  },
+})
+```
+
+</CodeGroup>
+
+Next, set up your Flowglad API route at `/api/flowglad/[...path]`. Your app will use this to send and receive data from Flowglad.
+
+<CodeGroup>
+```ts Next.js
+// /api/flowglad/[...path]/route.ts
+'use server';
+import { createNextRouteHandler } from '@flowglad/nextjs/server';
+import { flowgladServer } from '@/app/flowglad';
+
+const routeHandler = createNextRouteHandler(flowgladServer);
+
+export { routeHandler as GET, routeHandler as POST }
+```
+
+```ts Other React Frameworks
+import { createFetchRequestHandler } from '@flowglad/nextjs/server'
+import { flowgladServer } from '@/app/flowglad'
+
+const flowgladFetchRequestHandler =
+  createFetchRequestHandler(flowgladServer)
+
+export const flowgladRouteHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const result = await flowgladFetchRequestHandler(req)
+  return result
+}
+```
+
+</CodeGroup>
+
+<Info>
+  You can mount Flowglad's handler at a different route, but you'll
+  need to specify it via the `serverRoute` prop in `
+  <FlowgladProvider />` in your React app.
+</Info>
+
+## 5. Set up React
+
+Next, you need to set up the FlowgladProvider component. For the fastest possible demo, make your success route the home page you load once customers sign in..
+
+<CodeGroup>
+```tsx Supabase Auth
+// app/layout.tsx
+import { PropsWithChildren } from 'react'
+import { FlowgladProvider } from '@flowglad/react'
+// or wherever you initialize your supabase client
+import { createClient } from '@/utils/supabase'
+
+export default function RootLayout({
+  children,
+}: PropsWithChildren) {
+    const supabase = createClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+  return (
+    <FlowgladProvider authenticated={!!user}>
+    { /* ... existing layout JSX ... */}
+      {children}
+    { /* ... existing layout JSX ... */}
+    </FlowgladProvider>
+  )
+}
+```
+
+```tsx Clerk
+// app/layout.tsx
+'use client'
+import { PropsWithChildren } from 'react'
+import { FlowgladProvider } from '@flowglad/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
+
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  const user = await currentUser()
+  return (
+    <FlowgladProvider authenticated={!!user}>
+      <html lang="en">
+        <body>{children}</body>
+      </html>
+    </FlowgladProvider>
+  )
+}
+```
+
+```tsx Next Auth
+// app/layout.tsx
+import { PropsWithChildren } from 'react'
+import { FlowgladProvider } from '@flowglad/react'
+import { SessionProvider } from 'next-auth/react'
+
+export default async function RootLayout({
+  children,
+}: PropsWithChildren) {
+  const session = await auth()
+  return (
+    <SessionProvider basePath={'/auth'} session={session}>
+      <FlowgladProviderWithAuth
+        authenticated={session.status === 'authenticated'}
+      >
+        {children}
+      </FlowgladProviderWithAuth>
+    </SessionProvider>
+  )
+}
+```
+
+</CodeGroup>
+
+<Info>
+  If you are using custom route for your Flowglad handler instead of
+  `/api/flowglad`, set it on FlowgladProvider's `serverRoute` prop,
+  using `/path/to/your/route`.
+</Info>
+
+## 6. Initiate a Purchase Session
+
+Create a `SubscriptionDemo.tsx` file and paste the following contents into it.
+
+Then, mount `SubscriptionDemoCard` in your app's home page.
+
+```tsx SubscriptionDemo.tsx
+// SubscriptionDemo.tsx
+'use client'
+import { useBilling } from '@flowglad/nextjs'
+
+const SubscribeButton = () => {
+  const billing = useBilling()
+
+  if (!billing.loaded) {
+    return <div>Loading...</div>
+  } else if (billing.errors) {
+    return (
+      <div>
+        Error:{' '}
+        {billing.errors.map((error) => error.message).join(', ')}
+      </div>
+    )
+  }
+
+  const { createPurchaseSession, catalog } = billing
+
+  return (
+    <button
+      onClick={() =>
+        createPurchaseSession({
+          autoRedirect: true,
+          VariantId: catalog.products[0].variants[0].id,
+          successUrl: `${window.location.origin}/success`,
+          cancelUrl: `${window.location.origin}/cancel`,
+        })
+      }
+      className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+    >
+      Subscribe
+    </button>
+  )
+}
+
+const Label = ({
+  children,
+  bold = false,
+}: {
+  children: React.ReactNode
+  bold?: boolean
+}) => {
+  return (
+    <div
+      className={`mb-3 ${
+        bold ? 'font-bold' : ''
+      } text-gray-600 dark:text-gray-400`}
+    >
+      {children}
+    </div>
+  )
+}
+
+export const SubscriptionDemoCard = () => {
+  const billing = useBilling()
+
+  if (!billing.loaded) {
+    return <div>Loading...</div>
+  } else if (billing.errors) {
+    return (
+      <div>
+        Error:{' '}
+        {billing.errors.map((error) => error.message).join(', ')}
+      </div>
+    )
+  }
+
+  const { customerProfile, subscriptions } = billing
+
+  if (!customerProfile) {
+    return <div>No customer profile found</div>
+  }
+
+  const subscription = subscriptions[0]
+  let subscriptionView = <SubscribeButton />
+  if (subscription) {
+    const subscriptionItem = subscription.subscriptionItems[0]
+    const subscriptionPrice =
+      subscriptionItem.unitPrice * subscriptionItem.quantity
+    subscriptionView = (
+      <>
+        <Label>Price: {subscriptionPrice}</Label>
+        <Label>Status: {subscription.status}</Label>
+        <Label>
+          Next Billing Date: {subscription.currentBillingPeriodEnd}
+        </Label>
+      </>
+    )
+  }
+
+  return (
+    <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      <Label bold>Flowglad Customer Profile:</Label>
+      <Label>Email: {customerProfile.email}</Label>
+      <Label>Name: {customerProfile.name}</Label>
+      <Label>id: {customerProfile.id}</Label>
+      {subscriptionView}
+    </div>
+  )
+}
+```

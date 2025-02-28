@@ -1,0 +1,206 @@
+diff --git a/build/index.js b/build/index.js
+index f35a9c8bdec56b61b7ecb25e9e5ff03ccf7e956c..5ccc90d678acd9e79ef93dc41aef26677bf543a5 100644
+--- a/build/index.js
++++ b/build/index.js
+@@ -83,15 +83,8 @@ var getInputOutputParsers = (procedure) => {
+     outputParser: output
+   };
+ };
+-var getProcedureType = (procedure) => {
+-  if (procedure._def.query)
+-    return "query";
+-  if (procedure._def.mutation)
+-    return "mutation";
+-  if (procedure._def.subscription)
+-    return "subscription";
+-  throw new Error("Unknown procedure type");
+-};
++var getProcedureType = (procedure) => procedure._def.type;
++
+ var forEachOpenApiProcedure = (procedureRecord, callback) => {
+   for (const [path, procedure] of Object.entries(procedureRecord)) {
+     const { openapi } = _nullishCoalesce(procedure._def.meta, () => ( {}));
+@@ -527,7 +520,7 @@ var getBody = async (req, maxBodySize = BODY_100_KB) => {
+ var createProcedureCache = (router) => {
+   const procedureCache = /* @__PURE__ */ new Map();
+   const { queries, mutations } = router._def;
+-  forEachOpenApiProcedure(queries, ({ path: queryPath, procedure, openapi }) => {
++  forEachOpenApiProcedure(router._def.procedures, ({ path: queryPath, procedure, openapi }) => {
+     const { method } = openapi;
+     if (!procedureCache.has(method)) {
+       procedureCache.set(method, /* @__PURE__ */ new Map());
+@@ -535,24 +528,12 @@ var createProcedureCache = (router) => {
+     const path = normalizePath(openapi.path);
+     const pathRegExp = getPathRegExp(path);
+     procedureCache.get(method).set(pathRegExp, {
+-      type: "query",
++      type: procedure._def.type,
+       path: queryPath,
+       procedure
+     });
+   });
+-  forEachOpenApiProcedure(mutations, ({ path: mutationPath, procedure, openapi }) => {
+-    const { method } = openapi;
+-    if (!procedureCache.has(method)) {
+-      procedureCache.set(method, /* @__PURE__ */ new Map());
+-    }
+-    const path = normalizePath(openapi.path);
+-    const pathRegExp = getPathRegExp(path);
+-    procedureCache.get(method).set(pathRegExp, {
+-      type: "mutation",
+-      path: mutationPath,
+-      procedure
+-    });
+-  });
++
+   return (method, path) => {
+     const procedureMethodCache = procedureCache.get(method);
+     if (!procedureMethodCache) {
+@@ -661,7 +642,7 @@ var createOpenApiNodeHttpHandler = (opts) => {
+         data: [data],
+         errors: [error]
+       })]);
+-      const errorShape = router.getErrorShape({
++      const errorShape = router._def.errorFormatter({
+         error,
+         type: _nullishCoalesce(_optionalChain([procedure, 'optionalAccess', _36 => _36.type]), () => ( "unknown")),
+         path: _optionalChain([procedure, 'optionalAccess', _37 => _37.path]),
+diff --git a/build/index.mjs b/build/index.mjs
+index a23c6fb2fb648818fb0ece6addb62fd69511986e..3b9b567345aa70e7b751cd2e96d250a00c4b54d6 100644
+--- a/build/index.mjs
++++ b/build/index.mjs
+@@ -83,15 +83,8 @@ var getInputOutputParsers = (procedure) => {
+     outputParser: output
+   };
+ };
+-var getProcedureType = (procedure) => {
+-  if (procedure._def.query)
+-    return "query";
+-  if (procedure._def.mutation)
+-    return "mutation";
+-  if (procedure._def.subscription)
+-    return "subscription";
+-  throw new Error("Unknown procedure type");
+-};
++var getProcedureType = (procedure) => procedure._def.type;
++
+ var forEachOpenApiProcedure = (procedureRecord, callback) => {
+   for (const [path, procedure] of Object.entries(procedureRecord)) {
+     const { openapi } = procedure._def.meta ?? {};
+@@ -527,7 +520,7 @@ var getBody = async (req, maxBodySize = BODY_100_KB) => {
+ var createProcedureCache = (router) => {
+   const procedureCache = /* @__PURE__ */ new Map();
+   const { queries, mutations } = router._def;
+-  forEachOpenApiProcedure(queries, ({ path: queryPath, procedure, openapi }) => {
++  forEachOpenApiProcedure(router._def.procedures, ({ path: queryPath, procedure, openapi }) => {
+     const { method } = openapi;
+     if (!procedureCache.has(method)) {
+       procedureCache.set(method, /* @__PURE__ */ new Map());
+@@ -535,24 +528,12 @@ var createProcedureCache = (router) => {
+     const path = normalizePath(openapi.path);
+     const pathRegExp = getPathRegExp(path);
+     procedureCache.get(method).set(pathRegExp, {
+-      type: "query",
++      type: procedure._def.type,
+       path: queryPath,
+       procedure
+     });
+   });
+-  forEachOpenApiProcedure(mutations, ({ path: mutationPath, procedure, openapi }) => {
+-    const { method } = openapi;
+-    if (!procedureCache.has(method)) {
+-      procedureCache.set(method, /* @__PURE__ */ new Map());
+-    }
+-    const path = normalizePath(openapi.path);
+-    const pathRegExp = getPathRegExp(path);
+-    procedureCache.get(method).set(pathRegExp, {
+-      type: "mutation",
+-      path: mutationPath,
+-      procedure
+-    });
+-  });
++
+   return (method, path) => {
+     const procedureMethodCache = procedureCache.get(method);
+     if (!procedureMethodCache) {
+@@ -661,7 +642,7 @@ var createOpenApiNodeHttpHandler = (opts) => {
+         data: [data],
+         errors: [error]
+       });
+-      const errorShape = router.getErrorShape({
++      const errorShape = router._def.errorFormatter({
+         error,
+         type: procedure?.type ?? "unknown",
+         path: procedure?.path,
+diff --git a/packages/adapters/node-http/core.ts b/packages/adapters/node-http/core.ts
+index 94475efe245e1b4997e8d7a76a6199db15092048..3d40fd14a2b2bc4a20eba6e63cf825c89fa8acfe 100644
+--- a/packages/adapters/node-http/core.ts
++++ b/packages/adapters/node-http/core.ts
+@@ -167,7 +167,7 @@ export const createOpenApiNodeHttpHandler = <
+       })
+ 
+       // VERC: Catalog Change - @trpc/server v11.0.0-next-beta.318
+-      const errorShape = router.getErrorShape({
++      const errorShape = router._def.errorFormatter({
+         error,
+         type: procedure?.type ?? "unknown",
+         path: procedure?.path,
+diff --git a/packages/adapters/node-http/procedures.ts b/packages/adapters/node-http/procedures.ts
+index 78c28dd9c0f70565cf15110089055632e6b965f3..30488fbc7b7ecf5ea97c9efd4f9595f154cf59c0 100644
+--- a/packages/adapters/node-http/procedures.ts
++++ b/packages/adapters/node-http/procedures.ts
+@@ -17,7 +17,7 @@ export const createProcedureCache = (router: OpenApiRouter) => {
+ 
+   const { queries, mutations } = router._def
+ 
+-  forEachOpenApiProcedure(queries, ({ path: queryPath, procedure, openapi }) => {
++  forEachOpenApiProcedure(router._def.procedures, ({ path: queryPath, procedure, openapi }) => {
+     const { method } = openapi
+     if (!procedureCache.has(method)) {
+       procedureCache.set(method, new Map())
+@@ -25,26 +25,12 @@ export const createProcedureCache = (router: OpenApiRouter) => {
+     const path = normalizePath(openapi.path)
+     const pathRegExp = getPathRegExp(path)
+     procedureCache.get(method)!.set(pathRegExp, {
+-      type: "query",
++      type: procedure._def.type,
+       path: queryPath,
+       procedure
+     })
+   })
+ 
+-  forEachOpenApiProcedure(mutations, ({ path: mutationPath, procedure, openapi }) => {
+-    const { method } = openapi
+-    if (!procedureCache.has(method)) {
+-      procedureCache.set(method, new Map())
+-    }
+-    const path = normalizePath(openapi.path)
+-    const pathRegExp = getPathRegExp(path)
+-    procedureCache.get(method)!.set(pathRegExp, {
+-      type: "mutation",
+-      path: mutationPath,
+-      procedure
+-    })
+-  })
+-
+   return (method: OpenApiMethod, path: string) => {
+     const procedureMethodCache = procedureCache.get(method)
+     if (!procedureMethodCache) {
+diff --git a/packages/utils/procedure.ts b/packages/utils/procedure.ts
+index 2435062ae6c3e56b68512e20b3f1e1dac6590e88..ec1aa4e8d893de7f53fa9afa7089019ddda7a8e4 100644
+--- a/packages/utils/procedure.ts
++++ b/packages/utils/procedure.ts
+@@ -24,12 +24,7 @@ export const getInputOutputParsers = (procedure: OpenApiProcedure) => {
+   }
+ }
+ 
+-const getProcedureType = (procedure: OpenApiProcedure): ProcedureType => {
+-  if (procedure._def.query) return "query"
+-  if (procedure._def.mutation) return "mutation"
+-  if (procedure._def.subscription) return "subscription"
+-  throw new Error("Unknown procedure type")
+-}
++const getProcedureType = (procedure: OpenApiProcedure): ProcedureType => procedure._def.type
+ 
+ export const forEachOpenApiProcedure = (
+   procedureRecord: OpenApiProcedureRecord,

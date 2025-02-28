@@ -31,6 +31,7 @@ export default defineConfig((overrideOptions) => {
   const esm: Options = {
     ...common,
     format: 'esm',
+    outDir: './dist/esm',
   }
 
   const cjs: Options = {

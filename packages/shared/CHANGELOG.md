@@ -1,5 +1,11 @@
 # @flowglad/shared
 
+## 0.4.13
+
+### Patch Changes
+
+- Fix nextjs server types export
+
 ## 0.4.12
 
 ### Patch Changes

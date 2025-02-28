@@ -1,5 +1,15 @@
 # @flowglad/nextjs
 
+## 0.4.13
+
+### Patch Changes
+
+- Fix nextjs server types export
+- Updated dependencies
+  - @flowglad/server@0.4.13
+  - @flowglad/shared@0.4.13
+  - @flowglad/react@0.4.13
+
 ## 0.4.12
 
 ### Patch Changes

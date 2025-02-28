@@ -31,6 +31,7 @@ export default defineConfig((overrideOptions) => {
   const esm: Options = {
     ...common,
     format: 'esm',
+    outDir: './dist/esm',
   }
 
   const cjs: Options = {
@@ -38,9 +39,6 @@ export default defineConfig((overrideOptions) => {
     format: 'cjs',
     outDir: './dist/cjs',
   }
-
-  const copyPackageJson = (format: 'esm' | 'cjs') =>
-    `cp ./package.${format}.json ./dist/${format}/package.json`
 
   return runAfterLast([
     'pnpm build:declarations',

@@ -31,6 +31,7 @@ export default defineConfig((overrideOptions) => {
   const esm: Options = {
     ...common,
     format: 'esm',
+    outDir: './dist/esm',
   }
 
   const cjs: Options = {
@@ -48,15 +49,6 @@ export default defineConfig((overrideOptions) => {
     ...cjs,
     sourcemap: false,
   }
-
-  const copyPackageJson = (format: 'esm' | 'cjs') =>
-    `cp ./package.${format}.json ./dist/${format}/package.json`
-  // Tsup will not output the generated file in the same location as the source file
-  // So we need to move the server-actions.js file to the app-router folder manually
-  const moveServerActions = (format: 'esm' | 'cjs') =>
-    `mv ./dist/${format}/server-actions.js ./dist/${format}/app-router`
-  const moveKeylessActions = (format: 'esm' | 'cjs') =>
-    `mv ./dist/${format}/keyless-actions.js ./dist/${format}/app-router`
 
   return runAfterLast([
     'pnpm build:declarations',

@@ -6,7 +6,7 @@ import { PropsWithChildren, Suspense } from 'react';
 import { getURL } from '@/utils/helpers';
 import { createClient } from '@/utils/supabase/server';
 import 'styles/main.css';
-import { FlowgladProvider } from '@flowglad/react';
+import { FlowgladProvider } from '@flowglad/nextjs';
 
 const title = 'Next.js Subscription Starter';
 const description = 'Brought to you by Vercel, Stripe, and Supabase.';

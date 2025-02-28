@@ -1,11 +1,12 @@
 {
   "name": "@flowglad/nextjs",
-  "version": "0.4.12",
+  "version": "0.4.13",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/types/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "server"
   ],
   "scripts": {
     "build": "tsup",

@@ -147,7 +147,7 @@ const CodeblockGroup = ({
   )
 }
 
-const NEXT_INSTALL_COMMAND = `pnpm install @flowglad/next`
+const NEXT_INSTALL_COMMAND = `pnpm install @flowglad/nextjs`
 const REACT_INSTALL_COMMAND = `pnpm install @flowglad/react @flowglad/server`
 
 const OnboardingStatusTable = ({

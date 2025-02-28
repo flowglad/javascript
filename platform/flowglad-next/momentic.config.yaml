@@ -1,0 +1,4 @@
+name: app
+include:
+  - "**/*.test.yaml"
+  - "**/*.module.yaml"

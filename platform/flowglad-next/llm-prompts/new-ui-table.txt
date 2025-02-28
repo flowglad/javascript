@@ -1,0 +1,118 @@
+You are creating a new UI for a table using Tanstack Table. 
+
+Use the existing code in packages/flowglad-next/src/app/products/ProductsTable.tsx as a reference.
+
+You are to create your own table, with the name provided. Create the file in packages/flowglad-next/src/app/components.
+
+For demonstration purposes, imagine a UnicornRidersTable, with columns:
+- name
+- type
+- pricing
+- status
+- createdAt
+
+The columns should be like so:
+```
+import { useMemo } from 'react'
+import { DisplayColumnDef } from '@tanstack/react-table'
+import Table from '@/app/components/ion/Table'
+import SortableColumnHeaderCell from '@/app/components/ion/SortableColumnHeaderCell'
+// the prompt may provider another source for the type - if so, import it from there
+import { UnicornRiderRecord } from '@/db/schema/unicorn-riders'
+
+const UnicornRidersTable = ({ data }: { data: UnicornRiderRecord[] }) => {
+  const columns = useMemo(() => [
+  {
+    header: ({ column }) => (
+      <SortableColumnHeaderCell
+              title="Name"
+              column={column}
+            />
+          ),
+          accessorKey: 'name',
+          cell: ({ row: { original: cellData } }) => (
+            <span className="text-sm">{cellData.name}</span>
+          ),
+        },
+        {
+          header: ({ column }) => (
+            <SortableColumnHeaderCell
+              title="Type"
+              column={column}
+            />
+          ),
+          accessorKey: 'type',
+          cell: ({ row: { original: cellData } }) => (
+            <span className="text-sm">{cellData.type}</span>
+          ),
+        },
+        {
+          header: ({ column }) => (
+            <SortableColumnHeaderCell title="Pricing" column={column} />
+          ),
+          accessorKey: 'pricing',
+          cell: ({ row: { original: cellData } }) => (
+            <span className="text-sm">{cellData.pricing}</span>
+          ),
+        },
+        {
+            header: ({ column }) => (
+                <SortableColumnHeaderCell title="Status" column={column} />
+            ),
+            accessorKey: 'status',
+            cell: ({ row: { original: cellData } }) => (
+                <span className="text-sm">{cellData.status}</span>
+            ),
+        },
+        {
+            header: ({ column }) => (
+                <SortableColumnHeaderCell title="Created" column={column} />
+            ),
+            accessorKey: 'createdAt',
+            cell: ({ row: { original: cellData } }) => (
+                <>{core.formatDate(cellData.createdAt!)}</>
+            ),
+        },
+    ] as ColumnDef<UnicornRiderRecord>[],
+    []),
+  return <Table columns={columns} data={data} className="bg-nav" bordered />
+}
+
+export default UnicornRidersTable
+```
+
+# Notes
+- The prompt may specify a click handler for the table rows, if so, add it to the onClickRow prop of the <Table /> component that gets returned.
+- If the prompt specifies a *titled table*, then enhance the returned JSX like follows, adding TableTitleRow:
+```
+import TableTitleRow from '@/app/components/TableTitleRow'
+
+// ...previous code above...
+    return <div className="w-full flex flex-col gap-5 pb-8">
+      <TableTitleRow
+        title="Unicorn Riders"
+        button={<Button
+            iconLeading={<Plus size={16} weight="bold" />}
+            variant="outline"
+            color="primary"
+            size="sm"
+            onClick={() => {}}
+          >
+            Create Unicorn Rider
+          </Button>}
+      />
+      <div className="w-full flex flex-col gap-2">
+        <div className="w-full flex flex-col gap-2">
+          <div className="w-full flex flex-col gap-5">
+            <Table
+              columns={columns_1}
+              data={variants}
+              className="bg-nav"
+              bordered
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+```

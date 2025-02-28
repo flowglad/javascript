@@ -1,0 +1,62 @@
+All of the following changes will happen in the directory `./packages/flowglad-next`, so when you see a path like `./src/db/schema/unicornRiders.ts`, it should be translated to `./packages/flowglad-next/src/db/schema/unicornRiders.ts`.
+
+You are creating a new trpc protectedProcedure that will be a mutation. Refer to the TRPC docs for more information.
+
+You can rely on the other protectedProcedures the directory @/server/mutations as reference patterns. Here is how it will look for example, for a mutation called editCustomerProfile:
+
+```ts
+// in @/server/mutations/editCustomerProfile.ts
+import { protectedProcedure } from '@/server/trpc'
+import { authenticatedTransaction } from '@/db/databaseMethods'
+import { editCustomerProfileSchema } from '@/db/schema/customerProfiles'
+import { updateCustomerProfile } from '@/db/tableMethods/customerProfileMethods'
+
+export const editCustomerProfile = protectedProcedure
+  .input(editCustomerProfileSchema)
+  .mutation(async ({ input }) => {
+    const updatedCustomerProfile = await authenticatedTransaction(
+      async ({ transaction }) => {
+        return updateCustomerProfile(input.customerProfile, transaction)
+      }
+    )
+    return {
+      data: { customerProfile: updatedCustomerProfile },
+    }
+  })
+
+```
+
+And then in @/server/index.ts, you would add it to the appRouter like so:
+
+```ts
+// ... existing imports
+import { editCustomerProfile } from './mutations/editCustomerProfile'
+
+export const appRouter = router({
+  // ... existing mutation
+  editCustomerProfile,
+})
+```
+
+# Notes
+
+- Import the necessary zod schema from the files in "@/db/schema/*"
+
+- You should only need one zod schema. If it's not found, you should create one in the @/db/schema/<tableName.ts> file, and export it. The shape of the schema should be like so: { customerProfile: customerProfilesUpdateSchema }
+
+- The name of the mutation will specified in the prompt. Here's how the naming of the mutation relates to the ORM methods you would use:
+    - editCustomerProfile => updateCustomerProfile
+    - createCustomerProfile => insertCustomerProfile
+    - deleteCustomerProfile => deleteCustomerProfile
+We use "edit" instead of "update" to make it clear that this update may have side effects
+
+- If you do need to make a new zod schema, adhere to the following guidelines:
+  - Don't make a new zod object with individual properties. What you need should be available in the @/db/schema/<tableName.ts> file.
+  - Name the schema like so: <edit|create|delete><TableName>Schema
+  - Export both the schema and the inferred type from the db/schema/<tableName.ts> file:
+  ```ts
+  export const editCustomerProfileSchema = z.object({
+    customerProfile: customerProfilesUpdateSchema
+  })
+  export type EditCustomerProfileInput = z.infer<typeof editCustomerProfileSchema>
+  ```

@@ -1,0 +1,136 @@
+import {
+  createSelectById,
+  createInsertFunction,
+  createUpdateFunction,
+  createSelectFunction,
+  ORMMethodCreatorConfig,
+  createPaginatedSelectFunction,
+} from '@/db/tableUtils'
+import {
+  Subscription,
+  subscriptions,
+  subscriptionsInsertSchema,
+  subscriptionsSelectSchema,
+  subscriptionsTableRowDataSchema,
+  subscriptionsUpdateSchema,
+} from '@/db/schema/subscriptions'
+import { and, lte, gte, eq, desc } from 'drizzle-orm'
+import { DbTransaction, SubscriptionStatus } from '@/types'
+import { payments } from '../schema/payments'
+import { customerProfiles } from '../schema/customerProfiles'
+import { variants } from '../schema/variants'
+import { products } from '../schema/products'
+const config: ORMMethodCreatorConfig<
+  typeof subscriptions,
+  typeof subscriptionsSelectSchema,
+  typeof subscriptionsInsertSchema,
+  typeof subscriptionsUpdateSchema
+> = {
+  selectSchema: subscriptionsSelectSchema,
+  insertSchema: subscriptionsInsertSchema,
+  updateSchema: subscriptionsUpdateSchema,
+}
+
+export const selectSubscriptionById = createSelectById(
+  subscriptions,
+  config
+)
+
+export const insertSubscription = createInsertFunction(
+  subscriptions,
+  config
+)
+
+export const updateSubscription = createUpdateFunction(
+  subscriptions,
+  config
+)
+
+export const selectSubscriptions = createSelectFunction(
+  subscriptions,
+  config
+)
+
+export const isSubscriptionInTerminalState = (
+  status: SubscriptionStatus
+) => {
+  return [
+    SubscriptionStatus.Canceled,
+    SubscriptionStatus.IncompleteExpired,
+  ].includes(status)
+}
+
+export const safelyUpdateSubscriptionStatus = async (
+  subscription: Subscription.Record,
+  status: SubscriptionStatus,
+  transaction: DbTransaction
+) => {
+  if (subscription.status === status) {
+    return subscription
+  }
+  if (isSubscriptionInTerminalState(subscription.status)) {
+    throw new Error(
+      `Subscription ${subscription.id} is in terminal state ${subscription.status} and cannot be updated to ${status}`
+    )
+  }
+  return updateSubscription(
+    { id: subscription.id, status },
+    transaction
+  )
+}
+
+export const selectSubscriptionsToBeCancelled = async (
+  {
+    rangeStart,
+    rangeEnd,
+    livemode,
+  }: {
+    rangeStart: Date
+    rangeEnd: Date
+    livemode: boolean
+  },
+  transaction: DbTransaction
+) => {
+  const subscriptionToCancel = await transaction
+    .select()
+    .from(subscriptions)
+    .where(
+      and(
+        gte(subscriptions.cancelScheduledAt, rangeStart),
+        lte(subscriptions.cancelScheduledAt, rangeEnd),
+        eq(subscriptions.livemode, livemode)
+      )
+    )
+  return subscriptionToCancel.map((subscription) =>
+    subscriptionsSelectSchema.parse(subscription)
+  )
+}
+
+export const selectSubscriptionsTableRowData = async (
+  OrganizationId: string,
+  transaction: DbTransaction
+) => {
+  const subscriptionsRowData = await transaction
+    .select({
+      subscription: subscriptions,
+      customerProfile: customerProfiles,
+      variant: variants,
+      product: products,
+    })
+    .from(subscriptions)
+    .innerJoin(
+      customerProfiles,
+      eq(subscriptions.CustomerProfileId, customerProfiles.id)
+    )
+    .innerJoin(variants, eq(subscriptions.VariantId, variants.id))
+    .innerJoin(products, eq(variants.ProductId, products.id))
+    .where(eq(subscriptions.OrganizationId, OrganizationId))
+    .orderBy(desc(subscriptions.createdAt))
+
+  return subscriptionsRowData.map((row) =>
+    subscriptionsTableRowDataSchema.parse(row)
+  )
+}
+
+export const selectSubscriptionsPaginated =
+  createPaginatedSelectFunction(subscriptions, config)

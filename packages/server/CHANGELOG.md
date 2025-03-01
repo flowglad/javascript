@@ -1,5 +1,13 @@
 # @flowglad/server
 
+## 0.4.14
+
+### Patch Changes
+
+- Fix nested esm issue
+- Updated dependencies
+  - @flowglad/shared@0.4.14
+
 ## 0.4.13
 
 ### Patch Changes

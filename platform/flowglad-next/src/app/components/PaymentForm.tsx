@@ -13,14 +13,7 @@ import Button from '@/app/components/ion/Button'
 import { trpc } from '@/app/_trpc/client'
 import { Skeleton } from '@/app/components/ion/Skeleton'
 import { useRouter } from 'next/navigation'
-import Checkbox from '@/app/components/ion/Checkbox'
-import Link from 'next/link'
-import {
-  CurrencyCode,
-  PaymentMethodType,
-  PriceType,
-  ProductType,
-} from '@/types'
+import { PaymentMethodType, PriceType } from '@/types'
 import { LoaderCircle } from 'lucide-react'
 import { stripeCurrencyAmountToHumanReadableCurrencyAmount } from '@/utils/stripe'
 import TotalBillingDetails from './ion/TotalBillingDetails'
@@ -171,16 +164,11 @@ const PaymentForm = () => {
     feeCalculation,
     readonlyCustomerEmail,
   } = useCheckoutPageContext()
-  const isServiceProduct = product.type === ProductType.Service
   const [emailEmbedReady, setEmailEmbedReady] = useState(true)
   const [paymentEmbedReady, setPaymentEmbedReady] = useState(false)
   const [addressEmbedReady, setAddressEmbedReady] = useState(true)
   const [paymentInfoComplete, setPaymentInfoComplete] =
     useState(false)
-  /**
-   * Auto-set to true for non-service products
-   */
-  const [agreeToTerms, setAgreeToTerms] = useState(!isServiceProduct)
   const [emailComplete, setEmailComplete] = useState(
     Boolean(readonlyCustomerEmail)
   )
@@ -391,7 +379,6 @@ const PaymentForm = () => {
             <Button
               className="justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 w-full h-[45px]"
               disabled={
-                !agreeToTerms ||
                 !paymentInfoComplete ||
                 !emailComplete ||
                 isSubmitting ||

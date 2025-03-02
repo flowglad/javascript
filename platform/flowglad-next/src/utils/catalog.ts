@@ -13,8 +13,7 @@ import {
 import {
   AuthenticatedTransactionParams,
   DbTransaction,
-  OfferingType,
-} from '@/types'
+} from '@/db/types'
 import {
   upsertStripePriceFromVariant,
   upsertStripeProductFromProduct,

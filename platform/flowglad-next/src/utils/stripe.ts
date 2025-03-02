@@ -8,7 +8,6 @@ import {
   Nullish,
   PaymentMethodType,
   PriceType,
-  ProductType,
   StripeConnectContractType,
 } from '@/types'
 import core from './core'
@@ -26,6 +25,8 @@ import { calculateTotalFeeAmount } from './bookkeeping/fees'
 import { calculateTotalDueAmount } from './bookkeeping/fees'
 import { FeeCalculation } from '@/db/schema/feeCalculations'
 import { Country } from '@/db/schema/countries'
+
+const DIGITAL_TAX_CODE = 'txcd_10000000'
 
 export const cardPaymentsCountries = [
   'AU',
@@ -593,13 +594,11 @@ export const unitedStatesBankAccountPaymentMethodOptions = (
 export const getPaymentIntent = async (paymentIntentId: string) => {
   let paymentIntent: Stripe.PaymentIntent
   try {
-    paymentIntent = await stripe(true).paymentIntents.retrieve(
-      paymentIntentId
-    )
+    paymentIntent =
+      await stripe(true).paymentIntents.retrieve(paymentIntentId)
   } catch (err) {
-    paymentIntent = await stripe(false).paymentIntents.retrieve(
-      paymentIntentId
-    )
+    paymentIntent =
+      await stripe(false).paymentIntents.retrieve(paymentIntentId)
   }
   return paymentIntent
 }
@@ -850,7 +849,7 @@ export const createStripeTaxCalculationByVariant = async ({
       quantity: 1,
       amount: discountInclusiveAmount,
       reference: `${variant.id}`,
-      tax_code: productTypeToTaxCode[product.type],
+      tax_code: DIGITAL_TAX_CODE,
     },
   ]
 
@@ -864,16 +863,10 @@ export const createStripeTaxCalculationByVariant = async ({
   })
 }
 
-const productTypeToTaxCode: Record<ProductType, string> = {
-  [ProductType.Service]: 'txcd_20060000',
-  [ProductType.Digital]: 'txcd_10000000',
-}
-
 export const createStripeTaxCalculationByPurchase = async ({
   purchase,
   billingAddress,
   discountInclusiveAmount,
-  product,
   variant,
   livemode,
 }: {
@@ -889,7 +882,7 @@ export const createStripeTaxCalculationByPurchase = async ({
       quantity: 1,
       amount: discountInclusiveAmount,
       reference: `${purchase.id}`,
-      tax_code: productTypeToTaxCode[product.type],
+      tax_code: DIGITAL_TAX_CODE,
     },
   ]
   return stripe(livemode).tax.calculations.create({
@@ -1039,13 +1032,11 @@ export const paymentMethodFromStripeCharge = (
 export const getSetupIntent = async (setupIntentId: string) => {
   let setupIntent: Stripe.SetupIntent
   try {
-    setupIntent = await stripe(true).setupIntents.retrieve(
-      setupIntentId
-    )
+    setupIntent =
+      await stripe(true).setupIntents.retrieve(setupIntentId)
   } catch (err) {
-    setupIntent = await stripe(false).setupIntents.retrieve(
-      setupIntentId
-    )
+    setupIntent =
+      await stripe(false).setupIntents.retrieve(setupIntentId)
   }
   return setupIntent
 }

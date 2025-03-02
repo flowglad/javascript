@@ -13,10 +13,10 @@ import {
 } from '@/db/tableMethods/subscriptionMethods'
 import {
   BillingPeriodStatus,
-  DbTransaction,
   SubscriptionCancellationArrangement,
   SubscriptionStatus,
 } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { z } from 'zod'
 
 // Cancel a subscription immediately

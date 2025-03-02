@@ -19,7 +19,8 @@ import {
   paymentsUpdateSchema,
   RevenueDataItem,
 } from '@/db/schema/payments'
-import { DbTransaction, PaymentStatus } from '@/types'
+import { PaymentStatus } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { and, desc, eq, gte, inArray, sql } from 'drizzle-orm'
 import { invoices } from '../schema/invoices'
 import { GetRevenueDataInput } from '../schema/payments'
@@ -112,11 +113,11 @@ export const selectRevenueDataForOrganization = async (
       revenues AS (
         SELECT 
           date_trunc(${revenueChartIntervalUnit}, ${
-      payments.chargeDate
-    }) as date,
+            payments.chargeDate
+          }) as date,
           SUM(${payments.amount} - COALESCE(${
-      payments.refundedAmount
-    }, 0)) as revenue
+            payments.refundedAmount
+          }, 0)) as revenue
         FROM ${payments}
         WHERE 
           ${payments.OrganizationId} = ${OrganizationId}

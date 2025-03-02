@@ -1,7 +1,8 @@
 import { dateFromStripeTimestamp } from './stripe'
 import { safelyUpdatePaymentForRefund } from '@/db/tableMethods/paymentMethods'
 import { selectPaymentById } from '@/db/tableMethods/paymentMethods'
-import { DbTransaction, PaymentStatus } from '@/types'
+import { PaymentStatus } from '@/types'
+import { DbTransaction } from '@/db/types'
 import {
   getPaymentIntent,
   getStripeCharge,

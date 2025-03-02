@@ -1,51 +1,8 @@
-import { Node, Edge } from '@xyflow/react'
-import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
-export type { PgTable, PgTransaction } from 'drizzle-orm/pg-core'
-import type { PgColumn, PgTable } from 'drizzle-orm/pg-core'
-import type { ColumnBaseConfig, SQLWrapper } from 'drizzle-orm'
-import { CustomerProfile } from './db/schema/customerProfiles'
-import { Customer } from './db/schema/customers'
-import { Payment } from './db/schema/payments'
-export type { SQLWrapper } from 'drizzle-orm'
-
 export type Nullish<T> = T | null | undefined
 
 export enum StripePriceMode {
   Subscription = 'subscription',
   Payment = 'payment',
-}
-
-export type DbTransaction = Parameters<
-  Parameters<
-    PostgresJsDatabase<Record<string, never>>['transaction']
-  >[0]
->[0]
-
-export type PgNumberColumn = PgColumn<
-  ColumnBaseConfig<'number', 'number'>,
-  {},
-  {}
->
-
-export type PgSerialColumn = PgColumn<
-  ColumnBaseConfig<'number', 'serial'>,
-  {},
-  {}
->
-
-export type PgStringColumn = PgColumn<
-  ColumnBaseConfig<'string', 'string'>,
-  {},
-  {}
->
-
-export type PgTableWithId = PgTable & {
-  id: SQLWrapper
-}
-
-export type PgTableWithCreatedAtAndId = PgTable & {
-  createdAt: SQLWrapper
-  id: SQLWrapper
 }
 
 export interface IdNumberParam {
@@ -72,26 +29,6 @@ export enum RevenueChartIntervalUnit {
   Week = 'week',
   Day = 'day',
   Hour = 'hour',
-}
-
-export interface AuthenticatedTransactionParams {
-  transaction: DbTransaction
-  livemode: boolean
-  userId: string
-}
-
-export interface AdminTransactionParams {
-  transaction: DbTransaction
-  userId: 'ADMIN'
-  livemode: boolean
-}
-
-export enum ProductType {
-  Service = 'service',
-  Digital = 'digital',
-  /**
-   * TODO: consider "membership" as a product type
-   */
 }
 
 export enum InvoiceStatus {
@@ -567,22 +504,6 @@ export enum TaxType {
   None = 'none',
 }
 
-export enum InferredCustomerProfileStatus {
-  Active = 'active',
-  Archived = 'archived',
-  Pending = 'pending',
-  Concluded = 'concluded',
-  PastDue = 'past_due',
-}
-
-export interface CustomerTableRowData {
-  customerProfile: CustomerProfile.ClientRecord
-  customer: Customer.ClientRecord
-  totalSpend?: number
-  payments?: number
-  status: InferredCustomerProfileStatus
-}
-
 export enum FormFieldType {
   ShortAnswer = 'short_answer',
   ParagraphAnswer = 'paragraph_answer',
@@ -592,29 +513,6 @@ export enum FormFieldType {
   FileUpload = 'file_upload',
   Date = 'date',
   Time = 'time',
-}
-
-/**
- * EXPERIMENTAL
- */
-
-export type NodeTypes =
-  | 'dataLoader'
-  | 'transformer'
-  | 'filter'
-  | 'writer'
-  | 'customNode'
-
-export interface WorkflowNode extends Node {
-  type: NodeTypes
-  data: {
-    label: string
-  }
-}
-
-export interface WorkflowEdge extends Edge {
-  sourceHandle: string
-  targetHandle: string
 }
 
 export enum IntegrationMethod {

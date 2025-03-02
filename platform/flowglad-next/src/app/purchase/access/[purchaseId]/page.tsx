@@ -1,11 +1,8 @@
 import { adminTransaction } from '@/db/databaseMethods'
-import PaymentStatusSuccess from '@/app/components/PaymentStatusSuccess'
-import { ProductType, PurchaseStatus } from '@/types'
+import { PurchaseStatus } from '@/types'
 import PendingPostPurchaseScreen from './PendingPostPurchaseScreen'
 import { findPurchaseAccessSession } from '@/utils/purchaseAccessSessionState'
 import { selectPurchaseCheckoutParametersById } from '@/db/tableMethods/purchaseMethods'
-import ServicePurchaseIntakeForm from './ServicePurchaseIntakeForm'
-import core from '@/utils/core'
 import PostPurchaseEmailConfirmationForm from './PostPurchaseEmailConfirmationForm'
 import AccessResourcesView from './AccessResourcesView'
 
@@ -98,12 +95,6 @@ const PostPurchasePage = async ({
 
   if (purchase.status === PurchaseStatus.Pending) {
     return <PendingPostPurchaseScreen purchaseId={purchase.id} />
-  }
-  if (product.type === ProductType.Service) {
-    if (!core.IS_PROD) {
-      return <ServicePurchaseIntakeForm organization={organization} />
-    }
-    return <PaymentStatusSuccess />
   }
 
   return <AccessResourcesView files={[]} links={[]} />

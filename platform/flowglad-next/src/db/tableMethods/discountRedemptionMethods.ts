@@ -18,7 +18,7 @@ import {
   discounts,
   discountsSelectSchema,
 } from '../schema/discounts'
-import { DbTransaction } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { eq } from 'drizzle-orm'
 
 const config: ORMMethodCreatorConfig<

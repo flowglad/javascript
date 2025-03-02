@@ -8,7 +8,11 @@ import { useMemo, useState } from 'react'
 
 import Table from '@/app/components/ion/Table'
 import { PageHeader } from '@/app/components/ion/PageHeader'
-import { CustomerProfile } from '@/db/schema/customerProfiles'
+import {
+  CustomerProfile,
+  CustomerTableRowData,
+  InferredCustomerProfileStatus,
+} from '@/db/schema/customerProfiles'
 import { Customer } from '@/db/schema/customers'
 import TableRowPopoverMenu from '@/app/components/TableRowPopoverMenu'
 import core from '@/utils/core'
@@ -23,11 +27,7 @@ import {
 } from '@/app/components/PopoverMenu'
 import ArchiveCustomerModal from '@/app/components/forms/ArchiveCustomerModal'
 import Badge, { BadgeProps } from '@/app/components/ion/Badge'
-import {
-  CurrencyCode,
-  CustomerTableRowData,
-  InferredCustomerProfileStatus,
-} from '@/types'
+import { CurrencyCode } from '@/types'
 import EditCustomerModal from '@/app/components/forms/EditCustomerModal'
 import { stripeCurrencyAmountToHumanReadableCurrencyAmount } from '@/utils/stripe'
 import SortableColumnHeaderCell from '@/app/components/ion/SortableColumnHeaderCell'

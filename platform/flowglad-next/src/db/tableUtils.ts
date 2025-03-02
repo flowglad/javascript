@@ -30,11 +30,9 @@ import {
   type DbTransaction,
   type PgTableWithId,
   type PgStringColumn,
-  CountryCode,
-  TaxType,
-  SupabasePayloadType,
-  PgTableWithCreatedAtAndId,
-} from '@/types'
+  type PgTableWithCreatedAtAndId,
+} from '@/db/types'
+import { CountryCode, TaxType, SupabasePayloadType } from '@/types'
 import { z } from 'zod'
 import {
   createSelectSchema,
@@ -44,7 +42,7 @@ import {
 type ZodTableUnionOrType<
   T extends
     | InferSelectModel<PgTableWithId>
-    | InferInsertModel<PgTableWithId>
+    | InferInsertModel<PgTableWithId>,
 > =
   | z.ZodType<T, any, any>
   | z.ZodUnion<[z.ZodType<T, any, any>, ...z.ZodType<T, any, any>[]]>
@@ -57,7 +55,7 @@ export interface ORMMethodCreatorConfig<
   T extends PgTableWithId,
   S extends ZodTableUnionOrType<InferSelectModel<T>>,
   I extends ZodTableUnionOrType<Omit<InferInsertModel<T>, 'id'>>,
-  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>
+  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>,
 > {
   selectSchema: S
   insertSchema: I
@@ -68,7 +66,7 @@ export const createSelectById = <
   T extends PgTableWithId,
   S extends ZodTableUnionOrType<InferSelectModel<T>>,
   I extends ZodTableUnionOrType<Omit<InferInsertModel<T>, 'id'>>,
-  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>
+  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>,
 >(
   table: T,
   config: ORMMethodCreatorConfig<T, S, I, U>
@@ -101,7 +99,7 @@ export const createInsertManyFunction = <
   T extends PgTableWithId,
   S extends ZodTableUnionOrType<InferSelectModel<T>>,
   I extends ZodTableUnionOrType<Omit<InferInsertModel<T>, 'id'>>,
-  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>
+  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>,
 >(
   table: T,
   config: ORMMethodCreatorConfig<T, S, I, U>
@@ -128,7 +126,7 @@ export const createInsertFunction = <
   T extends PgTableWithId,
   S extends z.ZodType<InferSelectModel<T>, any, any>,
   I extends ZodTableUnionOrType<Omit<InferInsertModel<T>, 'id'>>,
-  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>
+  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>,
 >(
   table: T,
   config: ORMMethodCreatorConfig<T, S, I, U>
@@ -147,7 +145,7 @@ export const createUpdateFunction = <
   T extends PgTableWithId,
   S extends ZodTableUnionOrType<InferSelectModel<T>>,
   I extends ZodTableUnionOrType<Omit<InferInsertModel<T>, 'id'>>,
-  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>
+  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>,
 >(
   table: T,
   config: ORMMethodCreatorConfig<T, S, I, U>
@@ -202,7 +200,7 @@ export const whereClauseFromObject = <T extends PgTableWithId>(
 
 export type DBMethodReturn<
   T extends PgTableWithId,
-  S extends ZodTableUnionOrType<InferSelectModel<T>>
+  S extends ZodTableUnionOrType<InferSelectModel<T>>,
 > = z.infer<S>[]
 
 export type SelectConditions<T extends PgTableWithId> = {
@@ -215,7 +213,7 @@ export const createSelectFunction = <
   T extends PgTableWithId,
   S extends ZodTableUnionOrType<InferSelectModel<T>>,
   I extends ZodTableUnionOrType<Omit<InferInsertModel<T>, 'id'>>,
-  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>
+  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>,
 >(
   table: T,
   config: ORMMethodCreatorConfig<T, S, I, U>
@@ -325,7 +323,7 @@ export const livemodePolicy = () =>
  * giving the enum the name of the column
  */
 export const pgEnumColumn = <
-  T extends Record<string, string | number>
+  T extends Record<string, string | number>,
 >(params: {
   enumName: string
   columnName: string
@@ -345,7 +343,7 @@ export const pgEnumColumn = <
  * using the column names of the table
  */
 export const onConflictDoUpdateSetValues = <
-  TTable extends PgTableWithId
+  TTable extends PgTableWithId,
 >(
   table: TTable,
   excludeColumns: string[] = []
@@ -436,7 +434,7 @@ export const createUpsertFunction = <
   T extends PgTableWithId,
   S extends ZodTableUnionOrType<InferSelectModel<T>>,
   I extends ZodTableUnionOrType<Omit<InferInsertModel<T>, 'id'>>,
-  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>
+  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>,
 >(
   table: T,
   target: IndexColumn | IndexColumn[],
@@ -561,7 +559,7 @@ export const createBulkInsertFunction = <
   T extends PgTableWithId,
   S extends ZodTableUnionOrType<InferSelectModel<T>>,
   I extends ZodTableUnionOrType<Omit<InferInsertModel<T>, 'id'>>,
-  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>
+  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>,
 >(
   table: T,
   config: ORMMethodCreatorConfig<T, S, I, U>
@@ -587,7 +585,7 @@ export const createBulkInsertOrDoNothingFunction = <
   T extends PgTableWithId,
   S extends ZodTableUnionOrType<InferSelectModel<T>>,
   I extends ZodTableUnionOrType<Omit<InferInsertModel<T>, 'id'>>,
-  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>
+  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>,
 >(
   table: T,
   config: ORMMethodCreatorConfig<T, S, I, U>
@@ -616,7 +614,7 @@ export const createBulkUpsertFunction = <
   T extends PgTableWithId,
   S extends ZodTableUnionOrType<InferSelectModel<T>>,
   I extends ZodTableUnionOrType<Omit<InferInsertModel<T>, 'id'>>,
-  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>
+  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>,
 >(
   table: T,
   config: ORMMethodCreatorConfig<T, S, I, U>
@@ -704,7 +702,7 @@ export const createPaginatedSelectFunction = <
   T extends PgTableWithCreatedAtAndId,
   S extends ZodTableUnionOrType<InferSelectModel<T>>,
   I extends ZodTableUnionOrType<Omit<InferInsertModel<T>, 'id'>>,
-  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>
+  U extends ZodTableUnionOrType<Partial<InferInsertModel<T>>>,
 >(
   table: T,
   config: ORMMethodCreatorConfig<T, S, I, U>

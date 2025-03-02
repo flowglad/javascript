@@ -7,11 +7,8 @@ import {
   insertSubscription,
   selectSubscriptions,
 } from '@/db/tableMethods/subscriptionMethods'
-import {
-  DbTransaction,
-  IntervalUnit,
-  SubscriptionStatus,
-} from '@/types'
+import { IntervalUnit, SubscriptionStatus } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { generateNextBillingPeriod } from './billingIntervalHelpers'
 import { SubscriptionItem } from '@/db/schema/subscriptionItems'
 import { bulkInsertSubscriptionItems } from '@/db/tableMethods/subscriptionItemMethods'

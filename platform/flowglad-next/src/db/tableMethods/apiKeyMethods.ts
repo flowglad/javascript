@@ -12,11 +12,6 @@ import {
   apiKeysSelectSchema,
   apiKeysUpdateSchema,
 } from '@/db/schema/apiKeys'
-import { encrypt } from '@/utils/encryption'
-import { DbTransaction } from '@/types'
-import { UserRecord, users } from '@/db/schema/users'
-import { memberships } from '../schema/memberships'
-import { eq } from 'drizzle-orm'
 
 const config: ORMMethodCreatorConfig<
   typeof apiKeys,

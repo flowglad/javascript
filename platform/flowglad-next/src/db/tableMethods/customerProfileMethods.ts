@@ -4,6 +4,8 @@ import {
   customerProfilesInsertSchema,
   customerProfilesSelectSchema,
   customerProfilesUpdateSchema,
+  InferredCustomerProfileStatus,
+  type CustomerTableRowData,
 } from '@/db/schema/customerProfiles'
 import {
   createUpsertFunction,
@@ -18,12 +20,8 @@ import {
 } from '@/db/tableUtils'
 import { and, desc, eq, inArray, sql } from 'drizzle-orm'
 import { customers, customersSelectSchema } from '../schema/customers'
-import {
-  CustomerTableRowData,
-  DbTransaction,
-  InferredCustomerProfileStatus,
-  PaymentStatus,
-} from '@/types'
+import { PaymentStatus } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { invoices } from '../schema/invoices'
 import { payments } from '../schema/payments'
 import { purchases } from '../schema/purchases'

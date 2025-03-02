@@ -21,8 +21,9 @@ import {
 } from '@/db/tableMethods/invoiceMethods'
 import {
   AuthenticatedTransactionParams,
-  CountryCode,
   DbTransaction,
+} from '@/db/types'
+import {
   InvoiceStatus,
   InvoiceType,
   PaymentStatus,

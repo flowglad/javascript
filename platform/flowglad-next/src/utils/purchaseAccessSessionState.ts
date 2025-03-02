@@ -4,7 +4,8 @@ import {
   insertPurchaseAccessSession,
   updatePurchaseAccessSession,
 } from '@/db/tableMethods/purchaseAccessSessionMethods'
-import { DbTransaction, PurchaseAccessSessionSource } from '@/types'
+import { PurchaseAccessSessionSource } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { PurchaseAccessSession } from '@/db/schema/purchaseAccessSessions'
 import core from '@/utils/core'
 import { selectPurchaseById } from '@/db/tableMethods/purchaseMethods'

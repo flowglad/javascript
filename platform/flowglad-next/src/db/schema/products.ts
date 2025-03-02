@@ -1,7 +1,6 @@
 import { pgPolicy, pgTable, text, boolean } from 'drizzle-orm/pg-core'
 import { createSelectSchema } from 'drizzle-zod'
 import {
-  pgEnumColumn,
   constructIndex,
   newBaseZodSelectSchemaColumns,
   tableBase,
@@ -13,8 +12,6 @@ import {
   createPaginatedListQuerySchema,
 } from '@/db/tableUtils'
 import { organizations } from '@/db/schema/organizations'
-import core from '@/utils/core'
-import { ProductType } from '@/types'
 import { z } from 'zod'
 import { sql } from 'drizzle-orm'
 
@@ -23,11 +20,6 @@ const PRODUCTS_TABLE_NAME = 'Products'
 const columns = {
   ...tableBase('prod'),
   name: text('name').notNull(),
-  type: pgEnumColumn({
-    enumName: 'productType',
-    columnName: 'type',
-    enumBase: ProductType,
-  }).notNull(),
   description: text('description'),
   imageURL: text('imageURL'),
   stripeProductId: text('stripeProductId').unique(),
@@ -46,7 +38,6 @@ export const products = pgTable(
       constructIndex(PRODUCTS_TABLE_NAME, [table.OrganizationId]),
       constructIndex(PRODUCTS_TABLE_NAME, [table.active]),
       constructIndex(PRODUCTS_TABLE_NAME, [table.stripeProductId]),
-      constructIndex(PRODUCTS_TABLE_NAME, [table.type]),
       pgPolicy('Enable read for own organizations', {
         as: 'permissive',
         to: 'authenticated',
@@ -61,7 +52,6 @@ export const products = pgTable(
 const refinement = {
   ...newBaseZodSelectSchemaColumns,
   name: z.string(),
-  type: core.createSafeZodEnum(ProductType),
   active: z.boolean(),
 }
 

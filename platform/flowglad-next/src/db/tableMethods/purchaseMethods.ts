@@ -17,7 +17,8 @@ import {
   createUpdateFunction,
   whereClauseFromObject,
 } from '@/db/tableUtils'
-import { DbTransaction, PriceType } from '@/types'
+import { PriceType } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { and, eq } from 'drizzle-orm'
 import {
   otherVariantSelectSchema,

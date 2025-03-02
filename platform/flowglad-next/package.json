@@ -83,7 +83,6 @@
     "@trpc/server": "11.0.0-rc.566",
     "@unkey/api": "^0.31.0",
     "@unkey/nextjs": "^0.18.5",
-    "@xyflow/react": "^12.3.4",
     "ai": "^4.0.21",
     "axios": "^1.7.4",
     "bcrypt": "^5.1.1",

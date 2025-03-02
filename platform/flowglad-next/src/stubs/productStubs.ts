@@ -1,5 +1,4 @@
 import { Product } from '@/db/schema/products'
-import { ProductType } from '@/types'
 
 export const dummyProduct: Product.Record = {
   id: '1',
@@ -7,7 +6,6 @@ export const dummyProduct: Product.Record = {
   updatedAt: new Date(),
   name: 'Test Product',
   description: 'Test Product Description',
-  type: ProductType.Service,
   imageURL: null,
   stripeProductId: null,
   OrganizationId: '1',

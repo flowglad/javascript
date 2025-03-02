@@ -1,4 +1,4 @@
-import { DbTransaction } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { selectMembershipAndOrganizations } from '@/db/tableMethods/membershipMethods'
 import core from '@/utils/core'
 import { getHeadObject } from './cloudflare'

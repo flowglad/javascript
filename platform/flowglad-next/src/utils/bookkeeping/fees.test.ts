@@ -9,7 +9,6 @@ import {
   PaymentMethodType,
   DiscountAmountType,
   StripeConnectContractType,
-  ProductType,
   CountryCode,
   PaymentStatus,
   FeeCalculationType,
@@ -379,7 +378,6 @@ describe('fees.ts', () => {
 
       const product = {
         id: 'prod_1',
-        type: ProductType.Digital,
       } as Product.Record
 
       const variant = {

@@ -6,11 +6,8 @@ import {
   safelyUpdateBillingPeriodStatus,
   selectBillingPeriods,
 } from '@/db/tableMethods/billingPeriodMethods'
-import {
-  BillingPeriodStatus,
-  DbTransaction,
-  SubscriptionStatus,
-} from '@/types'
+import { BillingPeriodStatus, SubscriptionStatus } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { generateNextBillingPeriod } from './billingIntervalHelpers'
 import {
   bulkInsertBillingPeriodItems,

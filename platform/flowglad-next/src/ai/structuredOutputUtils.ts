@@ -2,11 +2,11 @@ import { makeAgentSchema } from '@/db/agentUtils'
 import { generateObject, CoreMessage } from 'ai'
 import { openai } from '@ai-sdk/openai'
 import { z } from 'zod'
-import { PgTableWithId } from '@/types'
+import { PgTableWithId } from '@/db/types'
 import { InferSelectModel } from 'drizzle-orm'
 
 export const createGenerateCreateInput = <
-  Schema extends z.ZodTypeAny
+  Schema extends z.ZodTypeAny,
 >(
   schema: Schema,
   systemPrompt: string
@@ -26,7 +26,7 @@ export const createGenerateCreateInput = <
 
 export const createGenerateEditInput = <
   T extends InferSelectModel<PgTableWithId>,
-  Schema extends z.ZodTypeAny
+  Schema extends z.ZodTypeAny,
 >(
   schema: Schema,
   systemPrompt: string

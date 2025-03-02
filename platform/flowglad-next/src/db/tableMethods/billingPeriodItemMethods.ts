@@ -15,7 +15,7 @@ import {
   billingPeriodItemsUpdateSchema,
 } from '@/db/schema/billingPeriodItems'
 import { and, eq, gte, lte } from 'drizzle-orm'
-import { DbTransaction } from '@/types'
+import { DbTransaction } from '@/db/types'
 import {
   organizations,
   organizationsSelectSchema,
@@ -28,7 +28,6 @@ import {
   subscriptions,
   subscriptionsSelectSchema,
 } from '../schema/subscriptions'
-import { paymentMethods } from '../schema/paymentMethods'
 import {
   customerProfiles,
   customerProfilesSelectSchema,

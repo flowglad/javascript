@@ -20,7 +20,8 @@ import {
 } from '../schema/customerProfiles'
 import { subscriptionsSelectSchema } from '../schema/subscriptions'
 import { and, eq, gte, lt, lte } from 'drizzle-orm'
-import { BillingPeriodStatus, DbTransaction } from '@/types'
+import { BillingPeriodStatus } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { subscriptions } from '../schema/subscriptions'
 import {
   organizations,

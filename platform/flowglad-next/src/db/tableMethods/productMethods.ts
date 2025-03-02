@@ -16,10 +16,6 @@ import {
   productsSelectSchema,
   productsUpdateSchema,
 } from '@/db/schema/products'
-import { DbTransaction } from '@/types'
-import { eq } from 'drizzle-orm'
-import { files, filesSelectSchema } from '@/db/schema/files'
-import { links, linksSelectSchema } from '@/db/schema/links'
 import { ProperNoun } from '../schema/properNouns'
 
 const config: ORMMethodCreatorConfig<
@@ -53,7 +49,7 @@ export const updateProduct = createUpdateFunction(products, config)
  * @returns
  */
 const getUniqueAssetsFromAssociatedAssetsQuery = <
-  T extends { id: string }
+  T extends { id: string },
 >(
   assets: (T | null)[]
 ): T[] => {

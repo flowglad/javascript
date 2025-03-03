@@ -1,5 +1,25 @@
 # @flowglad/nextjs
 
+## 0.4.16
+
+### Patch Changes
+
+- Try request handler options
+- Updated dependencies
+  - @flowglad/server@0.4.16
+  - @flowglad/shared@0.4.16
+  - @flowglad/react@0.4.16
+
+## 0.4.15
+
+### Patch Changes
+
+- Await params in nextjs route handler
+- Updated dependencies
+  - @flowglad/react@0.4.15
+  - @flowglad/server@0.4.15
+  - @flowglad/shared@0.4.15
+
 ## 0.4.14
 
 ### Patch Changes

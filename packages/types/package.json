@@ -1,5 +1,5 @@
 {
-  "name": "@flowglad/react",
+  "name": "@flowglad/types",
   "version": "0.4.14",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -11,18 +11,16 @@
     "build": "tsup",
     "clean": "rm -rf dist",
     "dev": "tsup --watch --onSuccess 'yalc push'",
-    "lint": "eslint --config eslint.config.js && tsc --noEmit",
-    "yalc:publish": "yalc publish && yalc link",
+    "lint": "eslint && tsc --noEmit",
     "build:declarations": "tsc -p tsconfig.declarations.json"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
-    "@flowglad/node": "catalog:repo",
-    "@flowglad/shared": "workspace:*",
-    "@tanstack/react-query": "5.66.0",
-    "zod": "3.23.8"
+    "@flowglad/node": "catalog:repo"
   },
   "devDependencies": {
-    "@types/react": "catalog:react",
     "eslint": "catalog:repo",
     "typescript": "catalog:repo"
   },
@@ -32,11 +30,5 @@
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
     }
-  },
-  "peerDependencies": {
-    "react": "19.0.0"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

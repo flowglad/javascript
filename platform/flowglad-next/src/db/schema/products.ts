@@ -66,7 +66,7 @@ const refinement = {
   ...newBaseZodSelectSchemaColumns,
   name: z.string(),
   active: z.boolean(),
-  displayFeatures: z.array(displayFeatureSchema),
+  displayFeatures: z.array(displayFeatureSchema).nullable(),
 }
 
 export const rawProductsSelectSchema = createSelectSchema(

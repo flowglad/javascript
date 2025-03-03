@@ -33,7 +33,7 @@ const columns = {
     'OrganizationId',
     organizations
   ),
-  displayFeatures: jsonb('displayFeatures').notNull(),
+  displayFeatures: jsonb('displayFeatures'),
   active: boolean('active').notNull().default(true),
 }
 

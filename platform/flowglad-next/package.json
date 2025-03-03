@@ -103,6 +103,7 @@
     "nanoid": "^5.0.7",
     "next": "14.2.5",
     "openai": "^4.76.3",
+    "octokit": "4.1.2",
     "papaparse": "^5.5.1",
     "playwright": "^1.46.1",
     "playwright-core": "1.47.0",

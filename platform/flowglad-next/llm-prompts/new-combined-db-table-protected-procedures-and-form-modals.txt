@@ -20,11 +20,12 @@ Here's what you need to do, assuming the table is named "UnicornRiders" (the act
   ```ts
   import { boolean, text, pgTable, pgPolicy } from 'drizzle-orm/pg-core'
   import { z } from 'zod'
+  import sql from 'drizzle-orm'
   import {
     tableBase,
     notNullStringForeignKey,
     constructIndex,
-    newConstructUniquenessIndex,
+    constructUniquenessIndex,
     enhancedCreateInsertSchema,
   } from '@/db/tableUtils'
   import { organizations } from '@/db/schema/organizations'
@@ -55,7 +56,7 @@ Here's what you need to do, assuming the table is named "UnicornRiders" (the act
       return [
         constructIndex(TABLE_NAME, [table.OrganizationId]),
         constructIndex(TABLE_NAME, [table.status]),
-        newConstructUniquenessIndex(TABLE_NAME, [table.email]),
+        constructUniquenessIndex(TABLE_NAME, [table.email]),
         pgPolicy('Enable read for own organizations', {
           as: 'permissive',
           to: 'authenticated',

@@ -13,6 +13,7 @@ import {
   createPaginatedListQuerySchema,
 } from '@/db/tableUtils'
 import {
+  Customer,
   customerBillingAddressSchema,
   customers,
 } from '@/db/schema/customers'
@@ -216,3 +217,19 @@ export const bulkImportCustomerProfilesInputSchema =
 export type BulkImportCustomerProfilesInput = z.infer<
   typeof bulkImportCustomerProfilesInputSchema
 >
+
+export enum InferredCustomerProfileStatus {
+  Active = 'active',
+  Archived = 'archived',
+  Pending = 'pending',
+  Concluded = 'concluded',
+  PastDue = 'past_due',
+}
+
+export interface CustomerTableRowData {
+  customerProfile: CustomerProfile.ClientRecord
+  customer: Customer.ClientRecord
+  totalSpend?: number
+  payments?: number
+  status: InferredCustomerProfileStatus
+}

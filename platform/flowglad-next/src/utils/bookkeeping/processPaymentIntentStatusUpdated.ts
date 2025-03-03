@@ -1,7 +1,7 @@
 import { CurrencyCode, PaymentStatus } from '@/types'
 import { selectBillingRunById } from '@/db/tableMethods/billingRunMethods'
 import { CountryCode } from '@/types'
-import { DbTransaction } from '@/types'
+import { DbTransaction } from '@/db/types'
 import {
   stripeIdFromObjectOrId,
   paymentMethodFromStripeCharge,

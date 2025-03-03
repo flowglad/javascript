@@ -1,9 +1,9 @@
 import {
-  DbTransaction,
   FeeCalculationType,
   PurchaseSessionStatus,
   PurchaseStatus,
 } from '@/types'
+import { DbTransaction } from '@/db/types'
 import {
   createStripeCustomer,
   getStripeCharge,

@@ -14,7 +14,8 @@ import {
   invoicesSelectSchema,
   invoicesUpdateSchema,
 } from '@/db/schema/invoices'
-import { DbTransaction, InvoiceStatus } from '@/types'
+import { InvoiceStatus } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { and, eq } from 'drizzle-orm'
 
 const config: ORMMethodCreatorConfig<

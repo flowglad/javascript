@@ -1,13 +1,12 @@
 import {
-  DbTransaction,
   EventNoun,
   EventCategory,
   EventRetentionPolicy,
   FlowgladEventType,
 } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { upsertEventByHash } from '@/db/tableMethods/eventMethods'
 import core from './core'
-import Stripe from 'stripe'
 import { Event } from '@/db/schema/events'
 import { Payment } from '@/db/schema/payments'
 import { CustomerProfile } from '@/db/schema/customerProfiles'

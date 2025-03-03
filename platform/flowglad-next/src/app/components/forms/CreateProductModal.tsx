@@ -1,7 +1,7 @@
 // Generated with Ion on 9/24/2024, 3:10:31 AM
 // Figma Link: https://www.figma.com/design/3fYHKpBnD7eYSAmfSvPhvr?node-id=373:16122
 'use client'
-import { PriceType, ProductType } from '@/types'
+import { PriceType } from '@/types'
 import { ProductFormFields } from '@/app/components/forms/ProductFormFieldsV2'
 import { Variant } from '@/db/schema/variants'
 import {
@@ -29,7 +29,6 @@ const defaultVariant: Variant.ClientOtherInsert = {
 
 const defaultProduct: Product.ClientInsert = {
   name: '',
-  type: ProductType.Digital,
   active: true,
   description: '',
   imageURL: '',

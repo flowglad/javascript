@@ -20,7 +20,7 @@ import {
   organizations,
   organizationsSelectSchema,
 } from '../schema/organizations'
-import { DbTransaction } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { users, usersSelectSchema } from '../schema/users'
 
 const config: ORMMethodCreatorConfig<

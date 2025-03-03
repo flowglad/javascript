@@ -13,7 +13,7 @@ import {
   properNounsSelectSchema,
   properNounsUpdateSchema,
 } from '@/db/schema/properNouns'
-import { DbTransaction } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { ilike, or, sql } from 'drizzle-orm'
 
 const config: ORMMethodCreatorConfig<

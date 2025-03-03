@@ -1,6 +1,6 @@
 import { PaymentMethodType } from '@/types'
 import { PaymentMethod } from '@/db/schema/paymentMethods'
-import { DbTransaction } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { getStripePaymentMethod } from '@/utils/stripe'
 import {
   insertPaymentMethod,

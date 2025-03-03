@@ -1,6 +1,7 @@
 import { Organization } from '@/db/schema/organizations'
 import { updateCustomerProfile } from '@/db/tableMethods/customerProfileMethods'
-import { DbTransaction, PurchaseStatus } from '@/types'
+import { PurchaseStatus } from '@/types'
+import { DbTransaction } from '@/db/types'
 import {
   StripeIntentMetadata,
   stripeIntentMetadataSchema,

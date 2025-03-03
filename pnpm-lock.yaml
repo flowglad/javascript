@@ -10,6 +10,9 @@ catalogs:
       specifier: 18.3.12
       version: 18.3.12
   repo:
+    '@flowglad/node':
+      specifier: 0.1.1
+      version: 0.1.1
     eslint:
       specifier: 8.57.0
       version: 8.57.0
@@ -92,8 +95,8 @@ importers:
   packages/react:
     dependencies:
       '@flowglad/node':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: catalog:repo
+        version: 0.1.1
       '@flowglad/shared':
         specifier: workspace:*
         version: link:../shared
@@ -120,8 +123,8 @@ importers:
   packages/server:
     dependencies:
       '@flowglad/node':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: catalog:repo
+        version: 0.1.1
       '@flowglad/shared':
         specifier: workspace:*
         version: link:../shared
@@ -141,6 +144,19 @@ importers:
       zod:
         specifier: 3.23.8
         version: 3.23.8
+    devDependencies:
+      eslint:
+        specifier: catalog:repo
+        version: 8.57.0
+      typescript:
+        specifier: catalog:repo
+        version: 5.6.3
+
+  packages/types:
+    dependencies:
+      '@flowglad/node':
+        specifier: catalog:repo
+        version: 0.1.1
     devDependencies:
       eslint:
         specifier: catalog:repo
@@ -525,8 +541,8 @@ packages:
     resolution: {integrity: sha512-Ys+3g2TaW7gADOJzPt83SJtCDhMjndcDMFVQ/Tj9iA1BfJzFKD9mAUXT3OenpuPHbI6P/myECxRJrofUsDx/5g==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
-  '@flowglad/node@0.1.0':
-    resolution: {integrity: sha512-d4/BAFaZBGOiv4U5PVF30CnxKY2mjtFt35kKF53IIaj/Z+nfLXOuZoy+uTNCq18JeoCYGKeQ3H6GmzljqU7t0w==}
+  '@flowglad/node@0.1.1':
+    resolution: {integrity: sha512-bMp37d4qUau0TNhgxvwJ+NyXbRGjBdcSzWQ6VW4Ah4EFnYPbkS6mEmAJD4HmzT6GDJVzo79CRnx9yDPBRsRYzg==}
 
   '@humanwhocodes/config-array@0.11.14':
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
@@ -2376,7 +2392,7 @@ snapshots:
 
   '@eslint/js@8.57.0': {}
 
-  '@flowglad/node@0.1.0':
+  '@flowglad/node@0.1.1':
     dependencies:
       '@types/node': 18.19.76
       '@types/node-fetch': 2.6.12

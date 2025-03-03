@@ -151,18 +151,6 @@ export const ProductsTable = ({
           ),
         },
         {
-          id: 'type',
-          header: ({ column }) => (
-            <SortableColumnHeaderCell title="Type" column={column} />
-          ),
-          accessorKey: 'product.type',
-          cell: ({ row: { original: cellData } }) => (
-            <span className="text-sm">
-              {sentenceCase(cellData.product.type)}
-            </span>
-          ),
-        },
-        {
           header: ({ column }) => (
             <SortableColumnHeaderCell
               title="Pricing"

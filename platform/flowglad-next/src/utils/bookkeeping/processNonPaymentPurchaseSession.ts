@@ -1,11 +1,5 @@
-import { Organization } from '@/db/schema/organizations'
-import { updateCustomerProfile } from '@/db/tableMethods/customerProfileMethods'
-import {
-  DbTransaction,
-  PriceType,
-  PurchaseSessionStatus,
-} from '@/types'
-
+import { PriceType, PurchaseSessionStatus } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { selectPurchaseById } from '@/db/tableMethods/purchaseMethods'
 import { PurchaseSession } from '@/db/schema/purchaseSessions'
 import { updatePurchaseSession } from '@/db/tableMethods/purchaseSessionMethods'

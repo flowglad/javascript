@@ -1,7 +1,6 @@
 import * as R from 'ramda'
 import Internal from './Internal'
 import { authenticatedTransaction } from '@/db/databaseMethods'
-import { Product } from '@/db/schema/products'
 import { Variant } from '@/db/schema/variants'
 import { selectMembershipAndOrganizations } from '@/db/tableMethods/membershipMethods'
 import { selectVariantsAndProductsForOrganization } from '@/db/tableMethods/variantMethods'

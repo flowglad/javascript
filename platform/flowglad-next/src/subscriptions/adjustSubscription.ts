@@ -10,7 +10,8 @@ import {
   isSubscriptionInTerminalState,
   selectSubscriptionById,
 } from '@/db/tableMethods/subscriptionMethods'
-import { DbTransaction, SubscriptionAdjustmentTiming } from '@/types'
+import { SubscriptionAdjustmentTiming } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { bulkInsertBillingPeriodItems } from '@/db/tableMethods/billingPeriodItemMethods'
 import { createBillingRun } from './billingRunHelpers'
 import { Subscription } from '@/db/schema/subscriptions'

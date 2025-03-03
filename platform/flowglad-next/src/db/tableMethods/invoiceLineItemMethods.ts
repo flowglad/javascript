@@ -17,7 +17,7 @@ import {
   invoiceLineItemsUpdateSchema,
   InvoiceWithLineItems,
 } from '@/db/schema/invoiceLineItems'
-import { DbTransaction } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { eq } from 'drizzle-orm'
 import {
   Invoice,

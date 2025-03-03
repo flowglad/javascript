@@ -8,13 +8,13 @@ import { Variant } from '@/db/schema/variants'
 import {
   CountryCode,
   CurrencyCode,
-  DbTransaction,
   DiscountAmountType,
   FeeCalculationType,
   PaymentMethodType,
   PriceType,
   StripeConnectContractType,
 } from '@/types'
+import { DbTransaction } from '@/db/types'
 import Stripe from 'stripe'
 import {
   createStripeTaxCalculationByPurchase,

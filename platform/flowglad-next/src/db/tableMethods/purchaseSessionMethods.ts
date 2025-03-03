@@ -14,7 +14,8 @@ import {
   purchaseSessionsSelectSchema,
   purchaseSessionsUpdateSchema,
 } from '@/db/schema/purchaseSessions'
-import { DbTransaction, PurchaseSessionStatus } from '@/types'
+import { PurchaseSessionStatus } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { and, inArray, lt, not } from 'drizzle-orm'
 import { feeCalculations } from '../schema/feeCalculations'
 

@@ -23,7 +23,6 @@ import { selectBillingPeriodById } from '@/db/tableMethods/billingPeriodMethods'
 import {
   PriceType,
   IntervalUnit,
-  ProductType,
   PaymentMethodType,
   SubscriptionStatus,
   BillingPeriodStatus,
@@ -88,7 +87,6 @@ export const setupOrg = async () => {
       {
         name: 'Flowglad Test Product',
         OrganizationId: organization.id,
-        type: ProductType.Digital,
         livemode: true,
         description: 'Flowglad Live Product',
         imageURL: 'https://flowglad.com/logo.png',

@@ -11,7 +11,8 @@ import {
   billingRunsSelectSchema,
   billingRunsUpdateSchema,
 } from '@/db/schema/billingRuns'
-import { BillingRunStatus, DbTransaction } from '@/types'
+import { BillingRunStatus } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { eq, and, lt } from 'drizzle-orm'
 
 const config: ORMMethodCreatorConfig<

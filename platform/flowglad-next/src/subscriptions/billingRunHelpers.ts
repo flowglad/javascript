@@ -40,11 +40,11 @@ import {
   BillingRunStatus,
   CountryCode,
   CurrencyCode,
-  DbTransaction,
   InvoiceStatus,
   InvoiceType,
   PaymentStatus,
 } from '@/types'
+import { DbTransaction } from '@/db/types'
 import {
   calculateTotalDueAmount,
   createAndFinalizeSubscriptionFeeCalculation,

@@ -13,7 +13,7 @@ import {
   createBulkInsertOrDoNothingFunction,
   createUpdateFunction,
 } from '@/db/tableUtils'
-import { DbTransaction } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { z } from 'zod'
 
 const config: ORMMethodCreatorConfig<

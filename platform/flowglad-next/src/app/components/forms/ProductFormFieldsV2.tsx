@@ -6,9 +6,7 @@ import VariantFormFields from '@/app/components/forms/VariantFormFields'
 import { Controller, useFormContext } from 'react-hook-form'
 import { CreateProductSchema } from '@/db/schema/variants'
 import Switch from '../ion/Switch'
-import Select from '../ion/Select'
 import StatusBadge from '../StatusBadge'
-import { ProductType } from '@/types'
 import { Accordion } from '../ion/Accordion'
 import AIHoverModal from './AIHoverModal'
 
@@ -65,37 +63,6 @@ export const ProductFormFields = ({
                         />
                       }
                       hint="Details about your product that will be displayed on the purchase page."
-                    />
-                    <Controller
-                      name="product.type"
-                      render={({ field }) => (
-                        <Select
-                          label="Product Type"
-                          value={`${field.value}`}
-                          onValueChange={(value) => {
-                            if (value === `${ProductType.Service}`) {
-                              field.onChange(ProductType.Service)
-                            } else if (
-                              value === `${ProductType.Digital}`
-                            ) {
-                              field.onChange(ProductType.Digital)
-                            }
-                          }}
-                          options={[
-                            {
-                              label:
-                                'Digital (Software, files, communities)',
-                              value: `${ProductType.Digital}`,
-                            },
-                            {
-                              label: 'Service (Consulting, coaching)',
-                              value: `${ProductType.Service}`,
-                            },
-                          ]}
-                          disabled={editProduct}
-                          hint="Used for tax calculation. Cannot be edited after creation."
-                        />
-                      )}
                     />
                     {editProduct && (
                       <div className="w-full relative flex flex-col gap-3">

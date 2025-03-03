@@ -7,10 +7,10 @@ import {
 import { insertMembership } from '@/db/tableMethods/membershipMethods'
 import {
   BusinessOnboardingStatus,
-  DbTransaction,
   FlowgladApiKeyType,
   StripeConnectContractType,
 } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { upsertUserById } from '@/db/tableMethods/userMethods'
 import { createProductTransaction } from '@/utils/catalog'
 import { dummyProduct } from '@/stubs/productStubs'

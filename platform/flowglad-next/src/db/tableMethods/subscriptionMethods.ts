@@ -15,11 +15,12 @@ import {
   subscriptionsUpdateSchema,
 } from '@/db/schema/subscriptions'
 import { and, lte, gte, eq, desc } from 'drizzle-orm'
-import { DbTransaction, SubscriptionStatus } from '@/types'
-import { payments } from '../schema/payments'
+import { SubscriptionStatus } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { customerProfiles } from '../schema/customerProfiles'
 import { variants } from '../schema/variants'
 import { products } from '../schema/products'
+
 const config: ORMMethodCreatorConfig<
   typeof subscriptions,
   typeof subscriptionsSelectSchema,

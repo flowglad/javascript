@@ -7,11 +7,8 @@ import {
   selectIntegrationById,
   updateIntegration,
 } from '@/db/tableMethods/integrationMethods'
-import {
-  DbTransaction,
-  IntegrationMethod,
-  IntegrationStatus,
-} from '@/types'
+import { IntegrationMethod, IntegrationStatus } from '@/types'
+import { DbTransaction } from '@/db/types'
 import {
   deleteIntegrationSession,
   insertIntegrationSession,
@@ -121,8 +118,8 @@ const redirectURL = (integration: Integration.Record) => {
     core.IS_PROD
       ? core.envVariable('NEXT_PUBLIC_APP_URL')
       : core.IS_DEV
-      ? 'https://7177-108-41-92-245.ngrok-free.app'
-      : 'http://staging.flowglad.com'
+        ? 'https://7177-108-41-92-245.ngrok-free.app'
+        : 'http://staging.flowglad.com'
   )
 }
 

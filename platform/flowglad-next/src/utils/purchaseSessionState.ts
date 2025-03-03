@@ -9,11 +9,8 @@ import {
   createPaymentIntentForPurchaseSession,
   createSetupIntentForPurchaseSession,
 } from '@/utils/stripe'
-import {
-  DbTransaction,
-  PriceType,
-  PurchaseSessionStatus,
-} from '@/types'
+import { PriceType, PurchaseSessionStatus } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { PurchaseSession } from '@/db/schema/purchaseSessions'
 import { selectProductById } from '@/db/tableMethods/productMethods'
 import { selectOrganizationById } from '@/db/tableMethods/organizationMethods'

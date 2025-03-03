@@ -10,11 +10,11 @@ import {
 } from '@/db/tableMethods/invoiceMethods'
 import {
   BillingRunStatus,
-  DbTransaction,
   InvoiceStatus,
   PaymentStatus,
   SubscriptionStatus,
 } from '@/types'
+import { DbTransaction } from '@/db/types'
 import {
   billingRunIntentMetadataSchema,
   dateFromStripeTimestamp,

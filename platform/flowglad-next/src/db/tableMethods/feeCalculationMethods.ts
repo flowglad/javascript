@@ -12,7 +12,7 @@ import {
   feeCalculationsSelectSchema,
   feeCalculationsUpdateSchema,
 } from '@/db/schema/feeCalculations'
-import { DbTransaction } from '@/types'
+import { DbTransaction } from '@/db/types'
 
 const config: ORMMethodCreatorConfig<
   typeof feeCalculations,

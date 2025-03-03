@@ -10,7 +10,7 @@ import {
   createSelectFunction,
   ORMMethodCreatorConfig,
 } from '@/db/tableUtils'
-import { DbTransaction } from '@/types'
+import { DbTransaction } from '@/db/types'
 
 const config: ORMMethodCreatorConfig<
   typeof countries,

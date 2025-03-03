@@ -1,8 +1,6 @@
 import { selectFocusedMembershipAndOrganization } from '@/db/tableMethods/membershipMethods'
-import {
-  AuthenticatedTransactionParams,
-  FlowgladApiKeyType,
-} from '@/types'
+import { FlowgladApiKeyType } from '@/types'
+import { AuthenticatedTransactionParams } from '@/db/types'
 import { createApiKey as createApiKeyUnkey } from '@/utils/unkey'
 import { insertApiKey } from '@/db/tableMethods/apiKeyMethods'
 import { CreateApiKeyInput } from '@/db/schema/apiKeys'

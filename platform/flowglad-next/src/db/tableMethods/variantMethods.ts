@@ -16,7 +16,7 @@ import {
   whereClauseFromObject,
   createPaginatedSelectFunction,
 } from '@/db/tableUtils'
-import { DbTransaction, IdNumberParam } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { and, eq, SQLWrapper } from 'drizzle-orm'
 import {
   Product,

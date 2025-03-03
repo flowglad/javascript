@@ -13,7 +13,7 @@ import {
   linksSelectSchema,
   linksUpdateSchema,
 } from '@/db/schema/links'
-import { DbTransaction } from '@/types'
+import { DbTransaction } from '@/db/types'
 
 const config: ORMMethodCreatorConfig<
   typeof links,

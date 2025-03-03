@@ -16,7 +16,7 @@ import {
   subscriptionItemsSelectSchema,
   subscriptionItemsUpdateSchema,
 } from '@/db/schema/subscriptionItems'
-import { DbTransaction } from '@/types'
+import { DbTransaction } from '@/db/types'
 import {
   Subscription,
   subscriptions,

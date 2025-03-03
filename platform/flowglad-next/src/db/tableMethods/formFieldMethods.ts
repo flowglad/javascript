@@ -12,7 +12,7 @@ import {
   formFieldsSelectSchema,
   formFieldsUpdateSchema,
 } from '@/db/schema/formFields'
-import { DbTransaction } from '@/types'
+import { DbTransaction } from '@/db/types'
 import { eq } from 'drizzle-orm'
 import { Form, formsSelectSchema, forms } from '@/db/schema/forms'
 

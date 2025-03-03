@@ -1,7 +1,7 @@
 import {
   AdminTransactionParams,
   AuthenticatedTransactionParams,
-} from '@/types'
+} from '@/db/types'
 import { verifyKey } from '@unkey/api'
 
 import { auth } from '@clerk/nextjs/server'

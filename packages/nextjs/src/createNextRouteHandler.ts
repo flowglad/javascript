@@ -2,7 +2,7 @@
 import {
   FlowgladServer,
   createRequestHandler,
-  RequestHandlerOptions,
+  type RequestHandlerOptions,
 } from '@flowglad/server'
 import { HTTPMethod } from '@flowglad/shared'
 import { NextRequest, NextResponse } from 'next/server'
@@ -17,8 +17,9 @@ export const createNextRouteHandler = (
     req: NextRequest,
     { params }: { params: { path: string[] } }
   ): Promise<NextResponse> => {
+    const { path } = await params
     const result = await handler({
-      path: params.path,
+      path,
       method: req.method as HTTPMethod,
       query:
         req.method === 'GET'

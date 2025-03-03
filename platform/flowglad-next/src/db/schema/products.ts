@@ -1,4 +1,10 @@
-import { pgPolicy, pgTable, text, boolean } from 'drizzle-orm/pg-core'
+import {
+  pgPolicy,
+  pgTable,
+  text,
+  boolean,
+  jsonb,
+} from 'drizzle-orm/pg-core'
 import { createSelectSchema } from 'drizzle-zod'
 import {
   constructIndex,
@@ -27,6 +33,7 @@ const columns = {
     'OrganizationId',
     organizations
   ),
+  displayFeatures: jsonb('displayFeatures'),
   active: boolean('active').notNull().default(true),
 }
 
@@ -49,10 +56,17 @@ export const products = pgTable(
   }
 ).enableRLS()
 
+const displayFeatureSchema = z.object({
+  enabled: z.boolean(),
+  label: z.string(),
+  details: z.string(),
+})
+
 const refinement = {
   ...newBaseZodSelectSchemaColumns,
   name: z.string(),
   active: z.boolean(),
+  displayFeatures: z.array(displayFeatureSchema).nullable(),
 }
 
 export const rawProductsSelectSchema = createSelectSchema(

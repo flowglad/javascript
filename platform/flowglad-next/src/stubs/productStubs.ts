@@ -9,6 +9,7 @@ export const dummyProduct: Product.Record = {
   imageURL: null,
   stripeProductId: null,
   OrganizationId: '1',
+  displayFeatures: null,
   active: true,
   livemode: false,
 }

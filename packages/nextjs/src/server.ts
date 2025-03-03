@@ -6,7 +6,7 @@ export {
   FlowgladServer,
   createRequestHandler,
   RequestHandlerError,
-  RequestHandlerOptions,
-  RequestHandlerInput,
-  RequestHandlerOutput,
+  type RequestHandlerOptions,
+  type RequestHandlerInput,
+  type RequestHandlerOutput,
 } from '@flowglad/server'

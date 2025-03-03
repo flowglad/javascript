@@ -92,6 +92,7 @@ export const setupOrg = async () => {
         imageURL: 'https://flowglad.com/logo.png',
         stripeProductId: `prod_${core.nanoid()}`,
         active: true,
+        displayFeatures: [],
       },
       transaction
     )

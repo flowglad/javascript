@@ -39,6 +39,7 @@ import { discountsRouter } from './routers/discountsRouter'
 import { invoiceLineItemsRouter } from './routers/invoiceLineItemsRouter'
 import { invoicesRouter } from './routers/invoicesRouter'
 import { countriesRouter } from './routers/countriesRouter'
+import { paymentMethodsRouter } from './routers/paymentMethodsRouter'
 
 const purchasesRouter = router({
   create: createPurchase,
@@ -112,6 +113,7 @@ export const appRouter = router({
     rotate: rotateApiKeyProcedure,
   }),
   subscriptions: subscriptionsRouter,
+  paymentMethods: paymentMethodsRouter,
 })
 
 // This would map to REST endpoints like:

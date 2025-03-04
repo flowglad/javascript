@@ -1,5 +1,25 @@
 # @flowglad/nextjs
 
+## 0.4.18
+
+### Patch Changes
+
+- Export types
+- Updated dependencies
+  - @flowglad/server@0.4.18
+  - @flowglad/shared@0.4.18
+  - @flowglad/react@0.4.18
+
+## 0.4.17
+
+### Patch Changes
+
+- Types package
+- Updated dependencies
+  - @flowglad/react@0.4.17
+  - @flowglad/server@0.4.17
+  - @flowglad/shared@0.4.17
+
 ## 0.4.16
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @flowglad/react
 
+## 0.4.17
+
+### Patch Changes
+
+- Types package
+- Updated dependencies
+  - @flowglad/shared@0.4.17
+
 ## 0.4.16
 
 ### Patch Changes

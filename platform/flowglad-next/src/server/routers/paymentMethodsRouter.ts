@@ -11,6 +11,7 @@ import {
   paymentMethodsPaginatedSelectSchema,
   paymentMethodClientSelectSchema,
 } from '@/db/schema/paymentMethods'
+import { z } from 'zod'
 
 const { openApiMetas, routeConfigs } = generateOpenApiMetas({
   resource: 'PaymentMethod',
@@ -32,11 +33,16 @@ const listPaymentMethodsProcedure = protectedProcedure
 const getPaymentMethodProcedure = protectedProcedure
   .meta(openApiMetas.GET)
   .input(idInputSchema)
-  .output(paymentMethodClientSelectSchema)
+  .output(
+    z.object({ paymentMethod: paymentMethodClientSelectSchema })
+  )
   .query(async ({ ctx, input }) => {
-    return authenticatedTransaction(async ({ transaction }) => {
-      return selectPaymentMethodById(input.id, transaction)
-    })
+    const paymentMethod = await authenticatedTransaction(
+      async ({ transaction }) => {
+        return selectPaymentMethodById(input.id, transaction)
+      }
+    )
+    return { paymentMethod }
   })
 
 export const paymentMethodsRouter = router({

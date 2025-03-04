@@ -1,5 +1,11 @@
 # @flowglad/types
 
+## 0.4.17
+
+### Patch Changes
+
+- Types package
+
 ## 0.4.16
 
 ### Patch Changes

@@ -13,6 +13,7 @@ import {
 import { idInputSchema } from '@/db/tableUtils'
 import { trpcToRest } from '@/utils/openapi'
 import { generateOpenApiMetas } from '@/utils/openapi'
+import { z } from 'zod'
 
 const { openApiMetas } = generateOpenApiMetas({
   resource: 'Payment',
@@ -37,11 +38,14 @@ const listPaymentsProcedure = protectedProcedure
 const getPaymentProcedure = protectedProcedure
   .meta(openApiMetas.GET)
   .input(idInputSchema)
-  .output(paymentsClientSelectSchema)
+  .output(z.object({ payment: paymentsClientSelectSchema }))
   .query(async ({ ctx, input }) => {
-    return authenticatedTransaction(async ({ transaction }) => {
-      return selectPaymentById(input.id, transaction)
-    })
+    const payment = await authenticatedTransaction(
+      async ({ transaction }) => {
+        return selectPaymentById(input.id, transaction)
+      }
+    )
+    return { payment }
   })
 
 export const paymentsRouter = router({

@@ -34,9 +34,6 @@ import {
   RouteConfig,
 } from '@/utils/openapi'
 import { externalIdInputSchema } from '@/db/tableUtils'
-import { selectSubscriptions } from '@/db/tableMethods/subscriptionMethods'
-import { purchaseSessionClientSelectSchema } from '@/db/schema/purchaseSessions'
-import { subscriptionClientSelectSchema } from '@/db/schema/subscriptions'
 import { selectCatalog } from '@/utils/catalog'
 import { variantsClientSelectSchema } from '@/db/schema/variants'
 import { productsClientSelectSchema } from '@/db/schema/products'
@@ -178,9 +175,7 @@ export const getCustomerProfile = protectedProcedure
     })
   )
   .output(
-    z.object({
-      customerProfile: customerProfileClientSelectSchema,
-    })
+    z.object({ customerProfile: customerProfileClientSelectSchema })
   )
   .query(async ({ input, ctx }) => {
     const OrganizationId = ctx.OrganizationId
@@ -210,9 +205,7 @@ export const getCustomerProfile = protectedProcedure
       })
     }
 
-    return {
-      customerProfile: customerProfiles[0],
-    }
+    return { customerProfile: customerProfiles[0] }
   })
 
 export const getCustomerBilling = protectedProcedure

@@ -1,3 +1,7 @@
 export * from './paymentMethod'
 export * from './subscription'
 export * from './invoice'
+export * from './customerProfile'
+export * from './payment'
+export * from './currency'
+export * from './catalog'

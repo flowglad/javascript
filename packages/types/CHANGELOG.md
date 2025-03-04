@@ -1,5 +1,11 @@
 # @flowglad/types
 
+## 0.4.18
+
+### Patch Changes
+
+- Export types
+
 ## 0.4.17
 
 ### Patch Changes

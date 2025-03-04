@@ -6,6 +6,8 @@ import {
   notNullStringForeignKey,
   tableBase,
   livemodePolicy,
+  createPaginatedSelectSchema,
+  createPaginatedListQuerySchema,
 } from '@/db/tableUtils'
 import { customerProfiles } from '@/db/schema/customerProfiles'
 import { PaymentMethodType } from '@/types'
@@ -129,6 +131,12 @@ export const paymentMethodClientUpdateSchema =
 export const paymentMethodClientSelectSchema =
   paymentMethodsSelectSchema.omit(hiddenColumns)
 
+export const paymentMethodsPaginatedSelectSchema =
+  createPaginatedSelectSchema(paymentMethodClientSelectSchema)
+
+export const paymentMethodsPaginatedListSchema =
+  createPaginatedListQuerySchema(paymentMethodClientSelectSchema)
+
 export namespace PaymentMethod {
   export type Insert = z.infer<typeof paymentMethodsInsertSchema>
   export type Update = z.infer<typeof paymentMethodsUpdateSchema>
@@ -141,6 +149,12 @@ export namespace PaymentMethod {
   >
   export type ClientRecord = z.infer<
     typeof paymentMethodClientSelectSchema
+  >
+  export type PaginatedList = z.infer<
+    typeof paymentMethodsPaginatedListSchema
+  >
+  export type PaginatedSelect = z.infer<
+    typeof paymentMethodsPaginatedSelectSchema
   >
 }
 

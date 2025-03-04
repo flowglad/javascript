@@ -4,6 +4,7 @@ import {
   createUpdateFunction,
   createSelectFunction,
   ORMMethodCreatorConfig,
+  createPaginatedSelectFunction,
 } from '@/db/tableUtils'
 import {
   paymentMethods,
@@ -42,3 +43,6 @@ export const selectPaymentMethods = createSelectFunction(
   paymentMethods,
   config
 )
+
+export const selectPaymentMethodsPaginated =
+  createPaginatedSelectFunction(paymentMethods, config)

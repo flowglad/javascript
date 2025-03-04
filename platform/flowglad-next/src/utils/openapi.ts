@@ -1,5 +1,6 @@
-import { kebabCase } from 'change-case'
+import { kebabCase, sentenceCase } from 'change-case'
 import { OpenApiMeta, OpenApiMethod } from 'trpc-swagger'
+import { titleCase } from './core'
 
 export type CreateOpenApiMetaParams = {
   idParamOverride?: string
@@ -143,10 +144,11 @@ export const generateOpenApiMetas = (params: {
 } => {
   const pluralResource =
     params.pluralResource ?? `${params.resource}s`
+  const titleCaseResource = titleCase(params.resource)
   const openApiMetas: OpenApiMetaOutput = {
     GET: createGetOpenApiMeta({
       resource: pluralResource,
-      summary: `Get ${params.resource}`,
+      summary: `Get ${titleCaseResource}`,
       tags: params.tags,
       idParamOverride: params.idParamOverride,
     }),
@@ -157,19 +159,19 @@ export const generateOpenApiMetas = (params: {
     }),
     PUT: createPutOpenApiMeta({
       resource: pluralResource,
-      summary: `Update ${params.resource}`,
+      summary: `Update ${titleCaseResource}`,
       tags: params.tags,
       idParamOverride: params.idParamOverride,
     }),
     DELETE: createDeleteOpenApiMeta({
       resource: pluralResource,
-      summary: `Delete ${params.resource}`,
+      summary: `Delete ${titleCaseResource}`,
       tags: params.tags,
       idParamOverride: params.idParamOverride,
     }),
     LIST: createListOpenApiMeta({
       resource: pluralResource,
-      summary: `List ${pluralResource}`,
+      summary: `List ${titleCase(pluralResource)}`,
       tags: params.tags,
       idParamOverride: params.idParamOverride,
     }),

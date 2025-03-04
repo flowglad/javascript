@@ -15,7 +15,7 @@ import { purchaseSessionsRouteConfigs } from '@/server/routers/purchaseSessionsR
 import { discountsRouteConfigs } from '@/server/routers/discountsRouter'
 import { variantsRouteConfigs } from '@/server/routers/variantsRouter'
 import { invoicesRouteConfigs } from '@/server/routers/invoicesRouter'
-
+import { paymentMethodsRouteConfigs } from '@/server/routers/paymentMethodsRouter'
 const parseErrorMessage = (rawMessage: string) => {
   let parsedMessage = rawMessage
   try {
@@ -31,6 +31,7 @@ const routeConfigs = [
   ...purchaseSessionsRouteConfigs,
   ...variantsRouteConfigs,
   ...invoicesRouteConfigs,
+  ...paymentMethodsRouteConfigs,
 ]
 
 const arrayRoutes: Record<string, RouteConfig> = routeConfigs.reduce(
@@ -180,4 +181,5 @@ export {
 // GET /api/v1/products - lists products
 // POST /api/v1/products - creates product
 // PUT /api/v1/products/123 - updates product 123
-// GET /api/v1/organizations/456/revenue - gets revenue for org 456
+// GET /api/v1/payment-methods - lists payment methods
+// GET /api/v1/payment-methods/123 - gets payment method 123

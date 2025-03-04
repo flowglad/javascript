@@ -472,6 +472,18 @@ export const verifyLogDrainSignature = async (req: Request) => {
   return signature === req.headers.get('x-vercel-signature')
 }
 
+/**
+ * Converts a string to title case
+ * @param str
+ * @returns
+ */
+export const titleCase = (str: string) => {
+  return str
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
+
 export const core = {
   IS_PROD,
   IS_TEST,

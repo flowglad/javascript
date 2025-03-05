@@ -59,7 +59,7 @@ export const products = pgTable(
 const displayFeatureSchema = z.object({
   enabled: z.boolean(),
   label: z.string(),
-  details: z.string(),
+  details: z.string().nullish(),
 })
 
 const refinement = {

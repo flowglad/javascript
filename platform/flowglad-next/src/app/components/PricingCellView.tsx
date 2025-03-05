@@ -1,7 +1,6 @@
 import { RotateCw } from 'lucide-react'
 import { PriceType } from '@/types'
 import { Variant } from '@/db/schema/variants'
-import { CurrencyCode } from '@/types'
 import { stripeCurrencyAmountToHumanReadableCurrencyAmount } from '@/utils/stripe'
 
 const PricingCellView = ({

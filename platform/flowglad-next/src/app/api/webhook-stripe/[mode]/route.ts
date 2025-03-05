@@ -7,8 +7,7 @@ import { constructStripeWebhookEvent } from '@/utils/stripe'
 import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
-type WebhookMode = 'livemode' | 'testmode' | 'test-mode'
-
+type WebhookMode = 'livemode' | 'testmode'
 const stripeWebhookSigningSecret = ({
   mode,
   connect,

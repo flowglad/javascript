@@ -7,7 +7,8 @@ import { constructStripeWebhookEvent } from '@/utils/stripe'
 import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
-type WebhookMode = 'livemode' | 'testmode'
+type WebhookMode = 'livemode' | 'testmode' | 'test-mode'
+
 const stripeWebhookSigningSecret = ({
   mode,
   connect,
@@ -21,9 +22,7 @@ const stripeWebhookSigningSecret = ({
   if (connect) {
     return core.envVariable('STRIPE_CONNECT_WEBHOOK_SIGNING_SECRET')
   } else if (mode === 'testmode') {
-    return core.envVariable(
-      'STRIPE_TESTMODE_CONNECT_WEBHOOK_SIGNING_SECRET'
-    )
+    return core.envVariable('STRIPE_TESTMODE_WEBHOOK_SIGNING_SECRET')
   } else {
     return core.envVariable('STRIPE_WEBHOOK_SIGNING_SECRET')
   }
@@ -47,15 +46,10 @@ export const POST = async (
   request: Request,
   { params }: { params: { mode: WebhookMode } }
 ) => {
-  const { mode } = await params
-  const signingSecret = stripeWebhookSigningSecret({
-    mode,
-    connect: false,
-  })
+  const { mode } = params
   try {
     const body = await request.text()
     const signature = request.headers.get('stripe-signature')
-
     if (!signature) {
       return NextResponse.json(
         { error: 'No signature provided' },
@@ -64,6 +58,10 @@ export const POST = async (
     }
     let event: Stripe.Event | null = null
     try {
+      const signingSecret = stripeWebhookSigningSecret({
+        mode,
+        connect: false,
+      })
       event = constructStripeWebhookEvent({
         payload: body,
         signature,

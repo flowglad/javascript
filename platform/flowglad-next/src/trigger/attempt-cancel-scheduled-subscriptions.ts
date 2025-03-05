@@ -37,37 +37,40 @@ export const attemptCancelScheduledSubscriptionsTask = task({
           ),
       }
     })
-    const testmodeSubscriptionCancellationIdempotencyKey =
-      await idempotencyKeys.create(
-        'attempt-testmode-subscription-cancellation'
+    if (testmodeSubscriptionsToCancel.length > 0) {
+      const testmodeSubscriptionCancellationIdempotencyKey =
+        await idempotencyKeys.create(
+          'attempt-testmode-subscription-cancellation'
+        )
+      await attemptSubscriptionCancellationTask.batchTrigger(
+        testmodeSubscriptionsToCancel.map((subscription) => ({
+          payload: {
+            subscription,
+          },
+        })),
+        {
+          idempotencyKey:
+            testmodeSubscriptionCancellationIdempotencyKey,
+        }
       )
-    await attemptSubscriptionCancellationTask.batchTrigger(
-      testmodeSubscriptionsToCancel.map((subscription) => ({
-        payload: {
-          subscription,
-        },
-      })),
-      {
-        idempotencyKey:
-          testmodeSubscriptionCancellationIdempotencyKey,
-      }
-    )
-
-    const livemodeSubscriptionCancellationIdempotencyKey =
-      await idempotencyKeys.create(
-        'attempt-livemode-subscription-cancellation'
+    }
+    if (livemodeSubscriptionsToCancel.length > 0) {
+      const livemodeSubscriptionCancellationIdempotencyKey =
+        await idempotencyKeys.create(
+          'attempt-livemode-subscription-cancellation'
+        )
+      await attemptSubscriptionCancellationTask.batchTrigger(
+        livemodeSubscriptionsToCancel.map((subscription) => ({
+          payload: {
+            subscription,
+          },
+        })),
+        {
+          idempotencyKey:
+            livemodeSubscriptionCancellationIdempotencyKey,
+        }
       )
-    await attemptSubscriptionCancellationTask.batchTrigger(
-      livemodeSubscriptionsToCancel.map((subscription) => ({
-        payload: {
-          subscription,
-        },
-      })),
-      {
-        idempotencyKey:
-          livemodeSubscriptionCancellationIdempotencyKey,
-      }
-    )
+    }
 
     return {
       message: 'Attempted to cancel scheduled subscriptions',

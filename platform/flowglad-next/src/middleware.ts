@@ -10,6 +10,7 @@ const publicRoutes = [
   '/sign-in(.*)',
   '/sign-up(.*)',
   '/api/ping',
+  '/api/webhook-stripe/(.*)',
   '/api/webhook-(.*)',
   '/api/testimonial-sets/(.*)',
   '/product/(.*)/purchase',

@@ -7,6 +7,28 @@ import { constructStripeWebhookEvent } from '@/utils/stripe'
 import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
+type WebhookMode = 'livemode' | 'testmode'
+const stripeWebhookSigningSecret = ({
+  mode,
+  connect,
+}: {
+  mode: WebhookMode
+  connect: boolean
+}) => {
+  if (mode !== 'livemode' && connect) {
+    throw new Error('Connect webhooks are not supported in testmode')
+  }
+  if (connect) {
+    return core.envVariable('STRIPE_CONNECT_WEBHOOK_SIGNING_SECRET')
+  } else if (mode === 'testmode') {
+    return core.envVariable(
+      'STRIPE_TESTMODE_CONNECT_WEBHOOK_SIGNING_SECRET'
+    )
+  } else {
+    return core.envVariable('STRIPE_WEBHOOK_SIGNING_SECRET')
+  }
+}
+
 /**
  * A single endpoint that is registered with TWO different Stripe webhooks:
  * - `STRIPE_WEBHOOK_SIGNING_SECRET`
@@ -21,7 +43,15 @@ import Stripe from 'stripe'
  * with a single signing secret. Stripe's webhooks architecture therefore *wants* to be
  * handled by a single endpoint, just with two different signing secrets.
  */
-export const POST = async (request: Request) => {
+export const POST = async (
+  request: Request,
+  { params }: { params: { mode: WebhookMode } }
+) => {
+  const { mode } = await params
+  const signingSecret = stripeWebhookSigningSecret({
+    mode,
+    connect: false,
+  })
   try {
     const body = await request.text()
     const signature = request.headers.get('stripe-signature')
@@ -34,26 +64,21 @@ export const POST = async (request: Request) => {
     }
     let event: Stripe.Event | null = null
     try {
-      /**
-       * FOR NOW: only support webhooks assuming live mode.
-       * We need to set up webhooks in the sandbox, and then update this.
-       */
       event = constructStripeWebhookEvent({
         payload: body,
         signature,
-        signingSecret: core.envVariable(
-          'STRIPE_WEBHOOK_SIGNING_SECRET'
-        ),
-        livemode: true,
+        signingSecret,
+        livemode: mode === 'livemode',
       })
     } catch (err) {
       // If primary account verification fails, try verifying webhook using connect secret
       event = constructStripeWebhookEvent({
         payload: body,
         signature,
-        signingSecret: core.envVariable(
-          'STRIPE_CONNECT_WEBHOOK_SIGNING_SECRET'
-        ),
+        signingSecret: stripeWebhookSigningSecret({
+          mode,
+          connect: true,
+        }),
         livemode: true,
       })
     }

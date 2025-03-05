@@ -1,5 +1,11 @@
 # @flowglad/shared
 
+## 0.4.21
+
+### Patch Changes
+
+- types: more exported discriminated union types
+
 ## 0.4.20
 
 ### Patch Changes

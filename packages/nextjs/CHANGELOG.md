@@ -1,5 +1,15 @@
 # @flowglad/nextjs
 
+## 0.4.21
+
+### Patch Changes
+
+- types: more exported discriminated union types
+- Updated dependencies
+  - @flowglad/server@0.4.21
+  - @flowglad/shared@0.4.21
+  - @flowglad/react@0.4.21
+
 ## 0.4.20
 
 ### Patch Changes

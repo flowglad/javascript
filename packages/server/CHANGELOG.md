@@ -1,5 +1,29 @@
 # @flowglad/server
 
+## 0.4.21
+
+### Patch Changes
+
+- types: more exported discriminated union types
+- Updated dependencies
+  - @flowglad/shared@0.4.21
+
+## 0.4.20
+
+### Patch Changes
+
+- Product export fix
+- Updated dependencies
+  - @flowglad/shared@0.4.20
+
+## 0.4.19
+
+### Patch Changes
+
+- types: Currency -> CurrencyCode
+- Updated dependencies
+  - @flowglad/shared@0.4.19
+
 ## 0.4.18
 
 ### Patch Changes

@@ -1,8 +1,6 @@
 import { generateOpenApiDocument } from 'trpc-swagger'
 import { appRouter } from './index'
-import core from '@/utils/core'
 
-/* 👇 */
 export const createFlowgladOpenApiDocument = () =>
   generateOpenApiDocument(appRouter, {
     securitySchemes: {
@@ -14,9 +12,6 @@ export const createFlowgladOpenApiDocument = () =>
     },
     title: 'Flowglad API',
     version: '0.0.1', // consider making this pull version from package.json
-    baseUrl: core.safeUrl(
-      '',
-      core.envVariable('NEXT_PUBLIC_APP_URL')!
-    ),
+    baseUrl: 'https://app.flowglad.com',
     docsUrl: 'https://docs.flowglad.com',
   })

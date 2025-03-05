@@ -29,11 +29,13 @@ export const attemptTransitionBillingPeriodsTask = task({
         )
     )
 
-    await attemptBillingPeriodTransitionTask.batchTrigger(
-      billingPeriodsToTransition.map((billingPeriod) => ({
-        payload: { billingPeriod },
-      }))
-    )
+    if (billingPeriodsToTransition.length > 0) {
+      await attemptBillingPeriodTransitionTask.batchTrigger(
+        billingPeriodsToTransition.map((billingPeriod) => ({
+          payload: { billingPeriod },
+        }))
+      )
+    }
 
     return {
       message: 'Billing periods transitioned',

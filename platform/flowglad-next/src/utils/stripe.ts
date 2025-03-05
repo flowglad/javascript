@@ -765,12 +765,7 @@ export const constructStripeWebhookEvent = (params: {
   return stripe(params.livemode).webhooks.constructEvent(
     params.payload,
     params.signature,
-    /**
-     * This should be the same as the webhook signing secret in the Stripe dashboard
-     */
-    core.IS_DEV
-      ? 'whsec_d994282a44179cb442f21e373f6cd8daf04a19aee90b96be1897a8cec8940e8f'
-      : params.signingSecret
+    params.signingSecret
   )
 }
 

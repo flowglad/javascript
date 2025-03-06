@@ -1,5 +1,11 @@
 # @flowglad/shared
 
+## 0.4.22
+
+### Patch Changes
+
+- Improve custom onboarding, deprecate authenticated
+
 ## 0.4.21
 
 ### Patch Changes

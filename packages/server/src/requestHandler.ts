@@ -2,10 +2,29 @@ import { routeToHandlerMap } from './subrouteHandlers'
 import { FlowgladServer } from './flowgladServer'
 import { FlowgladActionKey, HTTPMethod } from '@flowglad/shared'
 
+/**
+ * Input for the request handler.
+ */
 export interface RequestHandlerInput {
+  /**
+   * The path of the request.
+   * @example "/customers/123" => ["customers", "123"]
+   */
   path: string[]
+  /**
+   * The method of the request.
+   * @example "GET"
+   */
   method: HTTPMethod
+  /**
+   * The parsed query parameters of the request.
+   * @example { "name": "John", "age": "30" }
+   */
   query?: Record<string, string>
+  /**
+   * The body of the request.
+   * @example { "name": "John", "age": "30" }
+   */
   body?: unknown
 }
 
@@ -17,8 +36,20 @@ export interface RequestHandlerOutput {
 
 export interface RequestHandlerOptions {
   flowgladServer: FlowgladServer
+  /**
+   * Function to run when an error occurs.
+   * @param error - The error that occurred.
+   */
   onError?: (error: unknown) => void
+  /**
+   * Side effect to run before the request is processed.
+   * @returns A promise that resolves when the side effect is complete.
+   */
   beforeRequest?: () => Promise<void>
+  /**
+   * Side effect to run after the request is processed.
+   * @returns A promise that resolves when the side effect is complete.
+   */
   afterRequest?: () => Promise<void>
 }
 

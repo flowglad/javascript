@@ -39,7 +39,9 @@ pnpm install @flowglad/react @flowglad/server
 
 ## 4. Server Setup
 
-First, set up a Flowglad server client. Do this in a file that can be imported wherever you need to access billing data, or make calls to Flowglad:
+First, set up a Flowglad server client. 
+Do this in a file that can be imported wherever you need to access billing data, or make calls to Flowglad.
+Flowglad's premade backend modules use the Flowglad Server in sessionful contexts to determine who you're loading billing data for:
 
 <CodeGroup>
 ```ts Supabase Auth
@@ -75,6 +77,37 @@ export const flowgladServer = new FlowgladServer({
   },
 })
 ```
+```ts Custom Auth
+import { FlowgladServer } from '@flowglad/nextjs/server'
+// or whatever function you use to retrieve your session
+import { getBespokeSession } from '@/utils/auth'
+
+// if you can load sessions using an enclosed function
+export const flowgladServer = new FlowgladServer({
+  getRequestingCustomerProfile: () => {
+    const customSessionObject = await getBespokeSession()
+    return {
+      externalId: customSessionObject.id,
+      name: customSessionObject.name,
+      email: customSessionObject.email,
+    }
+  }
+})
+
+// if you derive your session from a request / cookies / headers object:
+const flowgladServer = (request: Request) => {
+  return new FlowgladServer({
+  getRequestingCustomerProfile: () => {
+    const customSessionObject = await getBespokeSession(request)
+    return {
+      externalId: customSessionObject.id,
+      name: customSessionObject.name,
+      email: customSessionObject.email,
+    }
+  }
+})
+}
+```
 
 </CodeGroup>
 
@@ -97,7 +130,10 @@ import { createFetchRequestHandler } from '@flowglad/nextjs/server'
 import { flowgladServer } from '@/app/flowglad'
 
 const flowgladFetchRequestHandler =
-  createFetchRequestHandler(flowgladServer)
+  createFetchRequestHandler({
+    flowgladServer
+    // optional fields: onError, beforeRequest, afterRequest
+  })
 
 export const flowgladRouteHandler = async (
   req: Request,
@@ -136,7 +172,7 @@ export default function RootLayout({
     data: { user }
   } = await supabase.auth.getUser();
   return (
-    <FlowgladProvider authenticated={!!user}>
+    <FlowgladProvider loadBilling={!!user}>
     { /* ... existing layout JSX ... */}
       {children}
     { /* ... existing layout JSX ... */}
@@ -159,7 +195,7 @@ export default async function RootLayout({
 }>) {
   const user = await currentUser()
   return (
-    <FlowgladProvider authenticated={!!user}>
+    <FlowgladProvider loadBilling={!!user}>
       <html lang="en">
         <body>{children}</body>
       </html>
@@ -181,7 +217,7 @@ export default async function RootLayout({
   return (
     <SessionProvider basePath={'/auth'} session={session}>
       <FlowgladProviderWithAuth
-        authenticated={session.status === 'authenticated'}
+        loadBilling={session.status === 'authenticated'}
       >
         {children}
       </FlowgladProviderWithAuth>

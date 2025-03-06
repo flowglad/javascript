@@ -13,24 +13,29 @@ export const FlowgladProvider = ({
   cancelUrl,
   successUrl,
   authenticated,
+  loadBilling,
   serverRoute,
 }: {
   children: React.ReactNode
   serverRoute?: string
   cancelUrl?: string
   successUrl?: string
+  loadBilling: boolean
+  /** @deprecated use loadBilling instead */
   authenticated: boolean
 }) => {
   validateUrl(serverRoute, 'serverRoute', true)
   validateUrl(cancelUrl, 'cancelUrl')
   validateUrl(successUrl, 'successUrl')
+  const shouldLoad =
+    typeof loadBilling === 'undefined' ? authenticated : loadBilling
   return (
     <QueryClientProvider client={queryClient}>
       <FlowgladContextProvider
         serverRoute={serverRoute}
         cancelUrl={cancelUrl}
         successUrl={successUrl}
-        authenticated={authenticated}
+        loadBilling={shouldLoad}
       >
         {children}
       </FlowgladContextProvider>

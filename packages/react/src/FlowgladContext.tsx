@@ -12,7 +12,7 @@ import { validateUrl } from './utils'
 
 type LoadedFlowgladContextValues = {
   loaded: true
-  authenticated: true
+  loadBilling: true
   customerProfile: Flowglad.CustomerProfiles.CustomerProfileRetrieveBillingResponse.CustomerProfile
   subscriptions: Flowglad.CustomerProfiles.CustomerProfileRetrieveBillingResponse.Subscription[]
   createPurchaseSession: (
@@ -32,19 +32,19 @@ type LoadedFlowgladContextValues = {
 
 interface NotLoadedFlowgladContextValues {
   loaded: false
-  authenticated: boolean
+  loadBilling: boolean
   errors: null
 }
 
 interface NotAuthenticatedFlowgladContextValues {
   loaded: true
-  authenticated: false
+  loadBilling: false
   errors: null
 }
 
 interface ErrorFlowgladContextValues {
   loaded: true
-  authenticated: boolean
+  loadBilling: boolean
   errors: Error[]
 }
 
@@ -56,7 +56,7 @@ type FlowgladContextValues =
 
 const FlowgladContext = createContext<FlowgladContextValues>({
   loaded: false,
-  authenticated: false,
+  loadBilling: false,
   errors: null,
 })
 
@@ -113,9 +113,9 @@ export const FlowgladContextProvider = ({
   serverRoute = '/api/flowglad',
   cancelUrl,
   successUrl,
-  authenticated,
+  loadBilling,
 }: {
-  authenticated?: boolean
+  loadBilling?: boolean
   customerProfile?: {
     externalId: string
     email: string
@@ -136,7 +136,7 @@ export const FlowgladContextProvider = ({
     data: billing,
   } = useQuery({
     queryKey: [FlowgladActionKey.GetCustomerProfileBilling],
-    enabled: authenticated,
+    enabled: loadBilling,
     queryFn: async () => {
       const response = await fetch(
         `${serverRoute}/${FlowgladActionKey.GetCustomerProfileBilling}`,
@@ -156,16 +156,16 @@ export const FlowgladContextProvider = ({
     constructCreatePurchaseSession(serverRoute)
 
   let value: FlowgladContextValues
-  if (!authenticated) {
+  if (!loadBilling) {
     value = {
       loaded: true,
-      authenticated: false,
+      loadBilling: loadBilling ?? false,
       errors: null,
     }
   } else if (billing) {
     value = {
       loaded: true,
-      authenticated,
+      loadBilling,
       customerProfile: billing.data.customerProfile,
       createPurchaseSession,
       catalog: billing.data.catalog,
@@ -175,7 +175,7 @@ export const FlowgladContextProvider = ({
   } else if (isPendingBilling) {
     value = {
       loaded: false,
-      authenticated,
+      loadBilling,
       errors: null,
     }
   } else {
@@ -184,7 +184,7 @@ export const FlowgladContextProvider = ({
     )
     value = {
       loaded: true,
-      authenticated,
+      loadBilling,
       errors,
     }
   }
@@ -198,9 +198,9 @@ export const FlowgladContextProvider = ({
 
 export const useBilling = () => {
   const billing = useContext(FlowgladContext)
-  if (!billing.authenticated) {
+  if (!billing.loadBilling) {
     throw new Error(
-      'Flowglad: Attempted to access billing data while `authenticated` property is not `true`. If you are authenticated, ensure that the FlowgladProvider `authenticated` property is set to true.'
+      'Flowglad: Attempted to access billing data while `loadBilling` property is not `true`. Ensure that the FlowgladProvider `loadBilling` property is set to true.'
     )
   }
   return billing

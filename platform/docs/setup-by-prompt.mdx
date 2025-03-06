@@ -80,7 +80,7 @@ data: { user }
 
 return (
 
-<FlowgladProvider authenticated={!!user}>
+<FlowgladProvider loadBilling={!!user}>
   {/* ... existing layout JSX ... */}
   {children}
   {/* ... existing layout JSX ... */}
@@ -237,7 +237,7 @@ const user = await currentUser()
 
 return (
 
-<FlowgladProvider authenticated={!!user}>
+<FlowgladProvider loadBilling={!!user}>
   {/* ... existing layout JSX ... */}
   {children}
   {/* ... existing layout JSX ... */}
@@ -397,7 +397,7 @@ return (
 
 <SessionProvider session={session}>
   <FlowgladProvider
-    authenticated={session?.status === 'authenticated'}
+    loadBilling={session?.status === 'authenticated'}
   >
     {/* ... existing layout JSX ... */}
     {children}

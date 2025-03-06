@@ -1,4 +1,10 @@
-import { pgTable, jsonb, pgPolicy, text } from 'drizzle-orm/pg-core'
+import {
+  pgTable,
+  jsonb,
+  pgPolicy,
+  text,
+  boolean,
+} from 'drizzle-orm/pg-core'
 import { createSelectSchema } from 'drizzle-zod'
 import {
   pgEnumColumn,
@@ -29,6 +35,7 @@ const columns = {
     columnName: 'type',
     enumBase: PaymentMethodType,
   }).notNull(),
+  default: boolean('default').notNull().default(false),
   paymentMethodData: jsonb('paymentMethodData').notNull(),
   metadata: jsonb('metadata'),
   stripePaymentMethodId: text('stripePaymentMethodId'),

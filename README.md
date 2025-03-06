@@ -39,7 +39,7 @@ Achieving this mission will take time. It will be hard. It might even make some 
 
 ## Demo: Integrating Flowglad in <40 seconds
 
-![Integrate in 40s](https://user-images.githubusercontent.com/flowglad/flowglad/public/integrate-40s.mp4)
+![Integrate in 40s](https://github.com/user-attachments/assets/6480c847-4f59-482e-8549-8833c2e182fb)
 
 ## Built With
 

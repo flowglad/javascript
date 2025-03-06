@@ -6,7 +6,7 @@ export type PurchaseInvoice =
 export type SubscriptionInvoice =
   Flowglad.Invoice.InvoiceRetrieveResponse.SubscriptionInvoice
 
-export type Invoice = Flowglad.Invoice.InvoiceRetrieveResponse
+export type Invoice = SubscriptionInvoice | PurchaseInvoice
 
 export type InvoiceLineItem = Flowglad.InvoiceLineItemRetrieveResponse
 export type InvoiceStatus =

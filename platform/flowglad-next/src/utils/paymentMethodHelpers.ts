@@ -3,7 +3,7 @@ import { PaymentMethod } from '@/db/schema/paymentMethods'
 import { DbTransaction } from '@/db/types'
 import { getStripePaymentMethod } from '@/utils/stripe'
 import {
-  insertPaymentMethod,
+  safelyInsertPaymentMethod,
   selectPaymentMethods,
 } from '@/db/tableMethods/paymentMethodMethods'
 
@@ -45,6 +45,11 @@ export const paymentMethodForStripePaymentMethodId = async (
           address: stripePaymentMethod.billing_details?.address,
         },
       },
+      /**
+       * For now, assume that the most recently added payment method is the
+       * default.
+       */
+      default: true,
       stripePaymentMethodId,
       /**
        * Stripe payment method objects are not serializable, so we need to
@@ -56,7 +61,7 @@ export const paymentMethodForStripePaymentMethodId = async (
       metadata: {},
     }
 
-    paymentMethod = await insertPaymentMethod(
+    paymentMethod = await safelyInsertPaymentMethod(
       paymentMethodInsert,
       transaction
     )

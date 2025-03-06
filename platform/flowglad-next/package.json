@@ -90,7 +90,7 @@
     "class-variance-authority": "^0.7.0",
     "client-only": "^0.0.1",
     "clsx": "^2.1.1",
-    "date-fns": "^3.6.0",
+    "date-fns": "4.1.0",
     "debounce": "^2.2.0",
     "discord.js": "^14.16.3",
     "drizzle-orm": "0.36.4",

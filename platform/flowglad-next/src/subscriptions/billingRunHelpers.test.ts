@@ -41,7 +41,10 @@ import { Subscription } from '@/db/schema/subscriptions'
 import { updateBillingPeriod } from '@/db/tableMethods/billingPeriodMethods'
 import { Payment } from '@/db/schema/payments'
 import { updateCustomerProfile } from '@/db/tableMethods/customerProfileMethods'
-import { updatePaymentMethod } from '@/db/tableMethods/paymentMethodMethods'
+import {
+  safelyUpdatePaymentMethod,
+  updatePaymentMethod,
+} from '@/db/tableMethods/paymentMethodMethods'
 
 describe('billingRunHelpers', async () => {
   const { organization, variant } = await setupOrg()
@@ -316,7 +319,7 @@ describe('billingRunHelpers', async () => {
 
     it('should throw an error if the payment method does not have a Stripe payment method ID', async () => {
       await adminTransaction(async ({ transaction }) => {
-        await updatePaymentMethod(
+        await safelyUpdatePaymentMethod(
           {
             id: paymentMethod.id,
             stripePaymentMethodId: null,

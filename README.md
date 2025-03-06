@@ -19,9 +19,29 @@
   </p>
 </p>
 
-## Drop-in Payments and Billing For Web Devs & Vibe Coders
+## Drop-in Payments and Billing
 
-### Built With
+## Project Goals
+
+In the last 15 years, the market has given developers more options than ever for every single part of their stack. But when it comes to payments, there have been virtually zero new entrants. The existing options are slim, and almost all of them require us to talk to sales to even set up an account. When it comes to _self-serve_ payments, there are even fewer options.
+
+The result? The developer experience and cost of payments has barely improved in that time. Best in class DX in payments feels eerily suspended in 2015. Meanwhile, we've enjoyed constant improvements in auth, compute, hosting, and practically everything else.
+
+Flowglad wants to change that.
+
+We're building a payments layer that lets you:
+- Think about billing and payments as little as possible
+- Spend as little time on integration and maintenance as possible
+- Get as much out of your single integration as possible
+- Unlock more payment providers from a single integration
+
+Achieving this mission will take time. It will be hard. It might even make some people unhappy. But with AI bringing more and more developers on line and exploding the complexity of startup billing, the need is more urgent than ever.
+
+## Demo: Integrating Flowglad in <40 seconds
+
+https://github.com/user-attachments/assets/6480c847-4f59-482e-8549-8833c2e182fb
+
+## Built With
 
 - [Next.js](https://nextjs.org/?ref=flowglad.com)
 - [tRPC](https://trpc.io/?ref=flowglad.com)

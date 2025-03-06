@@ -7,11 +7,15 @@ import {
   createPaginatedSelectFunction,
 } from '@/db/tableUtils'
 import {
+  PaymentMethod,
   paymentMethods,
   paymentMethodsInsertSchema,
   paymentMethodsSelectSchema,
   paymentMethodsUpdateSchema,
 } from '@/db/schema/paymentMethods'
+import { DbTransaction } from '../types'
+import db from '../client'
+import { eq, inArray } from 'drizzle-orm'
 
 const config: ORMMethodCreatorConfig<
   typeof paymentMethods,
@@ -29,7 +33,7 @@ export const selectPaymentMethodById = createSelectById(
   config
 )
 
-export const insertPaymentMethod = createInsertFunction(
+export const dangerouslyInsertPaymentMethod = createInsertFunction(
   paymentMethods,
   config
 )
@@ -46,3 +50,46 @@ export const selectPaymentMethods = createSelectFunction(
 
 export const selectPaymentMethodsPaginated =
   createPaginatedSelectFunction(paymentMethods, config)
+
+const setPaymentMethodsForCustomerProfileToNonDefault = async (
+  CustomerProfileId: string,
+  transaction: DbTransaction
+) => {
+  await transaction
+    .update(paymentMethods)
+    .set({ default: false })
+    .where(eq(paymentMethods.CustomerProfileId, CustomerProfileId))
+}
+
+export const safelyUpdatePaymentMethod = async (
+  paymentMethod: PaymentMethod.Update,
+  transaction: DbTransaction
+) => {
+  /**
+   * If payment method is default
+   */
+  if (paymentMethod.default) {
+    const existingPaymentMethod = await selectPaymentMethodById(
+      paymentMethod.id,
+      transaction
+    )
+    await setPaymentMethodsForCustomerProfileToNonDefault(
+      existingPaymentMethod.CustomerProfileId,
+      transaction
+    )
+  }
+  return updatePaymentMethod(paymentMethod, transaction)
+}
+
+export const safelyInsertPaymentMethod = async (
+  paymentMethod: PaymentMethod.Insert,
+  transaction: DbTransaction
+) => {
+  if (paymentMethod.default) {
+    await setPaymentMethodsForCustomerProfileToNonDefault(
+      paymentMethod.CustomerProfileId,
+      transaction
+    )
+  }
+  return dangerouslyInsertPaymentMethod(paymentMethod, transaction)
+}

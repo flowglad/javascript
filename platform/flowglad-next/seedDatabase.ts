@@ -5,7 +5,6 @@ import { organizations } from '@/db/schema/organizations'
 import { insertCustomer } from '@/db/tableMethods/customerMethods'
 import { insertCustomerProfile } from '@/db/tableMethods/customerProfileMethods'
 import { insertOrganization } from '@/db/tableMethods/organizationMethods'
-import { insertPaymentMethod } from '@/db/tableMethods/paymentMethodMethods'
 import { insertProduct } from '@/db/tableMethods/productMethods'
 import {
   insertSubscription,
@@ -48,6 +47,7 @@ import { Purchase } from '@/db/schema/purchases'
 import { projectVariantFieldsOntoPurchaseFields } from '@/utils/purchaseHelpers'
 import { insertInvoiceLineItem } from '@/db/tableMethods/invoiceLineItemMethods'
 import { Payment } from '@/db/schema/payments'
+import { safelyInsertPaymentMethod } from '@/db/tableMethods/paymentMethodMethods'
 const insertCountries = async () => {
   await db
     .insert(countries)
@@ -126,11 +126,12 @@ export const setupPaymentMethod = async (params: {
   type?: PaymentMethodType
 }) => {
   return adminTransaction(async ({ transaction }) => {
-    return insertPaymentMethod(
+    return safelyInsertPaymentMethod(
       {
         CustomerProfileId: params.CustomerProfileId,
         type: params.type ?? PaymentMethodType.Card,
         livemode: params.livemode ?? true,
+        default: true,
         billingDetails: {
           name: 'Test',
           email: 'test@test.com',

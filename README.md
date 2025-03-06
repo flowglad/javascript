@@ -23,9 +23,9 @@
 
 ## Project Goals
 
-In the last 15 years, the market has given developers more options than ever for every single part of their stack. But when it comes to payments, there have been virtually zero new entrants. And when it comes to _self-serve_ payments, there are even fewer options.
+In the last 15 years, the market has given developers more options than ever for every single part of their stack. But when it comes to payments, there have been virtually zero new entrants. The existing options are slim, and almost all of them require us to talk to sales to even set up an account. When it comes to _self-serve_ payments, there are even fewer options.
 
-The result? The developer experience and cost of payments has barely improved in that time. Meanwhile, we've enjoyed constant improvements in auth, compute, hosting, and practically everything else.
+The result? The developer experience and cost of payments has barely improved in that time. Best in class DX in payments feels eerily suspended in 2015. Meanwhile, we've enjoyed constant improvements in auth, compute, hosting, and practically everything else.
 
 Flowglad wants to change that.
 

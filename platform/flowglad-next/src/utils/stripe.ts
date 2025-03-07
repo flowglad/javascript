@@ -17,7 +17,7 @@ import { Variant } from '@/db/schema/variants'
 import { Organization } from '@/db/schema/organizations'
 import { InvoiceLineItem } from '@/db/schema/invoiceLineItems'
 import { Invoice } from '@/db/schema/invoices'
-import { CustomerBillingAddress } from '@/db/schema/customers'
+import { BillingAddress } from '@/db/schema/customers'
 import { Purchase } from '@/db/schema/purchases'
 import { PurchaseSession } from '@/db/schema/purchaseSessions'
 import { Discount } from '@/db/schema/discounts'
@@ -834,7 +834,7 @@ export const createStripeTaxCalculationByVariant = async ({
   livemode,
 }: {
   variant: Variant.Record
-  billingAddress: CustomerBillingAddress
+  billingAddress: BillingAddress
   discountInclusiveAmount: number
   product: Product.Record
   livemode: boolean
@@ -866,7 +866,7 @@ export const createStripeTaxCalculationByPurchase = async ({
   livemode,
 }: {
   purchase: Purchase.Record
-  billingAddress: CustomerBillingAddress
+  billingAddress: BillingAddress
   discountInclusiveAmount: number
   variant: Variant.Record
   product: Product.Record
@@ -1266,9 +1266,17 @@ export const createSetupIntentForPurchaseSession = async (params: {
         },
       }
 
+  /**
+   * On behalf of required to comply with SCA
+   */
+  const onBehalfOf = params.purchaseSession.livemode
+    ? params.organization.stripeAccountId!
+    : undefined
+
   return stripe(params.purchaseSession.livemode).setupIntents.create({
     ...bankPaymentOnlyParams,
     metadata,
+    on_behalf_of: onBehalfOf,
   })
 }
 

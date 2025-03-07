@@ -3,17 +3,17 @@
 'use client'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import Button from '@/app/components/ion/Button'
-import Input from '@/app/components/ion/Input'
+import Button from '@/components/ion/Button'
+import Input from '@/components/ion/Input'
 import { trpc } from '@/app/_trpc/client'
 import {
   createOrganizationSchema,
   type CreateOrganizationInput,
 } from '@/db/schema/organizations'
-import ErrorLabel from '@/app/components/ErrorLabel'
+import ErrorLabel from '@/components/ErrorLabel'
 import { useRouter } from 'next/navigation'
-import { useAuthContext } from '@/app/contexts/authContext'
-import { Select } from '@/app/components/ion/Select'
+import { useAuthContext } from '@/contexts/authContext'
+import { Select } from '@/components/ion/Select'
 
 const BusinessDetails = () => {
   const createOrganization = trpc.organizations.create.useMutation()
@@ -36,9 +36,8 @@ const BusinessDetails = () => {
   const router = useRouter()
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const { organization } = await createOrganization.mutateAsync(
-        data
-      )
+      const { organization } =
+        await createOrganization.mutateAsync(data)
       setOrganization(organization)
       router.refresh()
       router.push('/onboarding')

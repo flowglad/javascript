@@ -11,7 +11,7 @@ import {
   PriceType,
   PurchaseSessionStatus,
 } from '@/types'
-import { CheckoutPageContextValues } from '@/app/contexts/checkoutPageContext'
+import { CheckoutPageContextValues } from '@/contexts/checkoutPageContext'
 import { PurchaseSession } from '@/db/schema/purchaseSessions'
 
 const subscriptionDetails = {

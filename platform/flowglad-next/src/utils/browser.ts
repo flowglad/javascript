@@ -14,7 +14,10 @@ export const initBrowser = async () => {
 
   const innerBrowser = await puppeteer.launch({
     executablePath,
-    args: chrome.args,
+    args: [
+      ...chrome.args,
+      // '--font-render-hinting=none'
+    ],
     defaultViewport: chrome.defaultViewport,
     headless: 'new',
     ignoreHTTPSErrors: true,

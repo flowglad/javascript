@@ -304,7 +304,7 @@ We use "edit" instead of "update" to make it clear that this update may have sid
   ```
 
 # 3. Create Form Modals
-- In @/app/components/forms, create a new file UnicornRiderFormFields.tsx, and stub it out like so:
+- In @/components/forms, create a new file UnicornRiderFormFields.tsx, and stub it out like so:
 ```tsx
 'use client'
 
@@ -317,21 +317,21 @@ export default function UnicornRiderFormFields() {
 }
 ```
 
-Using '@/app/components/forms/FormModal', create new form modals for the newly created table:
-- @/app/components/components/CreateUnicornRiderModal
-- @/app/components/components/EditUnicornRiderModal
+Using '@/components/forms/FormModal', create new form modals for the newly created table:
+- @/components/components/CreateUnicornRiderModal
+- @/components/components/EditUnicornRiderModal
 
 They should follow the following pattern:
 ```ts
-// in @/app/components/forms/EditUnicornRiderModal.tsx
+// in @/components/forms/EditUnicornRiderModal.tsx
 'use client'
 
-import FormModal from '@/app/components/forms/FormModal'
+import FormModal from '@/components/forms/FormModal'
 import {
   UnicornRiderRecord,
   editUnicornRiderSchema,
 } from '@/db/schema/unicornRiders'
-import { UnicornRiderFormFields } from '@/app/components/forms/UnicornRiderFormFields'
+import { UnicornRiderFormFields } from '@/components/forms/UnicornRiderFormFields'
 import { trpc } from '@/app/_trpc/client'
 
 interface EditUnicornRiderModalProps {

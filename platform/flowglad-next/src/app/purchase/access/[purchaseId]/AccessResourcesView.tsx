@@ -1,10 +1,10 @@
 'use client'
 import JSZip from 'jszip'
-import TableTitle from '@/app/components/ion/TableTitle'
+import TableTitle from '@/components/ion/TableTitle'
 import {
   FilePostPurchaseAssetRow,
   LinkPostPurchaseAssetRow,
-} from '@/app/components/PostPurchaseAssetRow'
+} from '@/components/PostPurchaseAssetRow'
 import { File } from '@/db/schema/files'
 import { Link } from '@/db/schema/links'
 import { SquareArrowOutUpRight, Download } from 'lucide-react'

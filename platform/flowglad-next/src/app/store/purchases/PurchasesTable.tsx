@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { DisplayColumnDef } from '@tanstack/react-table'
-import Table from '@/app/components/ion/Table'
-import SortableColumnHeaderCell from '@/app/components/ion/SortableColumnHeaderCell'
+import Table from '@/components/ion/Table'
+import SortableColumnHeaderCell from '@/components/ion/SortableColumnHeaderCell'
 import { formatDate } from '@/utils/core'
 import { Purchase } from '@/db/schema/purchases'
 

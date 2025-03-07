@@ -34,6 +34,7 @@ import core from '@/utils/core'
 import { customerProfiles } from './customerProfiles'
 import { organizations } from './organizations'
 import { billingPeriods } from './billingPeriods'
+import { memberships } from './memberships'
 
 export const TABLE_NAME = 'Invoices'
 
@@ -77,6 +78,10 @@ export const invoices = pgTable(
     billingPeriodEndDate: timestamp('billingPeriodEndDate'),
     billingIntervalCount: integer('billingIntervalCount'),
     billingAnchorDate: timestamp('billingAnchorDate'),
+    ownerMembershipId: nullableStringForeignKey(
+      'ownerMembershipId',
+      memberships
+    ),
     pdfURL: text('pdfURL'),
     memo: text('memo'),
     bankPaymentOnly: boolean('bankPaymentOnly').default(false),

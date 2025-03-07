@@ -24,7 +24,7 @@ import {
 import { purchases } from '@/db/schema/purchases'
 import { discounts } from '@/db/schema/discounts'
 import { organizations } from '@/db/schema/organizations'
-import { customerBillingAddressSchema } from '@/db/schema/customers'
+import { billingAddressSchema } from '@/db/schema/customers'
 import {
   CurrencyCode,
   FeeCalculationType,
@@ -112,7 +112,7 @@ const columnRefinements = {
   taxAmountFixed: safeZodNonNegativeInteger,
   pretaxTotal: safeZodNonNegativeInteger,
   discountAmountFixed: safeZodNonNegativeInteger,
-  billingAddress: customerBillingAddressSchema.nullable(),
+  billingAddress: billingAddressSchema.nullable(),
   type: core.createSafeZodEnum(FeeCalculationType),
   currency: core.createSafeZodEnum(CurrencyCode),
 }

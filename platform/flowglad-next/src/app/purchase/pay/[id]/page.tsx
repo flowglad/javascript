@@ -4,11 +4,11 @@ import {
   billingInfoSchema,
   selectPurchaseCheckoutParametersById,
 } from '@/db/tableMethods/purchaseMethods'
-import PaymentStatusProcessing from '@/app/components/PaymentStatusProcessing'
+import PaymentStatusProcessing from '@/components/PaymentStatusProcessing'
 import core from '@/utils/core'
 import { createPurchaseSession } from '@/utils/purchaseSessionState'
 import { findPurchaseSession } from '@/utils/purchaseSessionState'
-import CheckoutPage from '@/app/components/CheckoutPage'
+import CheckoutPage from '@/components/CheckoutPage'
 import { selectDiscountById } from '@/db/tableMethods/discountMethods'
 import { selectLatestFeeCalculation } from '@/db/tableMethods/feeCalculationMethods'
 import { getPaymentIntent, getSetupIntent } from '@/utils/stripe'

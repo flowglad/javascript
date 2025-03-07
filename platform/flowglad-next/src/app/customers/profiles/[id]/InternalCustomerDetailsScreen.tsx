@@ -1,7 +1,7 @@
 // Generated with Ion on 10/10/2024, 7:03:48 PM
 // Figma Link: https://www.figma.com/design/3fYHKpBnD7eYSAmfSvPhvr?node-id=727:33232
 'use client'
-import { PageHeader } from '@/app/components/ion/PageHeader'
+import { PageHeader } from '@/components/ion/PageHeader'
 import { Customer } from '@/db/schema/customers'
 import { CustomerProfile } from '@/db/schema/customerProfiles'
 import { Purchase } from '@/db/schema/purchases'

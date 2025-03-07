@@ -33,7 +33,7 @@ import {
   customerProfilesSelectSchema,
 } from '../schema/customerProfiles'
 import {
-  customerBillingAddressSchema,
+  billingAddressSchema,
   customers,
   customersInsertSchema,
   customersSelectSchema,

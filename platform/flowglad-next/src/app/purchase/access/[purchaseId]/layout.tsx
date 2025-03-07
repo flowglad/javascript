@@ -1,5 +1,5 @@
 import { headers } from 'next/headers'
-import PostPaymentSideBar from '@/app/components/ion/PostPaymentSidebar'
+import PostPaymentSideBar from '@/components/ion/PostPaymentSidebar'
 import { adminTransaction } from '@/db/databaseMethods'
 import { selectPurchaseCheckoutParametersById } from '@/db/tableMethods/purchaseMethods'
 

@@ -1,26 +1,26 @@
 import { Plus } from 'lucide-react'
-import Badge from '@/app/components/ion/Badge'
-import Checkbox from '@/app/components/ion/Checkbox'
+import Badge from '@/components/ion/Badge'
+import Checkbox from '@/components/ion/Checkbox'
 import { RotateCw, Check } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
-import Table from '@/app/components/ion/Table'
+import Table from '@/components/ion/Table'
 import { Variant } from '@/db/schema/variants'
 import core from '@/utils/core'
-import TableRowPopoverMenu from '@/app/components/TableRowPopoverMenu'
+import TableRowPopoverMenu from '@/components/TableRowPopoverMenu'
 import {
   PopoverMenuItem,
   PopoverMenuItemState,
-} from '@/app/components/PopoverMenu'
-import CreateVariantModal from '@/app/components/forms/CreateVariantModal'
-import EditVariantModal from '@/app/components/forms/EditVariantModal'
-import ArchiveVariantModal from '@/app/components/forms/ArchiveVariantModal'
-import SetVariantAsDefaultModal from '@/app/components/forms/SetVariantAsDefaultModal'
+} from '@/components/PopoverMenu'
+import CreateVariantModal from '@/components/forms/CreateVariantModal'
+import EditVariantModal from '@/components/forms/EditVariantModal'
+import ArchiveVariantModal from '@/components/forms/ArchiveVariantModal'
+import SetVariantAsDefaultModal from '@/components/forms/SetVariantAsDefaultModal'
 import { Product } from '@/db/schema/products'
-import PricingCellView from '@/app/components/PricingCellView'
+import PricingCellView from '@/components/PricingCellView'
 import { PriceType } from '@/types'
-import TableTitle from '@/app/components/ion/TableTitle'
-import SortableColumnHeaderCell from '@/app/components/ion/SortableColumnHeaderCell'
+import TableTitle from '@/components/ion/TableTitle'
+import SortableColumnHeaderCell from '@/components/ion/SortableColumnHeaderCell'
 
 const MoreMenuCell = ({
   variant,

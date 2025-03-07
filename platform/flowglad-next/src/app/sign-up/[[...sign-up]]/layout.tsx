@@ -1,4 +1,4 @@
-import SignupLayout from '@/app/components/SignupLayout'
+import SignupLayout from '@/components/SignupLayout'
 
 const Layout = SignupLayout
 

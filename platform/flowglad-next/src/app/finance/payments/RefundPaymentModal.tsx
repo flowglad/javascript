@@ -1,5 +1,5 @@
 'use client'
-import FormModal from '@/app/components/forms/FormModal'
+import FormModal from '@/components/forms/FormModal'
 import {
   Payment,
   refundPaymentInputSchema,

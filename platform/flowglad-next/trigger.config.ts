@@ -1,8 +1,13 @@
 import { defineConfig } from '@trigger.dev/sdk/v3'
-import { syncVercelEnvVars } from '@trigger.dev/build/extensions/core'
+import { puppeteer } from '@trigger.dev/build/extensions/puppeteer'
+import {
+  additionalFiles,
+  syncVercelEnvVars,
+} from '@trigger.dev/build/extensions/core'
 
 export default defineConfig({
-  project: process.env.TRIGGER_PROJECT_ID!,
+  project: 'proj_nrfpgtxovaftyxkxlako',
+  // project: process.env.TRIGGER_PROJECT_ID!,
   logLevel: 'log',
   machine: 'medium-2x',
   maxDuration: 60000,
@@ -17,6 +22,12 @@ export default defineConfig({
     },
   },
   build: {
-    extensions: [syncVercelEnvVars()],
+    extensions: [
+      syncVercelEnvVars(),
+      puppeteer(),
+      additionalFiles({
+        files: ['./public/fonts/**'],
+      }),
+    ],
   },
 })

@@ -1,5 +1,5 @@
 'use client'
-import { PageHeader } from '@/app/components/ion/PageHeader'
+import { PageHeader } from '@/components/ion/PageHeader'
 import PurchasesTable from './PurchasesTable'
 import { Purchase } from '@/db/schema/purchases'
 

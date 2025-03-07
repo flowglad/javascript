@@ -18,4 +18,6 @@ export const dummyOrganization: Organization.Record = {
   stripeConnectContractType:
     StripeConnectContractType.MerchantOfRecord,
   defaultCurrency: CurrencyCode.USD,
+  billingAddress: null,
+  contactEmail: null,
 }

@@ -1,51 +1,28 @@
+import fs from 'fs/promises'
+import path from 'path'
 import cloudflareMethods from '@/utils/cloudflare'
 import core from '@/utils/core'
 import { logger, task } from '@trigger.dev/sdk/v3'
 import { initBrowser } from '@/utils/browser'
+import { Invoice } from '@/db/schema/invoices'
+import { generatePdf } from '@/pdf-generation/generatePDF'
 
 export const generatePdfTask = task({
   id: 'generate-invoice-pdf',
-  run: async (
-    { invoiceNumber }: { invoiceNumber: string },
-    { ctx }
-  ) => {
+  run: async ({ invoice }: { invoice: Invoice.Record }, { ctx }) => {
     logger.info('Starting PDF generation task')
-    const browser = await initBrowser()
-    logger.info('Browser initialized')
-
-    const defaultContext = browser.browserContexts()[0]
-    const page = (await defaultContext.pages())[0]
+    const urlBase = core.IS_DEV
+      ? 'https://staging.flowglad.com'
+      : core.envVariable('NEXT_PUBLIC_APP_URL')
     const invoiceUrl = core.safeUrl(
-      `/invoice/${invoiceNumber}`,
-      `https://flowglad-git-complete-checkout-action-flowglad.vercel.app`
+      `/invoice/view/${invoice.OrganizationId}/${invoice.id}/pdf-preview`,
+      urlBase
     )
-    await page.goto(invoiceUrl, {
-      // let's make sure the page is fully loaded before taking the screenshot
-      waitUntil: 'domcontentloaded',
-    })
-
-    logger.info('Page loaded')
-
-    const pdfBuffer = await page.pdf({ format: 'A4' })
-    logger.info('PDF generated')
-    await cloudflareMethods.putPDF({
-      body: pdfBuffer,
-      key: `invoices/${invoiceNumber}/${core.nanoid()}.pdf`,
-    })
-
-    logger.info('PDF uploaded')
-    await page.close()
-    logger.info('Page closed')
-    await browser.close()
-    logger.info('Browser closed')
-    try {
-      return {
-        message: 'PDF generated successfully',
-        pdfBuffer: '',
-      }
-    } catch (error) {
-      logger.error('Error generating PDF', { error })
-      throw error
+    const key = `invoices/${invoice.OrganizationId}/${invoice.id}/${core.nanoid()}.pdf`
+    await generatePdf({ url: invoiceUrl, bucketKey: key })
+    return {
+      message: `PDF generated successfully: ${invoice.id}`,
+      url: core.safeUrl(key, cloudflareMethods.BUCKET_PUBLIC_URL),
     }
   },
 })

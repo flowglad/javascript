@@ -6,31 +6,31 @@ import { Plus } from 'lucide-react'
 import { type ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
 
-import Table from '@/app/components/ion/Table'
-import { PageHeader } from '@/app/components/ion/PageHeader'
+import Table from '@/components/ion/Table'
+import { PageHeader } from '@/components/ion/PageHeader'
 import {
   CustomerProfile,
   CustomerTableRowData,
   InferredCustomerProfileStatus,
 } from '@/db/schema/customerProfiles'
 import { Customer } from '@/db/schema/customers'
-import TableRowPopoverMenu from '@/app/components/TableRowPopoverMenu'
+import TableRowPopoverMenu from '@/components/TableRowPopoverMenu'
 import core from '@/utils/core'
 import { useRouter } from 'next/navigation'
-import Button from '@/app/components/ion/Button'
-import CreateCustomerFormModal from '@/app/components/forms/CreateCustomerFormModal'
+import Button from '@/components/ion/Button'
+import CreateCustomerFormModal from '@/components/forms/CreateCustomerFormModal'
 import { Variant } from '@/db/schema/variants'
 import { Product } from '@/db/schema/products'
 import {
   PopoverMenuItem,
   PopoverMenuItemState,
-} from '@/app/components/PopoverMenu'
-import ArchiveCustomerModal from '@/app/components/forms/ArchiveCustomerModal'
-import Badge, { BadgeProps } from '@/app/components/ion/Badge'
+} from '@/components/PopoverMenu'
+import ArchiveCustomerModal from '@/components/forms/ArchiveCustomerModal'
+import Badge, { BadgeProps } from '@/components/ion/Badge'
 import { CurrencyCode } from '@/types'
-import EditCustomerModal from '@/app/components/forms/EditCustomerModal'
+import EditCustomerModal from '@/components/forms/EditCustomerModal'
 import { stripeCurrencyAmountToHumanReadableCurrencyAmount } from '@/utils/stripe'
-import SortableColumnHeaderCell from '@/app/components/ion/SortableColumnHeaderCell'
+import SortableColumnHeaderCell from '@/components/ion/SortableColumnHeaderCell'
 
 type CustomerTableRow = {
   name: string

@@ -1,4 +1,4 @@
-import { CustomerBillingAddress } from '@/db/schema/customers'
+import { BillingAddress } from '@/db/schema/customers'
 import { Discount } from '@/db/schema/discounts'
 import { FeeCalculation } from '@/db/schema/feeCalculations'
 import { Organization } from '@/db/schema/organizations'
@@ -187,7 +187,7 @@ export const calculateTaxes = async ({
 }: {
   discountInclusiveAmount: number
   product: Product.Record
-  billingAddress: CustomerBillingAddress
+  billingAddress: BillingAddress
   variant: Variant.Record
   purchase?: Purchase.Record
 }): Promise<
@@ -279,7 +279,7 @@ interface PurchaseSessionFeeCalculationParams {
   variant: Variant.Record
   purchase?: Purchase.Record
   discount?: Discount.Record
-  billingAddress: CustomerBillingAddress
+  billingAddress: BillingAddress
   paymentMethodType: PaymentMethodType
   PurchaseSessionId: string
   organizationCountry: Country.Record

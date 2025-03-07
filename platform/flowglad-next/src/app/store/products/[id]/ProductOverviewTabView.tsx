@@ -1,15 +1,15 @@
 import { Image as ImageIcon, Pencil } from 'lucide-react'
 import { useState } from 'react'
-import StatusBadge from '@/app/components/StatusBadge'
-import EditProductModal from '@/app/components/forms/EditProductModal'
+import StatusBadge from '@/components/StatusBadge'
+import EditProductModal from '@/components/forms/EditProductModal'
 import Image from 'next/image'
-import { useAuthenticatedContext } from '@/app/contexts/authContext'
-import DateRangeRevenueChart from '@/app/components/DateRangeRevenueChart'
+import { useAuthenticatedContext } from '@/contexts/authContext'
+import DateRangeRevenueChart from '@/components/DateRangeRevenueChart'
 import { Product } from '@/db/schema/products'
-import TableTitle from '@/app/components/ion/TableTitle'
+import TableTitle from '@/components/ion/TableTitle'
 import { Variant } from '@/db/schema/variants'
-import Label from '@/app/components/ion/Label'
-import PricingCellView from '@/app/components/PricingCellView'
+import Label from '@/components/ion/Label'
+import PricingCellView from '@/components/PricingCellView'
 
 interface ProductDetailsOverviewProps {
   product: Product.ClientRecord

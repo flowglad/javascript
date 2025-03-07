@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Variant } from '@/db/schema/variants'
 import { Purchase } from '@/db/schema/purchases'
 import { Discount } from '@/db/schema/discounts'
-import { CustomerBillingAddress } from '@/db/schema/customers'
+import { BillingAddress } from '@/db/schema/customers'
 import { FeeCalculation } from '@/db/schema/feeCalculations'
 import {
   PriceType,
@@ -140,11 +140,11 @@ describe('fees.ts', () => {
   describe('calculateInternationalFeePercentage', () => {
     const usAddress = {
       address: { country: 'US' },
-    } as CustomerBillingAddress
+    } as BillingAddress
 
     const nonUsAddress = {
       address: { country: 'GB' },
-    } as CustomerBillingAddress
+    } as BillingAddress
 
     const organization = {
       CountryId: '1',
@@ -193,7 +193,7 @@ describe('fees.ts', () => {
     it('handles null or undefined billingAddress.country', () => {
       const invalidAddress = {
         address: { country: 'XX' },
-      } as CustomerBillingAddress
+      } as BillingAddress
 
       expect(() =>
         calculateInternationalFeePercentage({
@@ -211,7 +211,7 @@ describe('fees.ts', () => {
     it('handles case sensitivity in country codes', () => {
       const mixedCaseAddress = {
         address: { country: 'us' }, // Lowercase
-      } as CustomerBillingAddress
+      } as BillingAddress
 
       expect(
         calculateInternationalFeePercentage({
@@ -390,7 +390,7 @@ describe('fees.ts', () => {
         paymentMethodType: PaymentMethodType.Card,
         billingAddress: {
           address: { country: 'US' },
-        } as CustomerBillingAddress,
+        } as BillingAddress,
       } as PurchaseSession.FeeReadyRecord
 
       const organizationCountry = {
@@ -416,7 +416,7 @@ describe('fees.ts', () => {
   })
 
   describe('finalizeFeeCalculation', () => {
-    const billingAddress: CustomerBillingAddress = {
+    const billingAddress: BillingAddress = {
       address: {
         country: 'US',
         line1: '123 Main St',

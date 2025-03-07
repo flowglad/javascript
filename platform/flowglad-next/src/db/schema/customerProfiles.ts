@@ -14,7 +14,7 @@ import {
 } from '@/db/tableUtils'
 import {
   Customer,
-  customerBillingAddressSchema,
+  billingAddressSchema,
   customers,
 } from '@/db/schema/customers'
 import { organizations } from '@/db/schema/organizations'
@@ -103,7 +103,7 @@ const nonClientEditableColumns = {
 } as const
 
 const zodSchemaEnhancementColumns = {
-  billingAddress: customerBillingAddressSchema.nullable(),
+  billingAddress: billingAddressSchema.nullable(),
 }
 
 export const customerProfilesSelectSchema = createSelectSchema(

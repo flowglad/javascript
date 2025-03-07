@@ -1,8 +1,8 @@
 // Generated with Ion on 10/31/2024, 6:10:56 PM
 // Figma Link: https://www.figma.com/design/3fYHKpBnD7eYSAmfSvPhvr?node-id=1033:8693
 'use client'
-import PageTitle from '../components/ion/PageTitle'
-import DateRangeRevenueChart from '../components/DateRangeRevenueChart'
+import PageTitle from '@/components/ion/PageTitle'
+import DateRangeRevenueChart from '@/components/DateRangeRevenueChart'
 
 export interface DashboardPageProps {
   organizationCreatedAt: Date

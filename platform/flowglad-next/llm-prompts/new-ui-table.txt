@@ -15,8 +15,8 @@ The columns should be like so:
 ```
 import { useMemo } from 'react'
 import { DisplayColumnDef } from '@tanstack/react-table'
-import Table from '@/app/components/ion/Table'
-import SortableColumnHeaderCell from '@/app/components/ion/SortableColumnHeaderCell'
+import Table from '@/components/ion/Table'
+import SortableColumnHeaderCell from '@/components/ion/SortableColumnHeaderCell'
 // the prompt may provider another source for the type - if so, import it from there
 import { UnicornRiderRecord } from '@/db/schema/unicorn-riders'
 
@@ -85,7 +85,7 @@ export default UnicornRidersTable
 - The prompt may specify a click handler for the table rows, if so, add it to the onClickRow prop of the <Table /> component that gets returned.
 - If the prompt specifies a *titled table*, then enhance the returned JSX like follows, adding TableTitleRow:
 ```
-import TableTitleRow from '@/app/components/TableTitleRow'
+import TableTitleRow from '@/components/TableTitleRow'
 
 // ...previous code above...
     return <div className="w-full flex flex-col gap-5 pb-8">

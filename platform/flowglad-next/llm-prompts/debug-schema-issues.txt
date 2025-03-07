@@ -19,7 +19,7 @@ For both:
   // rest of code ...
 
   const columnRefinement = {
-    customerBillingAddress: customerBillingAddressSchema
+    customerBillingAddress: billingAddressSchema
   }
   ```
   - columnRefinements: should have a specific object type declared for the JSON column

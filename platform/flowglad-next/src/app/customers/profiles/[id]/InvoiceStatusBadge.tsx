@@ -1,5 +1,5 @@
 import React from 'react'
-import { Badge } from '@/app/components/ion/Badge'
+import { Badge } from '@/components/ion/Badge'
 import { InvoiceStatus } from '@/types'
 import { sentenceCase } from 'change-case'
 

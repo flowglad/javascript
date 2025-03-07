@@ -1,8 +1,8 @@
 // Generated with Ion on 11/15/2024, 6:09:53 PM
 // Figma Link: https://www.figma.com/design/3fYHKpBnD7eYSAmfSvPhvr?node-id=1210:41903
 'use client'
-import Button from '@/app/components/ion/Button'
-import { PageHeader } from '@/app/components/ion/PageHeader'
+import Button from '@/components/ion/Button'
+import { PageHeader } from '@/components/ion/PageHeader'
 import { Variant } from '@/db/schema/variants'
 import { Clipboard, Eye } from 'lucide-react'
 import ProductOverviewTabView from './ProductOverviewTabView'

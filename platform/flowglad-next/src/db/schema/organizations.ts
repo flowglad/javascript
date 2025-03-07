@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 import { z } from 'zod'
-import { pgTable, text, boolean } from 'drizzle-orm/pg-core'
+import { pgTable, text, boolean, jsonb } from 'drizzle-orm/pg-core'
 import { createSelectSchema } from 'drizzle-zod'
 import {
   enhancedCreateInsertSchema,
@@ -9,7 +9,6 @@ import {
   constructUniqueIndex,
   tableBase,
   newBaseZodSelectSchemaColumns,
-  nullableStringForeignKey,
   notNullStringForeignKey,
 } from '@/db/tableUtils'
 import { countries } from '@/db/schema/countries'
@@ -19,6 +18,7 @@ import {
   CurrencyCode,
   StripeConnectContractType,
 } from '@/types'
+import { billingAddressSchema } from './customers'
 
 const TABLE_NAME = 'Organizations'
 
@@ -47,6 +47,8 @@ export const organizations = pgTable(
       columnName: 'defaultCurrency',
       enumBase: CurrencyCode,
     }).notNull(),
+    billingAddress: jsonb('billingAddress'),
+    contactEmail: text('contactEmail'),
     stripeConnectContractType: pgEnumColumn({
       enumName: 'StripeConnectContractType',
       columnName: 'stripeConnectContractType',
@@ -68,6 +70,8 @@ export const organizations = pgTable(
 const columnRefinements = {
   onboardingStatus: core.createSafeZodEnum(BusinessOnboardingStatus),
   defaultCurrency: core.createSafeZodEnum(CurrencyCode),
+  billingAddress: billingAddressSchema,
+  contactEmail: z.string().email().nullable(),
 }
 
 export const organizationsSelectSchema = createSelectSchema(

@@ -1,4 +1,4 @@
-import CheckoutPage from '@/app/components/CheckoutPage'
+import CheckoutPage from '@/components/CheckoutPage'
 import { adminTransaction } from '@/db/databaseMethods'
 import { selectCustomerProfileById } from '@/db/tableMethods/customerProfileMethods'
 import { selectLatestFeeCalculation } from '@/db/tableMethods/feeCalculationMethods'

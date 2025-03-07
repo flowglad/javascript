@@ -20,7 +20,7 @@ import {
   createPaginatedSelectSchema,
   createPaginatedListQuerySchema,
 } from '@/db/tableUtils'
-import { customerBillingAddressSchema } from '@/db/schema/customers'
+import { billingAddressSchema } from '@/db/schema/customers'
 import core from '@/utils/core'
 import { variants } from './variants'
 import { PaymentMethodType, PurchaseSessionStatus } from '@/types'
@@ -100,7 +100,7 @@ export const purchaseSessions = pgTable(
 
 const refinement = {
   ...newBaseZodSelectSchemaColumns,
-  billingAddress: customerBillingAddressSchema.nullable(),
+  billingAddress: billingAddressSchema.nullable(),
   status: core.createSafeZodEnum(PurchaseSessionStatus),
   successUrl: z.string().url().nullable(),
   cancelUrl: z.string().url().nullable(),
@@ -161,7 +161,7 @@ export const purchaseSessionClientSelectSchema =
 
 export const feeReadyPurchaseSessionSelectSchema =
   purchaseSessionsSelectSchema.extend({
-    billingAddress: customerBillingAddressSchema,
+    billingAddress: billingAddressSchema,
     paymentMethodType: core.createSafeZodEnum(PaymentMethodType),
   })
 

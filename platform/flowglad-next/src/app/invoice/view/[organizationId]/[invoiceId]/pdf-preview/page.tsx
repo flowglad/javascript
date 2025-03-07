@@ -1,4 +1,4 @@
-import { InvoiceTemplate } from '@/pdf-generation/invoices/invoices'
+import { InvoiceTemplate } from '@/pdf-generation/invoices'
 import { CustomerFacingInvoicePage } from '../CustomerFacingInvoicePage'
 
 const InvoicePdfPreviewPage =

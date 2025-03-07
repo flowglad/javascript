@@ -4,7 +4,7 @@ import { selectInvoiceLineItemsAndInvoicesByInvoiceWhere } from '@/db/tableMetho
 import { selectOrganizationById } from '@/db/tableMethods/organizationMethods'
 import core from '@/utils/core'
 import { notFound } from 'next/navigation'
-import { InvoiceTemplateProps } from '@/pdf-generation/invoices/invoices'
+import { InvoiceTemplateProps } from '@/pdf-generation/invoices'
 
 export const CustomerFacingInvoicePage = (
   InnerComponent: React.FC<InvoiceTemplateProps>

@@ -32,6 +32,7 @@ const publicRoutes = [
   '/apple-touch-icon(.*).png',
   '/api/v1/(.*)',
   '/api/openapi',
+  '/invoice/view/(.*)',
 ]
 
 if (core.IS_DEV) {

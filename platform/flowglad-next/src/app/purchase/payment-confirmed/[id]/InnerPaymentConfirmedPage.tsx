@@ -1,5 +1,5 @@
 'use client'
-import PaymentStatusSuccess from '@/app/components/PaymentStatusSuccess'
+import PaymentStatusSuccess from '@/components/PaymentStatusSuccess'
 
 const InnerPaymentConfirmedPage = () => {
   return <PaymentStatusSuccess />

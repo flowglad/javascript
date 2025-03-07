@@ -1,9 +1,9 @@
 'use client'
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
-import Button from '@/app/components/ion/Button'
-import { PageHeader } from '@/app/components/ion/PageHeader'
-import CreateDiscountModal from '@/app/components/forms/CreateDiscountModal'
+import Button from '@/components/ion/Button'
+import { PageHeader } from '@/components/ion/PageHeader'
+import CreateDiscountModal from '@/components/forms/CreateDiscountModal'
 import DiscountsTable from './DiscountsTable'
 import { Discount } from '@/db/schema/discounts'
 

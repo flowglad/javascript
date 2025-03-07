@@ -1,6 +1,6 @@
 'use client'
 
-import { PageHeader } from '@/app/components/ion/PageHeader'
+import { PageHeader } from '@/components/ion/PageHeader'
 import PaymentsTable from './PaymentsTable'
 import { Payment } from '@/db/schema/payments'
 import { PaymentStatus } from '@/types'

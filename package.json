@@ -13,7 +13,6 @@
     "dev:server": "pnpm --filter @flowglad/server dev",
     "lint": "pnpm -r lint",
     "clean": "pnpm -r clean",
-    
     "changeset:empty": "pnpm changeset --empty",
     "preinstall": "npx only-allow pnpm",
     "build": "pnpm -r build",

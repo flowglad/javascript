@@ -1,5 +1,5 @@
 'use client'
-import Button from '@/app/components/ion/Button'
+import Button from '@/components/ion/Button'
 import { trpc } from '@/app/_trpc/client'
 
 const PostPurchaseEmailConfirmationForm = ({

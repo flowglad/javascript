@@ -1,5 +1,5 @@
 'use client'
-import PaymentStatusProcessing from '@/app/components/PaymentStatusProcessing'
+import PaymentStatusProcessing from '@/components/PaymentStatusProcessing'
 
 const PendingPostPurchaseScreen = ({
   purchaseId,

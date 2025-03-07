@@ -1,8 +1,8 @@
 'use client'
 import { useMemo, useState } from 'react'
 import { ColumnDef } from '@tanstack/react-table'
-import Table from '@/app/components/ion/Table'
-import SortableColumnHeaderCell from '@/app/components/ion/SortableColumnHeaderCell'
+import Table from '@/components/ion/Table'
+import SortableColumnHeaderCell from '@/components/ion/SortableColumnHeaderCell'
 import { Discount } from '@/db/schema/discounts'
 import core from '@/utils/core'
 import {
@@ -10,11 +10,11 @@ import {
   DiscountAmountType,
   DiscountDuration,
 } from '@/types'
-import TableRowPopoverMenu from '@/app/components/TableRowPopoverMenu'
-import { PopoverMenuItem } from '@/app/components/PopoverMenu'
-import EditDiscountModal from '@/app/components/forms/EditDiscountModal'
-import DeleteDiscountModal from '@/app/components/forms/DeleteDiscountModal'
-import StatusBadge from '@/app/components/StatusBadge'
+import TableRowPopoverMenu from '@/components/TableRowPopoverMenu'
+import { PopoverMenuItem } from '@/components/PopoverMenu'
+import EditDiscountModal from '@/components/forms/EditDiscountModal'
+import DeleteDiscountModal from '@/components/forms/DeleteDiscountModal'
+import StatusBadge from '@/components/StatusBadge'
 import { RotateCw, Infinity } from 'lucide-react'
 import { sentenceCase } from 'change-case'
 import { stripeCurrencyAmountToHumanReadableCurrencyAmount } from '@/utils/stripe'

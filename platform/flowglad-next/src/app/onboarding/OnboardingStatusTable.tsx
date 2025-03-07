@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import Button from '@/app/components/ion/Button'
+import Button from '@/components/ion/Button'
 import {
   Nouns,
   OnboardingChecklistItem,
@@ -14,13 +14,13 @@ import {
   Check,
   Copy,
 } from 'lucide-react'
-import NounVerbModal from '../components/forms/NounVerbModal'
-import RequestStripeConnectOnboardingLinkModal from '../components/forms/RequestStripeConnectOnboardingLinkModal'
+import NounVerbModal from '@/components/forms/NounVerbModal'
+import RequestStripeConnectOnboardingLinkModal from '@/components/forms/RequestStripeConnectOnboardingLinkModal'
 import { Country } from '@/db/schema/countries'
 import Markdown from 'react-markdown'
 import Link from 'next/link'
 import { cn } from '@/utils/core'
-import { Tab, Tabs, TabsList } from '../components/ion/Tab'
+import { Tab, Tabs, TabsList } from '@/components/ion/Tab'
 
 interface OnboardingStatusRowProps extends OnboardingChecklistItem {
   onClick?: () => void

@@ -1,14 +1,14 @@
 import { useMemo, useState } from 'react'
 import { ColumnDef } from '@tanstack/react-table'
-import Table from '@/app/components/ion/Table'
-import SortableColumnHeaderCell from '@/app/components/ion/SortableColumnHeaderCell'
+import Table from '@/components/ion/Table'
+import SortableColumnHeaderCell from '@/components/ion/SortableColumnHeaderCell'
 import { Subscription } from '@/db/schema/subscriptions'
 import core from '@/utils/core'
 import { SubscriptionStatus } from '@/types'
-import Badge, { BadgeColor } from '@/app/components/ion/Badge'
+import Badge, { BadgeColor } from '@/components/ion/Badge'
 import { sentenceCase } from 'change-case'
-import TableRowPopoverMenu from '@/app/components/TableRowPopoverMenu'
-import CancelSubscriptionModal from '@/app/components/forms/CancelSubscriptionModal'
+import TableRowPopoverMenu from '@/components/TableRowPopoverMenu'
+import CancelSubscriptionModal from '@/components/forms/CancelSubscriptionModal'
 
 const subscriptionStatusColors: Record<
   SubscriptionStatus,

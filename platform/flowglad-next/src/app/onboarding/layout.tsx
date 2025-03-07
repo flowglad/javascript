@@ -1,6 +1,6 @@
 'use client'
 import { usePathname } from 'next/navigation'
-import SidebarLayout from '@/app/components/SidebarLayout'
+import SidebarLayout from '@/components/SidebarLayout'
 
 export default function OnboardingLayout({
   children,

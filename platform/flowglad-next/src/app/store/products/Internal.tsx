@@ -3,10 +3,10 @@
 'use client'
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
-import Button from '@/app/components/ion/Button'
-import { PageHeader } from '@/app/components/ion/PageHeader'
+import Button from '@/components/ion/Button'
+import { PageHeader } from '@/components/ion/PageHeader'
 import { Product } from '@/db/schema/products'
-import { CreateProductModal } from '@/app/components/forms/CreateProductModal'
+import { CreateProductModal } from '@/components/forms/CreateProductModal'
 import { Variant } from '@/db/schema/variants'
 import { ProductsTable } from './ProductsTable'
 

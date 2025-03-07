@@ -32,7 +32,14 @@ export const localizedEnvVariable = (key: string) =>
 
 export const safeUrl = (path: string, urlBase: string) => {
   const protocol = urlBase.match('localhost') ? 'http' : 'https'
-  return new URL(
+  const isFlowgladPreviewURL =
+    urlBase.endsWith('-flowglad.vercel.app') ||
+    urlBase.endsWith('staging.flowglad.com')
+
+  const vercelDeploymentProtectionByPass = isFlowgladPreviewURL
+    ? core.envVariable('DEPLOYMENT_PROTECTION_BYPASS_SECRET')
+    : undefined
+  const url = new URL(
     path,
     /**
      * 1. Safely strip the protocol from the URL base to avoid double protocols
@@ -40,7 +47,14 @@ export const safeUrl = (path: string, urlBase: string) => {
      *      not it's localhost (which only supports http)
      */
     `${protocol}://${urlBase.replace(/.*\/\//g, '')}`
-  ).href
+  )
+  if (isFlowgladPreviewURL && vercelDeploymentProtectionByPass) {
+    url.searchParams.set(
+      'x-vercel-protection-bypass',
+      vercelDeploymentProtectionByPass
+    )
+  }
+  return url.href
 }
 
 export const notEmptyOrNil = (value: string | unknown[]) =>

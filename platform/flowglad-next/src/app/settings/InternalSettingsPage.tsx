@@ -1,7 +1,7 @@
 'use client'
 
-import { PageHeader } from '@/app/components/ion/PageHeader'
-import type { TabData } from '@/app/components/ion/PageHeader'
+import { PageHeader } from '@/components/ion/PageHeader'
+import type { TabData } from '@/components/ion/PageHeader'
 import DeveloperSettingsPage from './DeveloperSettingsTab'
 
 const tabs: TabData[] = [

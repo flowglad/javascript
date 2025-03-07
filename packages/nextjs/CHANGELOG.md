@@ -1,5 +1,15 @@
 # @flowglad/nextjs
 
+## 0.4.22
+
+### Patch Changes
+
+- Improve custom onboarding, deprecate authenticated
+- Updated dependencies
+  - @flowglad/server@0.4.22
+  - @flowglad/react@0.4.22
+  - @flowglad/shared@0.4.22
+
 ## 0.4.21
 
 ### Patch Changes

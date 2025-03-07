@@ -3,8 +3,8 @@ import { ClerkProvider } from '@clerk/nextjs'
 import { dark } from '@clerk/themes'
 import posthog from 'posthog-js'
 import { PostHogProvider } from 'posthog-js/react'
-import type { AuthContextValues } from './contexts/authContext'
-import AuthProvider from './contexts/authContext'
+import type { AuthContextValues } from '../contexts/authContext'
+import AuthProvider from '../contexts/authContext'
 import TrpcProvider from '@/app/_trpc/Provider'
 
 if (typeof window !== 'undefined') {

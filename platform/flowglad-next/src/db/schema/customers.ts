@@ -48,17 +48,15 @@ const billingAddressSchemaColumns = {
   phone: z.string().optional(),
 }
 
-export const customerBillingAddressSchema = z.object(
+export const billingAddressSchema = z.object(
   billingAddressSchemaColumns
 )
 
-export type CustomerBillingAddress = z.infer<
-  typeof customerBillingAddressSchema
->
+export type BillingAddress = z.infer<typeof billingAddressSchema>
 
 const columnEnhancements = {
   ...newBaseZodSelectSchemaColumns,
-  billingAddress: customerBillingAddressSchema.nullable(),
+  billingAddress: billingAddressSchema.nullable(),
 }
 
 export const customersSelectSchema = createSelectSchema(

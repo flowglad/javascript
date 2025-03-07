@@ -44,10 +44,7 @@ import {
 } from '@/db/tableMethods/purchaseMethods'
 import { selectMembershipAndOrganizations } from '@/db/tableMethods/membershipMethods'
 import { CustomerProfile } from '@/db/schema/customerProfiles'
-import {
-  customerBillingAddressSchema,
-  Customer,
-} from '@/db/schema/customers'
+import { billingAddressSchema, Customer } from '@/db/schema/customers'
 import { selectPayments } from '@/db/tableMethods/paymentMethods'
 import { Payment } from '@/db/schema/payments'
 import { selectVariantById } from '@/db/tableMethods/variantMethods'
@@ -220,8 +217,7 @@ export const createInitialInvoiceForPurchase = async (
     bankPaymentOnly,
     OrganizationId,
     taxCountry: billingAddress
-      ? customerBillingAddressSchema.parse(billingAddress).address
-          .country
+      ? billingAddressSchema.parse(billingAddress).address.country
       : null,
   }
   const invoice: Invoice.Record = await insertInvoice(

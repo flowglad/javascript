@@ -1037,6 +1037,13 @@
       "when": 1741043892467,
       "tag": "0147_mighty_valkyrie",
       "breakpoints": true
+    },
+    {
+      "idx": 148,
+      "version": "7",
+      "when": 1741288565263,
+      "tag": "0148_lowly_naoko",
+      "breakpoints": true
     }
   ]
 }

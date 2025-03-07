@@ -1,4 +1,4 @@
-import SidebarLayout from '@/app/components/SidebarLayout'
+import SidebarLayout from '@/components/SidebarLayout'
 
 const SettingsLayout = SidebarLayout
 

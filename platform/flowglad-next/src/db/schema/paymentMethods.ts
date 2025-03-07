@@ -19,7 +19,7 @@ import { customerProfiles } from '@/db/schema/customerProfiles'
 import { PaymentMethodType } from '@/types'
 import { z } from 'zod'
 import { sql } from 'drizzle-orm'
-import { customerBillingAddressSchema } from './customers'
+import { billingAddressSchema } from './customers'
 
 const TABLE_NAME = 'PaymentMethods'
 
@@ -69,7 +69,7 @@ const columnRefinements = {
     email: z.string().nullable(),
     address: z.object({
       name: z.string().nullable(),
-      address: customerBillingAddressSchema.shape.address
+      address: billingAddressSchema.shape.address
         .extend({
           country: z.string().nullable(),
           line1: z.string().nullable(),

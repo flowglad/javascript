@@ -1,7 +1,7 @@
 'use client'
 
-import BillingInfo from '@/app/components/ion/BillingInfo'
-import CheckoutPageProvider from '@/app/contexts/checkoutPageContext'
+import BillingInfo from '@/components/ion/BillingInfo'
+import CheckoutPageProvider from '@/contexts/checkoutPageContext'
 import { subscriptionCheckoutPageContextValuesWithTrial } from '@/stubs/checkoutContextStubs'
 
 const TestBillingInfoPage = () => {

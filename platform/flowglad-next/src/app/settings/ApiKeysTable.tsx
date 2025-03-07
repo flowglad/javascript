@@ -1,20 +1,20 @@
 import { useMemo, useState } from 'react'
 import { DisplayColumnDef } from '@tanstack/react-table'
-import Table from '@/app/components/ion/Table'
-import SortableColumnHeaderCell from '@/app/components/ion/SortableColumnHeaderCell'
+import Table from '@/components/ion/Table'
+import SortableColumnHeaderCell from '@/components/ion/SortableColumnHeaderCell'
 import { ApiKey } from '@/db/schema/apiKeys'
 import core from '@/utils/core'
 import TableTitle, {
   TableTitleButtonSettingProps,
-} from '@/app/components/ion/TableTitle'
-import CreateApiKeyModal from '@/app/components/forms/CreateApiKeyModal'
+} from '@/components/ion/TableTitle'
+import CreateApiKeyModal from '@/components/forms/CreateApiKeyModal'
 import { Plus } from 'lucide-react'
-import { FallbackSkeleton } from '../components/ion/Skeleton'
+import { FallbackSkeleton } from '@/components/ion/Skeleton'
 import { useCopyTextHandler } from '@/app/hooks/useCopyTextHandler'
-import TableRowPopoverMenu from '../components/TableRowPopoverMenu'
-import { PopoverMenuItem } from '../components/PopoverMenu'
+import TableRowPopoverMenu from '@/components/TableRowPopoverMenu'
+import { PopoverMenuItem } from '@/components/PopoverMenu'
 import { FlowgladApiKeyType } from '@/types'
-import { useAuthContext } from '../contexts/authContext'
+import { useAuthContext } from '@/contexts/authContext'
 
 const MoreMenuCell = ({
   apiKey,

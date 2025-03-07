@@ -83,6 +83,7 @@ export const invoices = pgTable(
       memberships
     ),
     pdfURL: text('pdfURL'),
+    receiptPdfURL: text('receiptPdfURL'),
     memo: text('memo'),
     bankPaymentOnly: boolean('bankPaymentOnly').default(false),
     type: pgEnumColumn({

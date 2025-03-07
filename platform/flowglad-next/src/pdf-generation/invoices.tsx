@@ -1,4 +1,3 @@
-// components/email/invoice/InvoiceComponents.tsx
 import React from 'react'
 import {
   Section,

@@ -6,8 +6,8 @@ import { sendReceiptEmail } from '@/utils/email'
 import { selectCustomerProfileAndCustomerTableRows } from '@/db/tableMethods/customerProfileMethods'
 import { selectOrganizationById } from '@/db/tableMethods/organizationMethods'
 import { adminTransaction } from '@/db/databaseMethods'
-import { supabaseUpdatePayloadSchema } from '@/db/supabase'
-import { invoicesSelectSchema } from '@/db/schema/invoices'
+import { generatePaymentReceiptPdfTask } from '../generate-receipt-pdf'
+import { selectPayments } from '@/db/tableMethods/paymentMethods'
 
 interface ChangeCheckerParams {
   oldRecord: Invoice.Record
@@ -22,10 +22,6 @@ const invoiceStatusChangedToPaid = (params: ChangeCheckerParams) => {
   )
 }
 
-const invoiceUpdateSchema = supabaseUpdatePayloadSchema(
-  invoicesSelectSchema
-)
-
 export const invoiceUpdatedTask = task({
   id: 'invoice-updated',
   run: async (
@@ -34,21 +30,15 @@ export const invoiceUpdatedTask = task({
   ) => {
     logger.log(JSON.stringify({ payload, ctx }, null, 2))
 
-    const parsedPayload = invoiceUpdateSchema.safeParse(payload)
-
-    if (!parsedPayload.success) {
-      logger.error(parsedPayload.error.message)
-      parsedPayload.error.issues.forEach((issue) => {
-        logger.error(`${issue.path.join('.')}: ${issue.message}`)
-      })
-      throw new Error('Invalid payload')
-    }
-
-    const { old_record: oldRecord, record: newRecord } =
-      parsedPayload.data
+    const { old_record: oldRecord, record: newRecord } = payload
 
     if (invoiceStatusChangedToPaid({ oldRecord, newRecord })) {
-      return adminTransaction(async ({ transaction }) => {
+      const {
+        invoiceLineItems,
+        customer,
+        organization,
+        paymentForInvoice,
+      } = await adminTransaction(async ({ transaction }) => {
         const invoiceLineItems = await selectInvoiceLineItems(
           { InvoiceId: newRecord.id },
           transaction
@@ -77,15 +67,30 @@ export const invoiceUpdatedTask = task({
           )
         }
         logger.info(`Sending receipt email to ${customer.email}`)
-        await sendReceiptEmail({
-          to: [customer.email],
+        const [paymentForInvoice] = await selectPayments(
+          { InvoiceId: newRecord.id },
+          transaction
+        )
+        return {
           invoice: newRecord,
           invoiceLineItems,
-          organizationName: organization.name,
-        })
-        return {
+          customer,
+          organization,
+          paymentForInvoice,
           message: 'Receipt email sent successfully',
         }
+      })
+      if (paymentForInvoice) {
+        await generatePaymentReceiptPdfTask.triggerAndWait({
+          paymentId: paymentForInvoice.id,
+        })
+      }
+
+      await sendReceiptEmail({
+        to: [customer.email],
+        invoice: newRecord,
+        invoiceLineItems,
+        organizationName: organization.name,
       })
     }
 

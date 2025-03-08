@@ -1,14 +1,22 @@
 import cloudflareMethods from '@/utils/cloudflare'
 import core from '@/utils/core'
-import { task } from '@trigger.dev/sdk/v3'
+import { logger, task } from '@trigger.dev/sdk/v3'
 import { Invoice } from '@/db/schema/invoices'
 import { generatePdf } from '@/pdf-generation/generatePDF'
 import { adminTransaction } from '@/db/databaseMethods'
-import { updateInvoice } from '@/db/tableMethods/invoiceMethods'
+import {
+  selectInvoiceById,
+  updateInvoice,
+} from '@/db/tableMethods/invoiceMethods'
 
-export const generatePdfTask = task({
+export const generateInvoicePdfTask = task({
   id: 'generate-invoice-pdf',
-  run: async ({ invoice }: { invoice: Invoice.Record }, { ctx }) => {
+  run: async ({ invoiceId }: { invoiceId: string }, { ctx }) => {
+    const invoice = await adminTransaction(
+      async ({ transaction }) => {
+        return await selectInvoiceById(invoiceId, transaction)
+      }
+    )
     /**
      * In dev mode, trigger will not load localhost:3000 correctly,
      * probably because it's running inside of a container.
@@ -17,6 +25,7 @@ export const generatePdfTask = task({
     const urlBase = core.IS_DEV
       ? 'https://staging.flowglad.com'
       : core.envVariable('NEXT_PUBLIC_APP_URL')
+
     const invoiceUrl = core.safeUrl(
       `/invoice/view/${invoice.OrganizationId}/${invoice.id}/pdf-preview`,
       urlBase
@@ -27,15 +36,38 @@ export const generatePdfTask = task({
       key,
       cloudflareMethods.BUCKET_PUBLIC_URL
     )
-    await adminTransaction(async ({ transaction }) => {
-      return updateInvoice(
-        {
-          id: invoice.id,
-          pdfURL: invoicePdfUrl,
-        } as Invoice.Update,
-        transaction
-      )
-    })
+    const oldInvoicePdfUrl = await adminTransaction(
+      async ({ transaction }) => {
+        const latestInvoice = await selectInvoiceById(
+          invoice.id,
+          transaction
+        )
+        const oldInvoicePdfUrl = latestInvoice.pdfURL
+        await updateInvoice(
+          {
+            id: invoice.id,
+            pdfURL: invoicePdfUrl,
+          } as Invoice.Update,
+          transaction
+        )
+        return oldInvoicePdfUrl
+      }
+    )
+    /**
+     * Delete the old invoice PDF from Cloudflare if it exists
+     */
+    if (oldInvoicePdfUrl) {
+      try {
+        await cloudflareMethods.deleteObject(
+          cloudflareMethods.keyFromCDNUrl(oldInvoicePdfUrl)
+        )
+      } catch (error) {
+        logger.info(
+          `Error deleting old invoice PDF: ${oldInvoicePdfUrl}`,
+          { error }
+        )
+      }
+    }
     return {
       message: `PDF generated successfully: ${invoice.id}`,
       url: invoicePdfUrl,

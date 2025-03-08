@@ -53,6 +53,7 @@ import {
   bulkUpdatePurchaseSessions,
   selectOpenNonExpiredPurchaseSessions,
 } from '@/db/tableMethods/purchaseSessionMethods'
+import { generatePaymentReceiptPdfTask } from '@/trigger/generate-receipt-pdf'
 
 export const updatePurchaseStatusToReflectLatestPayment = async (
   payment: Payment.Record,
@@ -127,6 +128,9 @@ export const updateInvoiceStatusToReflectLatestPayment = async (
       InvoiceStatus.Paid,
       transaction
     )
+    await generatePaymentReceiptPdfTask.trigger({
+      paymentId: payment.id,
+    })
   }
 }
 

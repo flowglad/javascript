@@ -115,6 +115,8 @@ const refineColumns = {
   status: core.createSafeZodEnum(InvoiceStatus),
   type: core.createSafeZodEnum(InvoiceType),
   currency: core.createSafeZodEnum(CurrencyCode),
+  receiptPdfURL: z.string().url().nullable(),
+  pdfURL: z.string().url().nullable(),
   ...taxSchemaColumns,
 }
 

@@ -54,6 +54,8 @@ import {
   createAndConfirmPaymentIntent,
   stripeIdFromObjectOrId,
 } from '@/utils/stripe'
+import { generateInvoicePdfTask } from '@/trigger/generate-invoice-pdf'
+import { generatePaymentReceiptPdfTask } from '@/trigger/generate-receipt-pdf'
 
 interface CreateBillingRunInsertParams {
   billingPeriod: BillingPeriod.Record
@@ -535,12 +537,28 @@ export const executeBillingRun = async (billingRunId: string) => {
       totalAmountPaid,
       payments,
     })
-
+    /**
+     * Skip PDF generation in test mode
+     */
+    if (!core.IS_TEST) {
+      await generateInvoicePdfTask.trigger({
+        invoiceId: invoice.id,
+      })
+    }
     /**
      * If the total amount to charge is less than or equal to 0,
      * we can skip the charge attempt.
      */
     if (totalAmountToCharge <= 0) {
+      await adminTransaction(async ({ transaction }) => {
+        await updateInvoice(
+          {
+            id: invoice.id,
+            status: InvoiceStatus.Paid,
+          } as Invoice.Update,
+          transaction
+        )
+      })
       return
     }
 

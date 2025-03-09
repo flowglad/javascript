@@ -200,7 +200,6 @@ const PaymentForm = () => {
     redirectUrl,
     currency,
     purchaseSession,
-    // variant,
     product,
     flowType,
     subscriptionDetails,
@@ -411,8 +410,10 @@ const PaymentForm = () => {
       </div>
       {embedsReady && (
         <>
-          <DiscountCodeInput />
-          <TotalBillingDetails data-testid="total-billing-details" />
+          {flowType !== CheckoutFlowType.Invoice && (
+            <DiscountCodeInput />
+          )}
+          <TotalBillingDetails />
           <div className="py-8">
             <Button
               className="justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 w-full h-[45px]"

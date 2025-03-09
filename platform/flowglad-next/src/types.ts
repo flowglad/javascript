@@ -429,6 +429,12 @@ export enum PriceType {
   // ZeroPrice = 'zero_price',
 }
 
+export enum CheckoutFlowType {
+  SinglePayment = 'single_payment',
+  Subscription = 'subscription',
+  Invoice = 'invoice',
+}
+
 export enum SupabasePayloadType {
   INSERT = 'INSERT',
   UPDATE = 'UPDATE',

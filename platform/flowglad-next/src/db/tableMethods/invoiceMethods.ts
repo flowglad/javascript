@@ -17,6 +17,7 @@ import {
 import { InvoiceStatus } from '@/types'
 import { DbTransaction } from '@/db/types'
 import { and, eq } from 'drizzle-orm'
+import { BillingInfoCore } from './purchaseMethods'
 
 const config: ORMMethodCreatorConfig<
   typeof invoices,

@@ -6,12 +6,18 @@ import CheckoutPageProvider from '@/contexts/checkoutPageContext'
 import { trpc } from '@/app/_trpc/client'
 import { useEffect, useRef } from 'react'
 import core, { cn } from '@/utils/core'
+import { CheckoutFlowType } from '@/types'
 
 const CheckoutPage = ({
   billingInfo,
 }: {
   billingInfo: BillingInfoCore
 }) => {
+  if (billingInfo.flowType === CheckoutFlowType.Invoice) {
+    throw Error(
+      'Invoice checkout flow cannot be rendered as a Checkout Page'
+    )
+  }
   const purchaseSessionId = billingInfo.purchaseSession.id
   const setPurchaseSessionCookie =
     trpc.purchases.createSession.useMutation()

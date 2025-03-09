@@ -116,3 +116,7 @@ export type CreateInvoiceInput = z.infer<typeof createInvoiceSchema>
 export type InvoiceWithLineItems = Invoice.Record & {
   invoiceLineItems: InvoiceLineItem.Record[]
 }
+
+export type ClientInvoiceWithLineItems = Invoice.ClientRecord & {
+  invoiceLineItems: InvoiceLineItem.ClientRecord[]
+}

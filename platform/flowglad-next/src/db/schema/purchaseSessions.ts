@@ -29,6 +29,7 @@ import { purchases } from './purchases'
 import { discounts } from './discounts'
 import { customerProfiles } from './customerProfiles'
 import { sql } from 'drizzle-orm'
+import { invoices } from './invoices'
 
 const TABLE_NAME = 'PurchaseSessions'
 
@@ -41,6 +42,11 @@ const columns = {
   }).notNull(),
   billingAddress: jsonb('billingAddress'),
   VariantId: notNullStringForeignKey('VariantId', variants),
+  PurchaseId: nullableStringForeignKey('PurchaseId', purchases),
+  InvoiceId: nullableStringForeignKey('InvoiceId', invoices),
+  /**
+   * Should only be non-1 in the case of VariantId is not null.
+   */
   quantity: integer('quantity').notNull().default(1),
   OrganizationId: notNullStringForeignKey(
     'OrganizationId',
@@ -54,7 +60,6 @@ const columns = {
     'CustomerProfileId',
     customerProfiles
   ),
-  PurchaseId: nullableStringForeignKey('PurchaseId', purchases),
   /**
    * Default to 24 hours from now
    */

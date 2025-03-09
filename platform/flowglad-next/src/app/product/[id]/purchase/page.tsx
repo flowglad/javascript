@@ -9,6 +9,7 @@ import {
   billingInfoSchema,
 } from '@/db/tableMethods/purchaseMethods'
 import { selectDefaultVariantAndProductByProductId } from '@/db/tableMethods/variantMethods'
+import { CheckoutFlowType, PriceType } from '@/types'
 import core from '@/utils/core'
 import {
   createPurchaseSession,
@@ -124,7 +125,10 @@ const PurchasePage = async ({ params }: PurchasePageProps) => {
     product,
     variant,
     sellerOrganization: organization,
-    priceType: variant?.priceType as BillingInfoCore['priceType'],
+    flowType:
+      variant.priceType === PriceType.SinglePayment
+        ? CheckoutFlowType.SinglePayment
+        : CheckoutFlowType.Subscription,
     redirectUrl: core.safeUrl(
       `/purchase/post-payment`,
       core.envVariable('NEXT_PUBLIC_APP_URL')

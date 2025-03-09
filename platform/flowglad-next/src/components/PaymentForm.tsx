@@ -7,20 +7,29 @@ import {
   AddressElement,
   LinkAuthenticationElementProps,
 } from '@stripe/react-stripe-js'
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 import core, { cn } from '@/utils/core'
 import Button from '@/components/ion/Button'
 import { trpc } from '@/app/_trpc/client'
 import { Skeleton } from '@/components/ion/Skeleton'
 import { useRouter } from 'next/navigation'
-import { PaymentMethodType, PriceType } from '@/types'
+import {
+  CheckoutFlowType,
+  CurrencyCode,
+  PaymentMethodType,
+  PriceType,
+} from '@/types'
 import { LoaderCircle } from 'lucide-react'
 import { stripeCurrencyAmountToHumanReadableCurrencyAmount } from '@/utils/stripe'
 import TotalBillingDetails from './ion/TotalBillingDetails'
 import PoweredByFlowgladText from './ion/PoweredByFlowgladText'
 import DiscountCodeInput from './DiscountCodeInput'
-import { useCheckoutPageContext } from '@/contexts/checkoutPageContext'
+import {
+  SubscriptionCheckoutDetails,
+  useCheckoutPageContext,
+} from '@/contexts/checkoutPageContext'
 import { calculateTotalDueAmount } from '@/utils/bookkeeping/fees'
+import { FeeCalculation } from '@/db/schema/feeCalculations'
 
 export const PaymentLoadingForm = ({
   disableAnimation,
@@ -147,23 +156,60 @@ const AuthenticationElement = ({
     </div>
   )
 }
+
+const paymentFormButtonLabel = ({
+  checkoutBlocked,
+  subscriptionDetails,
+  feeCalculation,
+  flowType,
+  totalDueAmount,
+  currency,
+}: {
+  checkoutBlocked: boolean
+  subscriptionDetails: SubscriptionCheckoutDetails | null
+  flowType: CheckoutFlowType
+  totalDueAmount: number | null
+  feeCalculation: FeeCalculation.CustomerRecord | null
+  currency: CurrencyCode
+}) => {
+  if (checkoutBlocked) {
+    return 'Processing'
+  } else if (subscriptionDetails?.trialPeriodDays) {
+    return `Start ${subscriptionDetails.trialPeriodDays} day trial`
+  } else if (feeCalculation && !core.isNil(totalDueAmount)) {
+    if (flowType === CheckoutFlowType.SinglePayment) {
+      return `Pay ${stripeCurrencyAmountToHumanReadableCurrencyAmount(
+        currency,
+        totalDueAmount
+      )}`
+    } else if (flowType === CheckoutFlowType.Subscription) {
+      return `Start ${stripeCurrencyAmountToHumanReadableCurrencyAmount(
+        currency,
+        totalDueAmount
+      )} Subscription`
+    }
+  }
+  return 'Pay'
+}
 const PaymentForm = () => {
   const stripe = useStripe()
   const elements = useElements()
   const router = useRouter()
+  const checkoutPageContext = useCheckoutPageContext()
   const {
     redirectUrl,
+    currency,
     purchaseSession,
+    // variant,
     product,
-    variant,
-    priceType,
+    flowType,
     subscriptionDetails,
     customerProfile,
     editPurchaseSession,
     checkoutBlocked,
     feeCalculation,
     readonlyCustomerEmail,
-  } = useCheckoutPageContext()
+  } = checkoutPageContext
   const [emailEmbedReady, setEmailEmbedReady] = useState(true)
   const [paymentEmbedReady, setPaymentEmbedReady] = useState(false)
   const [addressEmbedReady, setAddressEmbedReady] = useState(true)
@@ -180,32 +226,24 @@ const PaymentForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const confirmPurchaseSession =
     trpc.purchases.confirmSession.useMutation()
-  let buttonLabel = 'Pay'
+
   const totalDueAmount: number | null = feeCalculation
     ? calculateTotalDueAmount(feeCalculation)
     : null
-  if (checkoutBlocked) {
-    buttonLabel = 'Processing'
-  } else if (subscriptionDetails?.trialPeriodDays) {
-    buttonLabel = `Start ${subscriptionDetails.trialPeriodDays} day trial`
-  } else if (feeCalculation && !core.isNil(totalDueAmount)) {
-    if (priceType === PriceType.SinglePayment) {
-      buttonLabel = `Pay ${stripeCurrencyAmountToHumanReadableCurrencyAmount(
-        variant.currency,
-        totalDueAmount
-      )}`
-    } else if (priceType === PriceType.Subscription) {
-      buttonLabel = `Start ${stripeCurrencyAmountToHumanReadableCurrencyAmount(
-        variant.currency,
-        totalDueAmount
-      )} Subscription`
-    }
-  }
+
+  const buttonLabel = paymentFormButtonLabel({
+    checkoutBlocked: checkoutBlocked ?? false,
+    subscriptionDetails: subscriptionDetails ?? null,
+    feeCalculation,
+    flowType,
+    totalDueAmount,
+    currency,
+  })
 
   return (
     <form
       className="w-[380px] relative"
-      onSubmit={async (event) => {
+      onSubmit={async (event: FormEvent<HTMLFormElement>) => {
         // We don't want to let default form submission happen here,
         // which would refresh the page.
         event.preventDefault()
@@ -227,9 +265,9 @@ const PaymentForm = () => {
          */
         if (
           totalDueAmount === 0 &&
-          priceType === PriceType.SinglePayment
+          flowType === CheckoutFlowType.SinglePayment
         ) {
-          window.location.href = `${redirectUrl}?purchase_session=${purchaseSession.id}`
+          window.location.href = `${redirectUrl}?purchase_session=${checkoutPageContext.purchaseSession.id}`
           return
         }
 
@@ -241,9 +279,9 @@ const PaymentForm = () => {
         }
 
         const confirmationFunction =
-          priceType === PriceType.SinglePayment
-            ? stripe.confirmPayment
-            : stripe.confirmSetup
+          flowType === CheckoutFlowType.Subscription
+            ? stripe.confirmSetup
+            : stripe.confirmPayment
         const hasEmail = customerProfile?.email
         // Create the ConfirmationToken using the details collected by the Payment Element
         // and additional shipping information
@@ -351,7 +389,7 @@ const PaymentForm = () => {
           options={{
             mode: 'billing',
             defaultValues:
-              purchaseSession.billingAddress ?? undefined,
+              purchaseSession?.billingAddress ?? undefined,
           }}
           onReady={() => {
             // setTimeout(() => {
@@ -395,7 +433,7 @@ const PaymentForm = () => {
             >
               {buttonLabel}
             </Button>
-            {!product.livemode && (
+            {!product?.livemode && (
               <div className="p-2 bg-orange-600 justify-center items-center text-center w-full flex mt-4 rounded-md">
                 <div className="text-white text-sm">
                   <p>This is a test mode checkout.</p>

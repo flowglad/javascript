@@ -150,7 +150,7 @@ const safelyProcessCreationForExistingSubscription = async (
   if (!billingPeriodAndItems) {
     throw new Error('Billing period and items not found')
   }
-  const { billingPeriod, billingPeriodItems } = billingPeriodAndItems
+  const { billingPeriod } = billingPeriodAndItems
   const [existingBillingRun] = await selectBillingRuns(
     {
       BillingPeriodId: billingPeriod.id,
@@ -183,10 +183,15 @@ export const createSubscriptionWorkflow = async (
   params: CreateSubscriptionParams,
   transaction: DbTransaction
 ) => {
+  const {
+    customerProfile,
+    defaultPaymentMethod,
+    backupPaymentMethod,
+  } = params
   const activeSubscriptionsForCustomerProfile =
     await selectSubscriptions(
       {
-        CustomerProfileId: params.customerProfile.id,
+        CustomerProfileId: customerProfile.id,
         status: SubscriptionStatus.Active,
       },
       transaction
@@ -194,6 +199,19 @@ export const createSubscriptionWorkflow = async (
   if (activeSubscriptionsForCustomerProfile.length > 0) {
     throw new Error(
       'Customer profile already has an active subscription'
+    )
+  }
+  if (customerProfile.id !== defaultPaymentMethod.CustomerProfileId) {
+    throw new Error(
+      `Customer profile ${customerProfile.id} does not match default payment method ${defaultPaymentMethod.CustomerProfileId}`
+    )
+  }
+  if (
+    backupPaymentMethod &&
+    customerProfile.id !== backupPaymentMethod.CustomerProfileId
+  ) {
+    throw new Error(
+      `Customer profile ${customerProfile.id} does not match backup payment method ${backupPaymentMethod.CustomerProfileId}`
     )
   }
 

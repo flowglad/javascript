@@ -1065,6 +1065,13 @@
       "when": 1741494139212,
       "tag": "0151_bright_giant_man",
       "breakpoints": true
+    },
+    {
+      "idx": 152,
+      "version": "7",
+      "when": 1741539746903,
+      "tag": "0152_keen_omega_red",
+      "breakpoints": true
     }
   ]
 }

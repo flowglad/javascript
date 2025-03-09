@@ -74,15 +74,15 @@ describe('fees.ts', () => {
     it('falls back to unitPrice when purchase is provided but firstInvoiceValue or pricePerBillingCycle is missing', () => {
       const variant = { unitPrice: 1000 } as Variant.Record
       expect(
-        calculateVariantBaseAmount(
+        calculateVariantBaseAmount({
           variant,
           // @ts-expect-error - we are testing the fallback behavior
-          {
+          purchase: {
             ...subscriptionWithoutTrialDummyPurchase,
             firstInvoiceValue: null,
             pricePerBillingCycle: null,
-          } as Purchase.Record
-        )
+          } as Purchase.Record,
+        })
       ).toBe(1000)
     })
 

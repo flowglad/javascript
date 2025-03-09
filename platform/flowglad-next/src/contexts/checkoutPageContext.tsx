@@ -107,6 +107,7 @@ const subscriptionDetailsFromBillingInfoCore = (
             : purchase.pricePerBillingCycle,
         }
       : undefined
+  return subscriptionDetails
 }
 
 export const useCheckoutPageContext =

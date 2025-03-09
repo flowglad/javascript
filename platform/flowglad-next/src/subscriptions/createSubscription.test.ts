@@ -15,6 +15,7 @@ import {
 import { updateSubscription } from '@/db/tableMethods/subscriptionMethods'
 import { selectBillingPeriodById } from '@/db/tableMethods/billingPeriodMethods'
 import { selectBillingPeriodItems } from '@/db/tableMethods/billingPeriodItemMethods'
+import { core } from '@/utils/core'
 
 describe('createSubscription', async () => {
   const { organization, product, variant } = await setupOrg()
@@ -31,6 +32,7 @@ describe('createSubscription', async () => {
     billingPeriod,
     billingRun,
   } = await adminTransaction(async ({ transaction }) => {
+    const stripeSetupIntentId = `setupintent_${core.nanoid()}`
     return createSubscriptionWorkflow(
       {
         organization,
@@ -43,6 +45,7 @@ describe('createSubscription', async () => {
         intervalCount: 1,
         defaultPaymentMethod: paymentMethod,
         customerProfile,
+        stripeSetupIntentId,
       },
       transaction
     )
@@ -66,6 +69,7 @@ describe('createSubscription', async () => {
         transaction
       )
     })
+    const stripeSetupIntentId = `setupintent_${core.nanoid()}`
     await expect(
       adminTransaction(async ({ transaction }) => {
         return createSubscriptionWorkflow(
@@ -80,6 +84,7 @@ describe('createSubscription', async () => {
             intervalCount: 1,
             defaultPaymentMethod: paymentMethod,
             customerProfile,
+            stripeSetupIntentId,
           },
           transaction
         )
@@ -97,6 +102,7 @@ describe('createSubscription', async () => {
     // Create a past subscription that is now cancelled
     const pastSubscription = await adminTransaction(
       async ({ transaction }) => {
+        const stripeSetupIntentId = `setupintent_${core.nanoid()}`
         const sub = await createSubscriptionWorkflow(
           {
             organization,
@@ -109,6 +115,7 @@ describe('createSubscription', async () => {
             intervalCount: 1,
             defaultPaymentMethod: newPaymentMethod,
             customerProfile: newCustomerProfile,
+            stripeSetupIntentId,
           },
           transaction
         )
@@ -141,6 +148,7 @@ describe('createSubscription', async () => {
             intervalCount: 1,
             defaultPaymentMethod: newPaymentMethod,
             customerProfile: newCustomerProfile,
+            stripeSetupIntentId: 'test-intent-id',
           },
           transaction
         )
@@ -162,6 +170,7 @@ describe('createSubscription', async () => {
 
     const { subscription, billingPeriod } = await adminTransaction(
       async ({ transaction }) => {
+        const stripeSetupIntentId = `setupintent_${core.nanoid()}`
         return createSubscriptionWorkflow(
           {
             organization,
@@ -175,6 +184,7 @@ describe('createSubscription', async () => {
             defaultPaymentMethod: newPaymentMethod,
             customerProfile: newCustomerProfile,
             trialEnd,
+            stripeSetupIntentId,
           },
           transaction
         )

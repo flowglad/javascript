@@ -142,6 +142,7 @@ export const processSetupIntentUpdated = async (
   }
   await createSubscriptionWorkflow(
     {
+      stripeSetupIntentId: setupIntent.id,
       defaultPaymentMethod: paymentMethod,
       organization,
       variant,

@@ -11,11 +11,15 @@ import { IntervalUnit, SubscriptionStatus } from '@/types'
 import { DbTransaction } from '@/db/types'
 import { generateNextBillingPeriod } from './billingIntervalHelpers'
 import { SubscriptionItem } from '@/db/schema/subscriptionItems'
-import { bulkInsertSubscriptionItems } from '@/db/tableMethods/subscriptionItemMethods'
+import {
+  bulkInsertSubscriptionItems,
+  selectRichSubscriptions,
+} from '@/db/tableMethods/subscriptionItemMethods'
 import { PaymentMethod } from '@/db/schema/paymentMethods'
 import { createBillingPeriodAndItems } from './billingPeriodHelpers'
 import { createBillingRun } from './billingRunHelpers'
 import { attemptBillingRunTask } from '@/trigger/attempt-billing-run'
+import { isNil } from '@/utils/core'
 
 export interface CreateSubscriptionParams {
   organization: Organization.Record
@@ -28,6 +32,7 @@ export interface CreateSubscriptionParams {
   interval: IntervalUnit
   intervalCount: number
   trialEnd?: Date
+  stripeSetupIntentId: string
   defaultPaymentMethod: PaymentMethod.Record
   backupPaymentMethod?: PaymentMethod.Record
 }
@@ -45,6 +50,7 @@ export const insertSubscriptionAndItems = async (
     defaultPaymentMethod,
     backupPaymentMethod,
     trialEnd,
+    stripeSetupIntentId,
   }: CreateSubscriptionParams,
   transaction: DbTransaction
 ) => {
@@ -73,6 +79,7 @@ export const insertSubscriptionAndItems = async (
     billingCycleAnchorDate: startDate,
     interval,
     intervalCount,
+    stripeSetupIntentId,
   }
 
   const subscription = await insertSubscription(
@@ -99,6 +106,27 @@ export const insertSubscriptionAndItems = async (
   return { subscription, subscriptionItems }
 }
 
+const subscriptionForSetupIntent = async (
+  stripeSetupIntentId: string,
+  transaction: DbTransaction
+) => {
+  const [existingSubscriptionAndItemsForSetupIntent] =
+    await selectRichSubscriptions(
+      {
+        stripeSetupIntentId,
+      },
+      transaction
+    )
+  if (existingSubscriptionAndItemsForSetupIntent) {
+    return {
+      subscription: existingSubscriptionAndItemsForSetupIntent,
+      subscriptionItems:
+        existingSubscriptionAndItemsForSetupIntent.subscriptionItems,
+    }
+  }
+  return null
+}
+
 export const createSubscriptionWorkflow = async (
   params: CreateSubscriptionParams,
   transaction: DbTransaction
@@ -116,9 +144,14 @@ export const createSubscriptionWorkflow = async (
       'Customer profile already has an active subscription'
     )
   }
-  const { subscription, subscriptionItems } =
-    await insertSubscriptionAndItems(params, transaction)
 
+  const existingSubscription = await subscriptionForSetupIntent(
+    params.stripeSetupIntentId,
+    transaction
+  )
+  const { subscription, subscriptionItems } =
+    existingSubscription ??
+    (await insertSubscriptionAndItems(params, transaction))
   const { billingPeriod, billingPeriodItems } =
     await createBillingPeriodAndItems(
       {

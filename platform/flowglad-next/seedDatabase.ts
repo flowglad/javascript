@@ -235,6 +235,7 @@ export const setupSubscription = async (params: {
         interval: params.interval ?? IntervalUnit.Month,
         intervalCount: params.intervalCount ?? 1,
         metadata: {},
+        stripeSetupIntentId: `setupintent_${core.nanoid()}`,
       },
       transaction
     )

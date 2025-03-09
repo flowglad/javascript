@@ -41,7 +41,10 @@ import { UserRecord } from '@/db/schema/users'
 import { selectMembershipsAndUsersByMembershipWhere } from '@/db/tableMethods/membershipMethods'
 import { selectInvoiceLineItems } from '@/db/tableMethods/invoiceLineItemMethods'
 import { InvoiceLineItem } from '@/db/schema/invoiceLineItems'
-import { updateSubscription } from '@/db/tableMethods/subscriptionMethods'
+import {
+  safelyUpdateSubscriptionStatus,
+  updateSubscription,
+} from '@/db/tableMethods/subscriptionMethods'
 import { selectBillingPeriodItemsBillingPeriodSubscriptionAndOrganizationByBillingPeriodId } from '@/db/tableMethods/billingPeriodItemMethods'
 import { selectPaymentMethodById } from '@/db/tableMethods/paymentMethodMethods'
 import { processPaymentIntentStatusUpdated } from '@/utils/bookkeeping/processPaymentIntentStatusUpdated'
@@ -301,11 +304,9 @@ export const processPaymentIntentEventForBillingRun = async (
 
   if (billingRunStatus === BillingRunStatus.Succeeded) {
     await processSucceededNotifications(notificationParams)
-    await updateSubscription(
-      {
-        id: subscription.id,
-        status: SubscriptionStatus.Active,
-      },
+    await safelyUpdateSubscriptionStatus(
+      subscription,
+      SubscriptionStatus.Active,
       transaction
     )
   } else if (billingRunStatus === BillingRunStatus.Failed) {
@@ -317,20 +318,16 @@ export const processPaymentIntentEventForBillingRun = async (
       ...notificationParams,
       retryDate: maybeRetry?.scheduledFor,
     })
-    await updateSubscription(
-      {
-        id: subscription.id,
-        status: SubscriptionStatus.PastDue,
-      },
+    await safelyUpdateSubscriptionStatus(
+      subscription,
+      SubscriptionStatus.PastDue,
       transaction
     )
   } else if (billingRunStatus === BillingRunStatus.Aborted) {
     await processAbortedNotifications(notificationParams)
-    await updateSubscription(
-      {
-        id: subscription.id,
-        status: SubscriptionStatus.PastDue,
-      },
+    await safelyUpdateSubscriptionStatus(
+      subscription,
+      SubscriptionStatus.PastDue,
       transaction
     )
   } else if (

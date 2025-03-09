@@ -119,7 +119,7 @@ const PurchasePage = async ({ params }: PurchasePageProps) => {
     )
     clientSecret = setupIntent.client_secret
   }
-
+  console.log('variant.priceType', variant.priceType)
   const billingInfo = billingInfoSchema.parse({
     purchaseSession,
     product,

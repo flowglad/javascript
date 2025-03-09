@@ -487,9 +487,7 @@ export const executeBillingRun = async (billingRunId: string) => {
     return selectBillingRunById(billingRunId, transaction)
   })
   if (billingRun.status !== BillingRunStatus.Scheduled) {
-    throw Error(
-      `Cannot execute billing run ${billingRunId} because it has status: ${billingRunId}`
-    )
+    return
   }
   try {
     const {

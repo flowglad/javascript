@@ -9,7 +9,11 @@ import {
   createPaymentIntentForPurchaseSession,
   createSetupIntentForPurchaseSession,
 } from '@/utils/stripe'
-import { PriceType, PurchaseSessionStatus } from '@/types'
+import {
+  PriceType,
+  PurchaseSessionStatus,
+  PurchaseSessionType,
+} from '@/types'
 import { DbTransaction } from '@/db/types'
 import { PurchaseSession } from '@/db/schema/purchaseSessions'
 import { selectProductById } from '@/db/tableMethods/productMethods'
@@ -18,15 +22,23 @@ import { Purchase } from '@/db/schema/purchases'
 
 import { z } from 'zod'
 import { idInputSchema } from '@/db/tableUtils'
+import core from './core'
+import { Invoice } from '@/db/schema/invoices'
 
 const productPurchaseSessionCookieNameParamsSchema = z.object({
+  type: z.literal('product'),
   productId: z.string(),
 })
 
 const purchasePurchaseSessionCookieNameParamsSchema = z.object({
+  type: z.literal('purchase'),
   purchaseId: z.string(),
 })
 
+const invoicePurchaseSessionCookieNameParamsSchema = z.object({
+  type: z.literal('invoice'),
+  invoiceId: z.string(),
+})
 /**
  * SUBTLE CODE ALERT:
  * The order of z.union matters here!
@@ -40,10 +52,12 @@ const purchasePurchaseSessionCookieNameParamsSchema = z.object({
  * We actually want this because open purchases are more strict versions than variants
  *
  */
-export const purchaseSessionCookieNameParamsSchema = z.union([
-  purchasePurchaseSessionCookieNameParamsSchema,
-  productPurchaseSessionCookieNameParamsSchema,
-])
+export const purchaseSessionCookieNameParamsSchema =
+  z.discriminatedUnion('type', [
+    purchasePurchaseSessionCookieNameParamsSchema,
+    productPurchaseSessionCookieNameParamsSchema,
+    invoicePurchaseSessionCookieNameParamsSchema,
+  ])
 
 export const setPurchaseSessionCookieParamsSchema = idInputSchema.and(
   purchaseSessionCookieNameParamsSchema
@@ -63,10 +77,19 @@ export type PurchaseSessionCookieNameParams = z.infer<
 
 const purchaseSessionName = (
   params: PurchaseSessionCookieNameParams
-) =>
-  `purchase-session-id-${
-    'purchaseId' in params ? params.purchaseId : params.productId
-  }`
+) => {
+  const base = 'purchase-session-id-'
+  switch (params.type) {
+    case PurchaseSessionType.Product:
+      return base + params.productId
+    case PurchaseSessionType.Purchase:
+      return base + params.purchaseId
+    case PurchaseSessionType.Invoice:
+      return base + params.invoiceId
+    default:
+      throw new Error('Invalid purchase session type: ' + params.type)
+  }
+}
 
 /**
  * We must support multiple purchase session cookies on the client,
@@ -104,6 +127,35 @@ export const findPurchaseSession = async (
   return sessions[0]
 }
 
+export const findPurchasePurchaseSession = async (
+  purchaseId: string,
+  transaction: DbTransaction
+) => {
+  return findPurchaseSession(
+    { purchaseId, type: PurchaseSessionType.Purchase },
+    transaction
+  )
+}
+
+export const findProductPurchaseSession = async (
+  productId: string,
+  transaction: DbTransaction
+) => {
+  return findPurchaseSession(
+    { productId, type: PurchaseSessionType.Product },
+    transaction
+  )
+}
+export const findInvoicePurchaseSession = async (
+  invoiceId: string,
+  transaction: DbTransaction
+) => {
+  return findPurchaseSession(
+    { invoiceId, type: PurchaseSessionType.Invoice },
+    transaction
+  )
+}
+
 export const createPurchaseSession = async (
   {
     variant,
@@ -116,15 +168,30 @@ export const createPurchaseSession = async (
   },
   transaction: DbTransaction
 ) => {
+  const purchaseSessionInsertCore = {
+    VariantId: variant.id,
+    status: PurchaseSessionStatus.Open,
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24), // 24 hours
+    OrganizationId,
+    livemode: variant.livemode,
+    ProductId: variant.ProductId,
+  } as const
+
+  const purchaseSesionInsert: PurchaseSession.Insert = purchase
+    ? {
+        ...purchaseSessionInsertCore,
+        PurchaseId: purchase.id,
+        InvoiceId: null,
+        type: PurchaseSessionType.Purchase,
+      }
+    : {
+        ...purchaseSessionInsertCore,
+        InvoiceId: null,
+        type: PurchaseSessionType.Product,
+      }
+
   const purchaseSession = await insertPurchaseSession(
-    {
-      VariantId: variant.id,
-      status: PurchaseSessionStatus.Open,
-      expires: new Date(Date.now() + 1000 * 60 * 60 * 24), // 24 hours
-      OrganizationId,
-      PurchaseId: purchase?.id,
-      livemode: variant.livemode,
-    },
+    purchaseSesionInsert,
     transaction
   )
   const organization = await selectOrganizationById(
@@ -167,7 +234,7 @@ export const createPurchaseSession = async (
   }
   const updatedPurchaseSession = await updatePurchaseSession(
     {
-      id: purchaseSession.id,
+      ...purchaseSession,
       stripePaymentIntentId,
       stripeSetupIntentId,
     },
@@ -175,6 +242,86 @@ export const createPurchaseSession = async (
   )
 
   return updatedPurchaseSession
+}
+
+export const findOrCreatePurchaseSession = async (
+  {
+    ProductId,
+    OrganizationId,
+    variant,
+    purchase,
+    type,
+  }: {
+    ProductId: string
+    OrganizationId: string
+    variant: Variant.Record
+    purchase?: Purchase.Record
+    type: PurchaseSessionType.Product | PurchaseSessionType.Purchase
+  },
+  transaction: DbTransaction
+) => {
+  const purchaseSession = await findPurchaseSession(
+    {
+      productId: ProductId,
+      purchaseId: purchase?.id,
+      type,
+    } as PurchaseSessionCookieNameParams,
+    transaction
+  )
+  if (
+    core.isNil(purchaseSession) ||
+    purchaseSession.VariantId !== variant.id
+  ) {
+    return createPurchaseSession(
+      { variant, OrganizationId, purchase },
+      transaction
+    )
+  }
+  return purchaseSession
+}
+
+const createInvoicePurchaseSession = async (
+  {
+    invoice,
+  }: {
+    invoice: Invoice.Record
+  },
+  transaction: DbTransaction
+) => {
+  return insertPurchaseSession(
+    {
+      status: PurchaseSessionStatus.Open,
+      type: PurchaseSessionType.Invoice,
+      InvoiceId: invoice.id,
+      ProductId: null,
+      OrganizationId: invoice.OrganizationId,
+      livemode: invoice.livemode,
+      PurchaseId: null,
+      VariantId: null,
+    },
+    transaction
+  )
+}
+
+export const findOrCreateInvoicePurchaseSession = async (
+  {
+    invoice,
+  }: {
+    invoice: Invoice.Record
+  },
+  transaction: DbTransaction
+) => {
+  const purchaseSession = await findPurchaseSession(
+    {
+      invoiceId: invoice.id,
+      type: PurchaseSessionType.Invoice,
+    },
+    transaction
+  )
+  if (purchaseSession) {
+    return purchaseSession
+  }
+  return createInvoicePurchaseSession({ invoice }, transaction)
 }
 
 type SetPurchaseSessionCookieParams = {
@@ -195,21 +342,34 @@ export const setPurchaseSessionCookie = async (
  * This strategy ensures we delete variant id
  * @param params
  */
-export const deletePurchaseSessionCookie = async (
-  params: PurchaseSessionCookieNameParams
-) => {
+export const deletePurchaseSessionCookie = async (params: {
+  productId?: string
+  purchaseId?: string
+  invoiceId?: string
+}) => {
   const cookieStore = await cookies()
-  if ('productId' in params) {
+  if ('productId' in params && params.productId) {
     await cookieStore.delete(
       purchaseSessionName({
         productId: params.productId,
+        type: PurchaseSessionType.Product,
       })
     )
   }
-  if ('purchaseId' in params) {
+  if ('purchaseId' in params && params.purchaseId) {
     await cookieStore.delete(
       purchaseSessionName({
         purchaseId: params.purchaseId,
+        type: PurchaseSessionType.Purchase,
+      })
+    )
+  }
+
+  if ('invoiceId' in params && params.invoiceId) {
+    await cookieStore.delete(
+      purchaseSessionName({
+        invoiceId: params.invoiceId,
+        type: PurchaseSessionType.Invoice,
       })
     )
   }

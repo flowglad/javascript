@@ -742,3 +742,9 @@ export enum SubscriptionAdjustmentTiming {
   AtEndOfCurrentBillingPeriod = 'at_end_of_current_billing_period',
   // AtFutureDate = 'at_future_date',
 }
+
+export enum PurchaseSessionType {
+  Product = 'product',
+  Purchase = 'purchase',
+  Invoice = 'invoice',
+}

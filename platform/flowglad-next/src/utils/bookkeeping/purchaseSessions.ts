@@ -1,6 +1,7 @@
 import {
   FeeCalculationType,
   PurchaseSessionStatus,
+  PurchaseSessionType,
   PurchaseStatus,
 } from '@/types'
 import { DbTransaction } from '@/db/types'
@@ -72,7 +73,7 @@ export const createFeeCalculationForPurchaseSession = async (
     : undefined
   const [{ variant, product, organization }] =
     await selectVariantProductAndOrganizationByVariantWhere(
-      { id: purchaseSession.VariantId },
+      { id: purchaseSession.VariantId! },
       transaction
     )
   const organizationCountryId = organization.CountryId
@@ -120,7 +121,10 @@ export const editPurchaseSession = async (
    * update the purchase session with the new tax calculation.
    */
   const updatedPurchaseSession = await updatePurchaseSession(
-    purchaseSession,
+    {
+      ...previousPurchaseSession,
+      ...purchaseSession,
+    } as PurchaseSession.Update,
     transaction
   )
   let feeCalculation: FeeCalculation.Record | null = null
@@ -208,7 +212,7 @@ export const processPurchaseBookkeepingForPurchaseSession = async (
 ) => {
   const [{ variant, product }] =
     await selectVariantProductAndOrganizationByVariantWhere(
-      { id: purchaseSession.VariantId },
+      { id: purchaseSession.VariantId! },
       transaction
     )
   let customerProfile: CustomerProfile.Record | null = null
@@ -377,6 +381,9 @@ export const processStripeChargeForPurchaseSession = async (
     purchaseSessionId,
     transaction
   )
+  if (purchaseSession.type === PurchaseSessionType.Invoice) {
+    throw new Error('Invoice checkout flow does not support charges')
+  }
   let invoice: Invoice.Record | null = null
   if (!purchaseSession) {
     throw new Error('No purchase session found for payment intent')
@@ -412,12 +419,12 @@ export const processStripeChargeForPurchaseSession = async (
   }
   purchaseSession = await updatePurchaseSession(
     {
-      id: purchaseSession.id,
+      ...purchaseSession,
       status: purchaseSessionStatus,
       customerName: charge.billing_details?.name,
       customerEmail: charge.billing_details?.email,
       PurchaseId: purchase?.id,
-    },
+    } as PurchaseSession.Update,
     transaction
   )
   return { purchase, invoice, purchaseSession }

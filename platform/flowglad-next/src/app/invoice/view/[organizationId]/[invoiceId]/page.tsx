@@ -6,10 +6,17 @@ import {
   stripeCurrencyAmountToHumanReadableCurrencyAmount,
 } from '@/utils/stripe'
 import Button from '@/components/ion/Button'
-import { CheckoutFlowType, InvoiceStatus, PriceType } from '@/types'
+import {
+  CheckoutFlowType,
+  InvoiceStatus,
+  PriceType,
+  PurchaseSessionType,
+} from '@/types'
 import { CustomerInvoiceButtonBanner } from './CustomerInvoiceButtonBanner'
 import { BillingInfoCore } from '@/db/tableMethods/purchaseMethods'
 import { stubbedPurchaseSession } from '@/stubs/checkoutContextStubs'
+import { adminTransaction } from '@/db/databaseMethods'
+import { findOrCreateInvoicePurchaseSession } from '@/utils/purchaseSessionState'
 
 const CustomerInvoicePaidView = (props: InvoiceTemplateProps) => {
   const { invoice, invoiceLineItems } = props
@@ -72,10 +79,21 @@ const CustomerInvoicePaidView = (props: InvoiceTemplateProps) => {
   )
 }
 
-const CustomerInvoiceOpenView = (props: InvoiceTemplateProps) => {
+const CustomerInvoiceOpenView = async (
+  props: InvoiceTemplateProps
+) => {
   const { invoice, invoiceLineItems, customerProfile, organization } =
     props
-  // TODO: unstub
+  const purchaseSession = await adminTransaction(
+    async ({ transaction }) => {
+      return findOrCreateInvoicePurchaseSession(
+        {
+          invoice,
+        },
+        transaction
+      )
+    }
+  )
   const billingInfo: BillingInfoCore = {
     customerProfile,
     sellerOrganization: organization,

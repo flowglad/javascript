@@ -5,7 +5,11 @@ import {
 import { dummyProduct } from '@/stubs/productStubs'
 import { dummyOrganization } from '@/stubs/organizationStubs'
 import { subscriptionDummyVariant } from '@/stubs/variantStubs'
-import { CheckoutFlowType, PurchaseSessionStatus } from '@/types'
+import {
+  CheckoutFlowType,
+  PurchaseSessionStatus,
+  PurchaseSessionType,
+} from '@/types'
 import { BillingInfoCore } from '@/db/tableMethods/purchaseMethods'
 import { PurchaseSession } from '@/db/schema/purchaseSessions'
 
@@ -31,6 +35,8 @@ const purchaseSession: PurchaseSession.Record = {
   cancelUrl: null,
   quantity: 1,
   InvoiceId: null,
+  type: PurchaseSessionType.Product,
+  ProductId: '1',
 }
 
 const billingInfoDefaults = {

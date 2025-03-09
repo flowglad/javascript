@@ -7,7 +7,8 @@ import Modal from '@/components/ion/Modal'
 import { trpc } from '@/app/_trpc/client'
 import { useEffect, useRef } from 'react'
 import { cn } from '@/utils/core'
-import { CheckoutFlowType } from '@/types'
+import { CheckoutFlowType, PurchaseSessionType } from '@/types'
+import { useSetPurchaseSessionCookieEffect } from '@/app/hooks/useSetPurchaseSessionCookieEffect'
 
 interface CheckoutModalProps {
   isOpen: boolean
@@ -25,33 +26,8 @@ const CheckoutModal = ({
       'Invoice checkout flow cannot be rendered as a Checkout Modal'
     )
   }
-  const purchaseSessionId = billingInfo.purchaseSession.id
-  const setPurchaseSessionCookie =
-    trpc.purchases.createSession.useMutation()
-  const productId = billingInfo.product?.id ?? null
-  const componentIsMounted = useRef(true)
 
-  useEffect(() => {
-    return () => {
-      componentIsMounted.current = false
-    }
-  }, [])
-
-  const mountedRef = useRef(false)
-  const purchaseId = billingInfo.purchase?.id
-
-  useEffect(() => {
-    if (mountedRef.current) return
-    mountedRef.current = true
-    if (!productId) {
-      return
-    }
-    setPurchaseSessionCookie.mutateAsync({
-      purchaseId,
-      productId,
-      id: purchaseSessionId,
-    })
-  })
+  useSetPurchaseSessionCookieEffect(billingInfo)
 
   const checkoutContainer = cn(
     'flex flex-col lg:flex-row',

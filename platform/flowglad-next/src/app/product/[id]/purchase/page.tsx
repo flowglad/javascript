@@ -9,10 +9,15 @@ import {
   billingInfoSchema,
 } from '@/db/tableMethods/purchaseMethods'
 import { selectDefaultVariantAndProductByProductId } from '@/db/tableMethods/variantMethods'
-import { CheckoutFlowType, PriceType } from '@/types'
+import {
+  CheckoutFlowType,
+  PriceType,
+  PurchaseSessionType,
+} from '@/types'
 import core from '@/utils/core'
 import {
   createPurchaseSession,
+  findOrCreatePurchaseSession,
   findPurchaseSession,
 } from '@/utils/purchaseSessionState'
 import { getPaymentIntent, getSetupIntent } from '@/utils/stripe'
@@ -54,21 +59,15 @@ const PurchasePage = async ({ params }: PurchasePageProps) => {
      * If not found, or the variant id does not match, create a new purchase session
      * and save it to cookies.
      */
-    let purchaseSession = await findPurchaseSession(
+    const purchaseSession = await findOrCreatePurchaseSession(
       {
-        productId: product.id,
+        ProductId: product.id,
+        OrganizationId: organization.id,
+        variant,
+        type: PurchaseSessionType.Product,
       },
       transaction
     )
-    if (
-      core.isNil(purchaseSession) ||
-      purchaseSession.VariantId !== variant.id
-    ) {
-      purchaseSession = await createPurchaseSession(
-        { variant, OrganizationId: organization.id },
-        transaction
-      )
-    }
     const discount = purchaseSession.DiscountId
       ? await selectDiscountById(
           purchaseSession.DiscountId,

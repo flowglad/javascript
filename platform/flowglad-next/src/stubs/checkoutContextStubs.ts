@@ -11,6 +11,7 @@ import {
   IntervalUnit,
   PriceType,
   PurchaseSessionStatus,
+  PurchaseSessionType,
 } from '@/types'
 import { CheckoutPageContextValues } from '@/contexts/checkoutPageContext'
 import { PurchaseSession } from '@/db/schema/purchaseSessions'
@@ -45,6 +46,8 @@ export const stubbedPurchaseSession: PurchaseSession.Record = {
   quantity: 1,
   successUrl: null,
   cancelUrl: null,
+  ProductId: 'lol',
+  type: PurchaseSessionType.Product,
 }
 
 const clearDiscountCode: CheckoutPageContextValues['clearDiscountCode'] =

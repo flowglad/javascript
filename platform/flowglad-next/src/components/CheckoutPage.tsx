@@ -7,6 +7,7 @@ import { trpc } from '@/app/_trpc/client'
 import { useEffect, useRef } from 'react'
 import core, { cn } from '@/utils/core'
 import { CheckoutFlowType } from '@/types'
+import { useSetPurchaseSessionCookieEffect } from '@/app/hooks/useSetPurchaseSessionCookieEffect'
 
 const CheckoutPage = ({
   billingInfo,
@@ -18,30 +19,7 @@ const CheckoutPage = ({
       'Invoice checkout flow cannot be rendered as a Checkout Page'
     )
   }
-  const purchaseSessionId = billingInfo.purchaseSession.id
-  const setPurchaseSessionCookie =
-    trpc.purchases.createSession.useMutation()
-  const productId = billingInfo.product.id
-  const componentIsMounted = useRef(true)
-
-  useEffect(() => {
-    // Cleanup function sets mounted flag
-    return () => {
-      componentIsMounted.current = false
-    }
-  }, [])
-  const mountedRef = useRef(false)
-  const purchaseId = billingInfo.purchase?.id
-  useEffect(() => {
-    if (mountedRef.current) return
-    mountedRef.current = true
-
-    setPurchaseSessionCookie.mutateAsync({
-      purchaseId,
-      productId,
-      id: purchaseSessionId,
-    })
-  })
+  useSetPurchaseSessionCookieEffect(billingInfo)
 
   /** Background split overlay for left side of checkout page */
   const leftBackgroundOverlay = core.cn(

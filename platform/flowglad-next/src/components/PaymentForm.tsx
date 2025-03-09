@@ -342,7 +342,7 @@ const PaymentForm = () => {
             if (event.complete) {
               await editPurchaseSession({
                 purchaseSession: {
-                  id: purchaseSession.id,
+                  ...purchaseSession,
                   customerEmail: event.value.email,
                 },
               })
@@ -375,7 +375,7 @@ const PaymentForm = () => {
             if (e.complete) {
               editPurchaseSession({
                 purchaseSession: {
-                  id: purchaseSession.id,
+                  ...purchaseSession,
                   paymentMethodType: e.value
                     .type as PaymentMethodType,
                 },
@@ -399,7 +399,7 @@ const PaymentForm = () => {
             if (event.complete) {
               await editPurchaseSession({
                 purchaseSession: {
-                  id: purchaseSession.id,
+                  ...purchaseSession,
                   billingAddress: event.value,
                 },
               })

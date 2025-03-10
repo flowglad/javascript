@@ -20,11 +20,13 @@ function CreateInvoiceModal({
   setIsOpen: (isOpen: boolean) => void
   customerProfile?: CustomerProfile.ClientRecord
 }) {
-  const { organization, livemode } = useAuthenticatedContext()
+  const { organization } = useAuthenticatedContext()
   const createInvoice = trpc.invoices.create.useMutation()
+  if (!organization) {
+    return null
+  }
   const defaultValues: CreateInvoiceInput = {
     invoice: {
-      livemode: livemode ?? false,
       invoiceDate: new Date(),
       CustomerProfileId: customerProfile?.id ?? '',
       currency: organization!.defaultCurrency,
@@ -32,12 +34,19 @@ function CreateInvoiceModal({
         customerProfile?.invoiceNumberBase ?? '',
         1
       ),
-      OrganizationId: organization!.id,
       type: InvoiceType.Standalone,
       PurchaseId: null,
       BillingPeriodId: null,
     },
-    invoiceLineItems: [],
+    invoiceLineItems: [
+      {
+        description: '',
+        quantity: 1,
+        price: 0,
+        VariantId: null,
+        InvoiceId: '',
+      },
+    ],
   }
 
   return (
@@ -50,7 +59,7 @@ function CreateInvoiceModal({
       defaultValues={defaultValues}
       wide
     >
-      <InvoiceFormFields />
+      <InvoiceFormFields customerProfile={customerProfile} />
     </FormModal>
   )
 }

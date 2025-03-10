@@ -208,7 +208,6 @@ const hiddenColumns = {
 
 const createOnlyColumns = {
   CustomerProfileId: true,
-  OrganizationId: true,
   PurchaseId: true,
 } as const
 
@@ -222,7 +221,6 @@ const readOnlyColumns = {
 
 const nonClientEditableColumns = {
   ...hiddenColumns,
-  ...createOnlyColumns,
   ...readOnlyColumns,
 } as const
 
@@ -243,11 +241,12 @@ export const invoicesClientSelectSchema = z.discriminatedUnion(
 )
 
 export const purchaseInvoiceClientInsertSchema =
-  purchaseInvoiceInsertSchema.omit(createOnlyColumns)
+  purchaseInvoiceInsertSchema.omit(nonClientEditableColumns)
 export const subscriptionInvoiceClientInsertSchema =
-  subscriptionInvoiceInsertSchema.omit(createOnlyColumns)
+  subscriptionInvoiceInsertSchema.omit(nonClientEditableColumns)
 export const standaloneInvoiceClientInsertSchema =
-  standaloneInvoiceInsertSchema.omit(createOnlyColumns)
+  standaloneInvoiceInsertSchema.omit(nonClientEditableColumns)
+
 export const invoicesClientInsertSchema = z.discriminatedUnion(
   'type',
   [

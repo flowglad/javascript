@@ -13,6 +13,11 @@ import clsx from 'clsx'
 import { useState } from 'react'
 import { CustomerProfile } from '@/db/schema/customerProfiles'
 import { trpc } from '@/app/_trpc/client'
+import Switch from '@/components/ion/Switch'
+import StatusBadge from '../StatusBadge'
+import Label from '../ion/Label'
+import Badge from '../ion/Badge'
+import ConnectedSelect from './ConnectedSelect'
 
 const customerProfileOptions = (
   customerProfile?: CustomerProfile.ClientRecord,
@@ -41,6 +46,12 @@ const InvoiceFormFields = ({
 }) => {
   const { organization } = useAuthenticatedContext()
   const { data } = trpc.customerProfiles.list.useQuery({})
+  const { refetch } = trpc.organizations.getMembers.useQuery(
+    undefined,
+    {
+      enabled: false,
+    }
+  )
   const customerOptions = customerProfileOptions(
     customerProfile,
     data
@@ -69,6 +80,7 @@ const InvoiceFormFields = ({
               options={customerOptions}
               label="Bill To"
               className="flex-1"
+              defaultValue={customerProfile?.id}
               disabled={!!customerProfile}
               value={field.value?.toString()}
               onValueChange={(value) => field.onChange(Number(value))}
@@ -102,6 +114,62 @@ const InvoiceFormFields = ({
         />
       </div>
       <div className="w-full flex flex-row items-start gap-2.5">
+        <Controller
+          name="invoice.ownerMembershipId"
+          control={control}
+          render={({ field }) => (
+            <ConnectedSelect
+              {...field}
+              value={field.value?.toString()}
+              fetchOptionData={async () => {
+                const { data } = await refetch()
+                return data?.data
+              }}
+              label="Owner"
+              mapDataToOptions={(data) => {
+                return (
+                  data?.members.map((member) => ({
+                    label: member.user.name ?? '',
+                    value: member.membership.id,
+                  })) ?? []
+                )
+              }}
+              className="flex-1"
+              defaultValueFromData={(data) => {
+                return data?.members[0]?.membership.id ?? ''
+              }}
+              onValueChange={(value) => field.onChange(value ?? '')}
+            />
+          )}
+        />
+        <Controller
+          name="invoice.bankPaymentOnly"
+          control={control}
+          render={({ field }) => (
+            <div className="flex flex-col items-start gap-2 flex-1">
+              <Label>Bank Payment Only</Label>
+              <Switch
+                checked={Boolean(field.value)}
+                onCheckedChange={field.onChange}
+                label={
+                  <div className="cursor-pointer w-full">
+                    {field.value ? (
+                      <Badge>
+                        Only accept payment via ACH or Wire.
+                      </Badge>
+                    ) : (
+                      <Badge>
+                        Accept payment via all payment methods.
+                      </Badge>
+                    )}
+                  </div>
+                }
+              />
+            </div>
+          )}
+        />
+      </div>
+      <div className="w-full flex flex-row items-start gap-2.5">
         <Select
           placeholder="placeholder"
           options={[
@@ -119,7 +187,6 @@ const InvoiceFormFields = ({
           value={dueOption}
           onValueChange={(value) => setDueOption(value)}
         />
-
         <Controller
           name="invoice.dueDate"
           control={control}
@@ -157,7 +224,7 @@ const InvoiceFormFields = ({
             render={({ field }) => (
               <Textarea
                 {...field}
-                placeholder="Add cope of work and other notes"
+                placeholder="Add scope of work and other notes"
                 label="Memo"
                 className="w-full"
                 value={field.value ?? ''}

@@ -15,11 +15,7 @@ import {
   PurchaseSessionType,
 } from '@/types'
 import core from '@/utils/core'
-import {
-  createPurchaseSession,
-  findOrCreatePurchaseSession,
-  findPurchaseSession,
-} from '@/utils/purchaseSessionState'
+import { findOrCreatePurchaseSession } from '@/utils/purchaseSessionState'
 import { getPaymentIntent, getSetupIntent } from '@/utils/stripe'
 
 interface PurchasePageProps {

@@ -60,7 +60,7 @@ export const CustomerBillingSubPage = ({
           </div>
           <PurchasesTable purchases={purchases} payments={payments} />
           <InvoicesTable
-            invoices={invoices}
+            invoicesAndLineItems={invoices}
             customer={{ customer, customerProfile }}
             purchases={purchases}
           />

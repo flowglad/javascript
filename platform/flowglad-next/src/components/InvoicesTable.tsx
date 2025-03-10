@@ -12,11 +12,16 @@ import { ColumnDef } from '@tanstack/react-table'
 import core from '@/utils/core'
 import { sentenceCase } from 'change-case'
 import SortableColumnHeaderCell from '@/components/ion/SortableColumnHeaderCell'
+import CreateInvoiceModal from './forms/CreateInvoiceModal'
+import {
+  InvoiceLineItem,
+  InvoiceWithLineItems,
+} from '@/db/schema/invoiceLineItems'
 
 const InvoiceStatusBadge = ({
   invoice,
 }: {
-  invoice: Invoice.Record
+  invoice: Invoice.ClientRecord
 }) => {
   let color: BadgeProps['color']
   switch (invoice.status) {
@@ -47,11 +52,10 @@ const InvoiceStatusBadge = ({
 }
 
 const InvoicesTable = ({
-  invoices,
+  invoicesAndLineItems,
   customer,
-  purchases,
 }: {
-  invoices: Invoice.Record[]
+  invoicesAndLineItems: InvoiceWithLineItems[]
   customer: {
     customer: Customer.ClientRecord
     customerProfile: CustomerProfile.ClientRecord
@@ -87,7 +91,7 @@ const InvoicesTable = ({
           ),
           accessorKey: 'status',
           cell: ({ row: { original: cellData } }) => (
-            <InvoiceStatusBadge invoice={cellData.invoice} />
+            <InvoiceStatusBadge invoice={cellData} />
           ),
         },
         {
@@ -99,7 +103,7 @@ const InvoicesTable = ({
           ),
           accessorKey: 'invoiceNumber',
           cell: ({ row: { original: cellData } }) => (
-            <>{cellData.invoice.invoiceNumber}</>
+            <>{cellData.invoiceNumber}</>
           ),
         },
         {
@@ -109,8 +113,8 @@ const InvoicesTable = ({
           accessorKey: 'due',
           cell: ({ row: { original: cellData } }) => (
             <>
-              {cellData.invoice.dueDate
-                ? core.formatDate(cellData.invoice.dueDate)
+              {cellData.dueDate
+                ? core.formatDate(cellData.dueDate)
                 : '-'}
             </>
           ),
@@ -124,7 +128,7 @@ const InvoicesTable = ({
           ),
           accessorKey: 'createdAt',
           cell: ({ row: { original: cellData } }) => (
-            <>{core.formatDate(cellData.invoice.createdAt)}</>
+            <>{core.formatDate(cellData.createdAt)}</>
           ),
         },
         {
@@ -139,15 +143,7 @@ const InvoicesTable = ({
             />
           ),
         },
-      ] as ColumnDef<{
-        invoice: Invoice.Record
-        amount: string
-        status: string
-        frequency: string
-        invoiceNumber: string
-        due: string
-        created: string
-      }>[],
+      ] as ColumnDef<InvoiceWithLineItems>[],
     []
   )
 
@@ -162,21 +158,16 @@ const InvoicesTable = ({
       <div className="w-full flex flex-col gap-5 pb-20">
         <Table
           columns={columns_1}
-          data={invoices.map((invoice) => {
-            return {
-              invoice,
-              amount: '',
-              status: '',
-              frequency: '',
-              invoiceNumber: '',
-              due: '',
-              created: '',
-            }
-          })}
+          data={invoicesAndLineItems}
           className="w-full rounded-radius"
           bordered
         />
       </div>
+      <CreateInvoiceModal
+        isOpen={createInvoiceModalOpen}
+        setIsOpen={setCreateInvoiceModalOpen}
+        customerProfile={customer.customerProfile}
+      />
     </div>
   )
 }

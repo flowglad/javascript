@@ -416,6 +416,7 @@ export const setupInvoice = async ({
           : InvoiceType.Purchase,
         PurchaseId,
         currency: CurrencyCode.USD,
+        taxCountry: CountryCode.US,
       },
       transaction
     )

@@ -722,6 +722,7 @@ export enum FeeCalculationType {
 export enum InvoiceType {
   Purchase = 'purchase',
   Subscription = 'subscription',
+  Standalone = 'standalone',
 }
 
 export enum SubscriptionCancellationArrangement {

@@ -27,7 +27,7 @@ export const processNonPaymentPurchaseSession = async (
   )
   if (purchaseSession.type === PurchaseSessionType.Invoice) {
     throw new Error(
-      'Invoice checkout flow does not support non-payment purchase sessions'
+      'Invoice checkout flow does not support non-payment purchase sessions. If the invoice had 0 balance due, the invoice should have been paid automatically.'
     )
   }
   const variant = await selectVariantById(

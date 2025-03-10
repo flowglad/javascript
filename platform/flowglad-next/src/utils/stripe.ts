@@ -693,6 +693,7 @@ const stripeConnectTransferDataForOrganization = ({
     transfer_data,
   }
 }
+
 /**
  * We must always create, not update, a payment intent for an invoice.
  * This is because we cannot send new automatic_payment_methods in an update.

@@ -60,6 +60,7 @@ const InvoicesTable = ({
     customer: Customer.ClientRecord
     customerProfile: CustomerProfile.ClientRecord
   }
+  showOwners?: boolean
   purchases: Purchase.ClientRecord[]
 }) => {
   const [createInvoiceModalOpen, setCreateInvoiceModalOpen] =

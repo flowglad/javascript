@@ -45,9 +45,9 @@ export const generateInvoicePdfTask = task({
         const oldInvoicePdfUrl = latestInvoice.pdfURL
         await updateInvoice(
           {
-            id: invoice.id,
+            ...latestInvoice,
             pdfURL: invoicePdfUrl,
-          } as Invoice.Update,
+          },
           transaction
         )
         return oldInvoicePdfUrl

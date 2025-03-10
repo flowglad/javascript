@@ -46,7 +46,6 @@ export const stubbedPurchaseSession: PurchaseSession.Record = {
   quantity: 1,
   successUrl: null,
   cancelUrl: null,
-  ProductId: 'lol',
   type: PurchaseSessionType.Product,
 }
 

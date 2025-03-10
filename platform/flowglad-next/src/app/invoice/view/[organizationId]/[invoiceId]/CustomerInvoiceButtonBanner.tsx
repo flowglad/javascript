@@ -5,7 +5,7 @@ import { Invoice } from '@/db/schema/invoices'
 import CheckoutModal from '@/components/CheckoutModal'
 import { BillingInfoCore } from '@/db/tableMethods/purchaseMethods'
 
-export const CustomerInvoiceButtonBanner = ({
+export const CustomerInvoicePayButtonBanner = ({
   invoice,
   billingInfo,
 }: {
@@ -39,7 +39,38 @@ export const CustomerInvoiceButtonBanner = ({
         isOpen={isCheckoutModalOpen}
         onClose={() => setIsCheckoutModalOpen(false)}
         billingInfo={billingInfo}
+        title={`Pay Invoice #${invoice.invoiceNumber}`}
       />
     </>
+  )
+}
+
+export const CustomerInvoiceDownloadReceiptButtonBanner = ({
+  invoice,
+}: {
+  invoice: Invoice.Record
+}) => {
+  return (
+    <div className="space-y-4">
+      {invoice.pdfURL && (
+        <Button
+          onClick={() => {
+            window.open(invoice.pdfURL!, '_blank')
+          }}
+        >
+          Download invoice
+        </Button>
+      )}
+
+      {invoice.receiptPdfURL && (
+        <Button
+          onClick={() => {
+            window.open(invoice.receiptPdfURL!, '_blank')
+          }}
+        >
+          Download receipt
+        </Button>
+      )}
+    </div>
   )
 }

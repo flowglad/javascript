@@ -125,7 +125,6 @@ const refinement = {
 
 const purchasePurchaseSessionRefinement = {
   PurchaseId: z.string(),
-  ProductId: z.string(),
   VariantId: z.string(),
   type: z.literal(PurchaseSessionType.Purchase),
 }
@@ -134,14 +133,12 @@ const invoicePurchaseSessionRefinement = {
   InvoiceId: z.string(),
   VariantId: z.null(),
   PurchaseId: z.null(),
-  ProductId: z.null(),
   type: z.literal(PurchaseSessionType.Invoice),
 }
 
 const productPurchaseSessionRefinement = {
   VariantId: z.string(),
   InvoiceId: z.null(),
-  ProductId: z.string(),
   type: z.literal(PurchaseSessionType.Product),
 }
 

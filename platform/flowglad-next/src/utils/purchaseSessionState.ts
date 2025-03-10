@@ -6,6 +6,7 @@ import {
   updatePurchaseSession,
 } from '@/db/tableMethods/purchaseSessionMethods'
 import {
+  createPaymentIntentForInvoicePurchaseSession,
   createPaymentIntentForPurchaseSession,
   createSetupIntentForPurchaseSession,
 } from '@/utils/stripe'
@@ -24,6 +25,9 @@ import { z } from 'zod'
 import { idInputSchema } from '@/db/tableUtils'
 import core from './core'
 import { Invoice } from '@/db/schema/invoices'
+import { InvoiceLineItem } from '@/db/schema/invoiceLineItems'
+import { FeeCalculation } from '@/db/schema/feeCalculations'
+import { selectCustomerProfileById } from '@/db/tableMethods/customerProfileMethods'
 
 const productPurchaseSessionCookieNameParamsSchema = z.object({
   type: z.literal('product'),
@@ -156,7 +160,7 @@ export const findInvoicePurchaseSession = async (
   )
 }
 
-export const createPurchaseSession = async (
+export const createNonInvoicePurchaseSession = async (
   {
     variant,
     purchase,
@@ -232,6 +236,7 @@ export const createPurchaseSession = async (
       stripePaymentIntentId = paymentIntent.id
     }
   }
+
   const updatedPurchaseSession = await updatePurchaseSession(
     {
       ...purchaseSession,
@@ -272,7 +277,7 @@ export const findOrCreatePurchaseSession = async (
     core.isNil(purchaseSession) ||
     purchaseSession.VariantId !== variant.id
   ) {
-    return createPurchaseSession(
+    return createNonInvoicePurchaseSession(
       { variant, OrganizationId, purchase },
       transaction
     )
@@ -283,31 +288,66 @@ export const findOrCreatePurchaseSession = async (
 const createInvoicePurchaseSession = async (
   {
     invoice,
+    invoiceLineItems,
+    feeCalculation,
   }: {
     invoice: Invoice.Record
+    invoiceLineItems: InvoiceLineItem.Record[]
+    feeCalculation?: FeeCalculation.Record
   },
   transaction: DbTransaction
 ) => {
-  return insertPurchaseSession(
+  const customerProfile = await selectCustomerProfileById(
+    invoice.CustomerProfileId,
+    transaction
+  )
+  const purchaseSession = await insertPurchaseSession(
     {
       status: PurchaseSessionStatus.Open,
       type: PurchaseSessionType.Invoice,
       InvoiceId: invoice.id,
-      ProductId: null,
       OrganizationId: invoice.OrganizationId,
+      CustomerProfileId: invoice.CustomerProfileId,
+      customerEmail: customerProfile.email,
+      customerName: customerProfile.name,
       livemode: invoice.livemode,
       PurchaseId: null,
       VariantId: null,
     },
     transaction
   )
+  const organization = await selectOrganizationById(
+    invoice.OrganizationId,
+    transaction
+  )
+  const paymentIntent =
+    await createPaymentIntentForInvoicePurchaseSession({
+      invoice,
+      organization,
+      purchaseSession,
+      invoiceLineItems: invoiceLineItems,
+      feeCalculation: feeCalculation,
+      stripeCustomerId: customerProfile.stripeCustomerId!,
+    })
+  const updatedPurchaseSession = await updatePurchaseSession(
+    {
+      ...purchaseSession,
+      stripePaymentIntentId: paymentIntent.id,
+    },
+    transaction
+  )
+  return updatedPurchaseSession
 }
 
 export const findOrCreateInvoicePurchaseSession = async (
   {
     invoice,
+    invoiceLineItems,
+    feeCalculation,
   }: {
     invoice: Invoice.Record
+    invoiceLineItems: InvoiceLineItem.Record[]
+    feeCalculation?: FeeCalculation.Record
   },
   transaction: DbTransaction
 ) => {
@@ -321,7 +361,11 @@ export const findOrCreateInvoicePurchaseSession = async (
   if (purchaseSession) {
     return purchaseSession
   }
-  return createInvoicePurchaseSession({ invoice }, transaction)
+
+  return createInvoicePurchaseSession(
+    { invoice, invoiceLineItems, feeCalculation },
+    transaction
+  )
 }
 
 type SetPurchaseSessionCookieParams = {

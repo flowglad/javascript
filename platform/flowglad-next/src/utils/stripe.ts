@@ -936,6 +936,57 @@ export type StripeAccountOnboardingStatus = Awaited<
   ReturnType<typeof getConnectedAccountOnboardingStatus>
 > | null
 
+export const createPaymentIntentForInvoicePurchaseSession =
+  async (params: {
+    invoice: Invoice.Record
+    invoiceLineItems: InvoiceLineItem.Record[]
+    organization: Organization.Record
+    stripeCustomerId: string
+    purchaseSession: PurchaseSession.Record
+    feeCalculation?: FeeCalculation.Record
+  }) => {
+    const {
+      invoice,
+      organization,
+      stripeCustomerId,
+      purchaseSession,
+      invoiceLineItems,
+      feeCalculation,
+    } = params
+    const livemode = invoice.livemode
+    const { on_behalf_of, transfer_data } =
+      stripeConnectTransferDataForOrganization({
+        organization,
+        livemode,
+      })
+    const metadata: PurchaseSessionStripeIntentMetadata = {
+      purchaseSessionId: purchaseSession.id,
+      type: IntentMetadataType.PurchaseSession,
+    }
+    const totalDue = feeCalculation
+      ? await calculateTotalDueAmount(feeCalculation)
+      : invoiceLineItems.reduce(
+          (acc, item) => acc + item.price * item.quantity,
+          0
+        )
+    const totalFeeAmount = feeCalculation
+      ? calculateTotalFeeAmount(feeCalculation)
+      : calculatePlatformApplicationFee({
+          organization,
+          subtotal: totalDue,
+          currency: invoice.currency,
+        })
+
+    return stripe(livemode).paymentIntents.create({
+      amount: totalDue,
+      currency: invoice.currency,
+      application_fee_amount: livemode ? totalFeeAmount : undefined,
+      on_behalf_of,
+      transfer_data,
+      metadata,
+    })
+  }
+
 export const createPaymentIntentForPurchaseSession = async (params: {
   variant: Variant.Record
   organization: Organization.Record

@@ -2,19 +2,15 @@ import { InvoiceTemplateProps } from '@/pdf-generation/invoices'
 import { CustomerFacingInvoicePage } from './CustomerFacingInvoicePage'
 import core from '@/utils/core'
 import {
-  humanReadableCurrencyAmountToStripeCurrencyAmount,
+  getPaymentIntent,
   stripeCurrencyAmountToHumanReadableCurrencyAmount,
 } from '@/utils/stripe'
-import Button from '@/components/ion/Button'
+import { CheckoutFlowType, InvoiceStatus } from '@/types'
 import {
-  CheckoutFlowType,
-  InvoiceStatus,
-  PriceType,
-  PurchaseSessionType,
-} from '@/types'
-import { CustomerInvoiceButtonBanner } from './CustomerInvoiceButtonBanner'
+  CustomerInvoiceDownloadReceiptButtonBanner,
+  CustomerInvoicePayButtonBanner,
+} from './CustomerInvoiceButtonBanner'
 import { BillingInfoCore } from '@/db/tableMethods/purchaseMethods'
-import { stubbedPurchaseSession } from '@/stubs/checkoutContextStubs'
 import { adminTransaction } from '@/db/databaseMethods'
 import { findOrCreateInvoicePurchaseSession } from '@/utils/purchaseSessionState'
 
@@ -52,28 +48,9 @@ const CustomerInvoicePaidView = (props: InvoiceTemplateProps) => {
             </span>
           </div>
         </div>
-
-        <div className="space-y-4">
-          {invoice.pdfURL && (
-            <Button
-              onClick={() => {
-                window.open(invoice.pdfURL!, '_blank')
-              }}
-            >
-              Download invoice
-            </Button>
-          )}
-
-          {invoice.receiptPdfURL && (
-            <Button
-              onClick={() => {
-                window.open(invoice.receiptPdfURL!, '_blank')
-              }}
-            >
-              Download receipt
-            </Button>
-          )}
-        </div>
+        <CustomerInvoiceDownloadReceiptButtonBanner
+          invoice={invoice}
+        />
       </div>
     </div>
   )
@@ -89,11 +66,21 @@ const CustomerInvoiceOpenView = async (
       return findOrCreateInvoicePurchaseSession(
         {
           invoice,
+          invoiceLineItems,
         },
         transaction
       )
     }
   )
+
+  let clientSecret: string | null = null
+  if (purchaseSession.stripePaymentIntentId) {
+    const paymentIntent = await getPaymentIntent(
+      purchaseSession.stripePaymentIntentId
+    )
+    clientSecret = paymentIntent.client_secret
+  }
+
   const billingInfo: BillingInfoCore = {
     customerProfile,
     sellerOrganization: organization,
@@ -101,9 +88,13 @@ const CustomerInvoiceOpenView = async (
     invoice,
     invoiceLineItems,
     feeCalculation: null,
-    clientSecret: '',
-    redirectUrl: '',
-    purchaseSession: stubbedPurchaseSession,
+    clientSecret,
+    readonlyCustomerEmail: customerProfile.email,
+    redirectUrl: core.safeUrl(
+      `/invoice/view/${organization.id}/${invoice.id}`,
+      core.envVariable('NEXT_PUBLIC_APP_URL')
+    ),
+    purchaseSession,
   }
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-primary-container p-4">
@@ -143,7 +134,7 @@ const CustomerInvoiceOpenView = async (
           </div>
         </div>
 
-        <CustomerInvoiceButtonBanner
+        <CustomerInvoicePayButtonBanner
           invoice={invoice}
           billingInfo={billingInfo}
         />
@@ -174,6 +165,7 @@ const CustomerInvoiceView = (props: InvoiceTemplateProps) => {
     />
   )
 }
+
 const CustomerInvoiceViewPage = CustomerFacingInvoicePage(
   CustomerInvoiceView
 )

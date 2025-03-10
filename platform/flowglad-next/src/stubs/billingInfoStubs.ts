@@ -36,7 +36,6 @@ const purchaseSession: PurchaseSession.Record = {
   quantity: 1,
   InvoiceId: null,
   type: PurchaseSessionType.Product,
-  ProductId: '1',
 }
 
 const billingInfoDefaults = {

@@ -1,6 +1,10 @@
 import { logger, task } from '@trigger.dev/sdk/v3'
 import { Invoice } from '@/db/schema/invoices'
-import { InvoiceStatus, SupabaseUpdatePayload } from '@/types'
+import {
+  InvoiceStatus,
+  PaymentStatus,
+  SupabaseUpdatePayload,
+} from '@/types'
 import { selectInvoiceLineItems } from '@/db/tableMethods/invoiceLineItemMethods'
 import { sendReceiptEmail } from '@/utils/email'
 import { selectCustomerProfileAndCustomerTableRows } from '@/db/tableMethods/customerProfileMethods'
@@ -80,12 +84,9 @@ export const invoiceUpdatedTask = task({
           message: 'Receipt email sent successfully',
         }
       })
-      if (paymentForInvoice) {
-        await generatePaymentReceiptPdfTask.triggerAndWait({
-          paymentId: paymentForInvoice.id,
-        })
-      }
-
+      await generatePaymentReceiptPdfTask.triggerAndWait({
+        paymentId: paymentForInvoice.id,
+      })
       await sendReceiptEmail({
         to: [customer.email],
         invoice: newRecord,
